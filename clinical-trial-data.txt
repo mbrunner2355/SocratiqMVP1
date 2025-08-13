@@ -1,0 +1,93 @@
+SocratIQ Clinical Trial Protocol CT-BNT327-002
+
+Study Title: Phase III Randomized, Double-Blind, Placebo-Controlled Study of BNT-327 in Patients with EGFR T790M-Positive Non-Small Cell Lung Cancer
+
+Principal Investigator: Dr. Sarah Chen, MD Anderson Cancer Center
+Co-Principal Investigator: Dr. Michael Rodriguez, UCLA Medical Center
+
+Study Sponsor: Pfizer Inc.
+Clinical Research Organization: ICON Clinical Research
+Data Safety Monitoring Board Chair: Dr. James Wilson, Johns Hopkins Hospital
+
+Study Overview:
+This multicenter Phase III trial will evaluate the efficacy and safety of BNT-327 compared to standard of care in 450 patients with locally advanced or metastatic NSCLC harboring EGFR T790M mutations.
+
+Key Inclusion Criteria:
+- Age ≥18 years
+- Histologically confirmed NSCLC with EGFR T790M mutation
+- Progressive disease following first-line EGFR TKI therapy
+- ECOG performance status 0-2
+- Adequate organ function
+
+Primary Endpoint:
+Progression-free survival (PFS) as assessed by blinded independent central review (BICR)
+
+Secondary Endpoints:
+- Overall survival (OS)
+- Objective response rate (ORR) 
+- Duration of response (DOR)
+- Safety and tolerability
+- Quality of life measures (EORTC QLQ-C30, QLQ-LC13)
+
+Study Sites:
+1. Memorial Sloan Kettering Cancer Center - Dr. Lisa Patel (Target: 45 patients)
+2. MD Anderson Cancer Center - Dr. Sarah Chen (Target: 60 patients) 
+3. Dana-Farber Cancer Institute - Dr. Robert Kim (Target: 35 patients)
+4. Mayo Clinic Rochester - Dr. Jennifer Lee (Target: 40 patients)
+5. UCLA Medical Center - Dr. Michael Rodriguez (Target: 50 patients)
+6. Cleveland Clinic - Dr. David Thompson (Target: 35 patients)
+7. Stanford Cancer Institute - Dr. Maria Gonzalez (Target: 30 patients)
+8. University of Chicago Medicine - Dr. Andrew Park (Target: 25 patients)
+9. Vanderbilt-Ingram Cancer Center - Dr. Susan Miller (Target: 35 patients)
+10. Seattle Cancer Care Alliance - Dr. Kevin Zhang (Target: 40 patients)
+
+Regulatory Status:
+- FDA IND Number: 145,789
+- IRB Approvals: Obtained from all participating sites
+- Clinical Trial Registration: NCT05234567
+- EMA Clinical Trial Application: Submitted March 2024
+
+Statistical Considerations:
+Sample size of 450 patients provides 85% power to detect hazard ratio of 0.65 for PFS, assuming median PFS of 8 months in control arm and 12.3 months in BNT-327 arm, with two-sided alpha of 0.05.
+
+Safety Monitoring:
+Independent Data Safety Monitoring Board (DSMB) will review safety data every 3 months. Stopping rules include:
+- Grade 4 treatment-related AEs in >15% of patients
+- Treatment-related mortality rate >5%
+- Futility analysis at 50% information fraction
+
+Key Personnel:
+- Study Director: Dr. Patricia Adams, Pfizer Global R&D
+- Biostatistician: Dr. Thomas Chen, Pfizer Statistics
+- Medical Monitor: Dr. Rachel Johnson, Pfizer Oncology
+- Clinical Operations Manager: Maria Santos, ICON Clinical
+- Pharmacovigilance Lead: Dr. Alan Cooper, Pfizer Safety
+
+Timeline:
+- First Patient First Visit: June 2024
+- Target Enrollment Completion: December 2025
+- Primary Analysis: June 2026
+- Final Study Report: December 2026
+
+Budget and Costs:
+Total study budget: $45.2 million
+- Site fees: $28.5 million  
+- Drug supply: $8.3 million
+- Central lab costs: $4.1 million
+- Imaging costs: $2.8 million
+- Regulatory and oversight: $1.5 million
+
+Patient Population Characteristics (Projected):
+- Median age: 62 years (range 35-85)
+- Gender: 55% female, 45% male
+- Race: 60% Caucasian, 25% Asian, 10% Hispanic, 5% Other
+- Prior therapies: 100% first-line EGFR TKI, 35% chemotherapy
+
+Companion Diagnostics:
+cobas EGFR Mutation Test v2 (Roche Molecular Systems) will be used to identify T790M mutations. Central testing laboratory: LabCorp/Covance.
+
+Manufacturing and Supply:
+BNT-327 tablets manufactured at Pfizer Pearl River facility under GMP conditions. Comparator drug (Tagrisso) supplied by AstraZeneca under clinical trial agreement.
+
+Publication Strategy:
+Primary results will be presented at ASCO Annual Meeting 2026 and simultaneously submitted to New England Journal of Medicine. Authorship guidelines follow ICMJE recommendations.

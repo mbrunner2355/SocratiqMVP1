@@ -1,0 +1,654 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocratIQ Transform™ - Document Intelligence Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1565C0',
+                        'secondary': '#37474F',
+                        'accent': '#00ACC1',
+                        'success': '#2E7D32',
+                        'warning': '#F57C00',
+                        'error': '#C62828',
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-secondary">SocratIQ Transform™</h1>
+                            <p class="text-xs text-gray-500">Document Intelligence Platform</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                        <div class="w-2 h-2 bg-success rounded-full"></div>
+                        <span>System Status: Operational</span>
+                    </div>
+                    <button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-secondary mb-4">Platform Overview</h2>
+                    
+                    <!-- Processing Stats -->
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Documents Processed</span>
+                            <span class="text-sm font-semibold text-secondary">247</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Entities Extracted</span>
+                            <span class="text-sm font-semibold text-secondary">12,439</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Processing Queue</span>
+                            <span class="text-sm font-semibold text-accent">3</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="space-y-2">
+                        <h3 class="text-sm font-medium text-secondary mb-3">Quick Actions</h3>
+                        <button class="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                            <i class="fas fa-search mr-2"></i>Search Documents
+                        </button>
+                        <button class="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                            <i class="fas fa-download mr-2"></i>Export Data
+                        </button>
+                        <button class="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                            <i class="fas fa-chart-line mr-2"></i>Analytics
+                        </button>
+                        <button class="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                            <i class="fas fa-cog mr-2"></i>Configure NLP
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Upload Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-secondary">Document Upload & Processing</h2>
+                        <p class="text-sm text-gray-600 mt-1">Upload documents for AI-powered semantic analysis and entity extraction</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- @COMPONENT: FileUpload -->
+                        <div id="upload-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
+                            <div class="space-y-4">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400"></i>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-medium text-secondary">Drag & drop files here</p>
+                                    <p class="text-sm text-gray-600">or click to browse</p>
+                                    <p class="text-xs text-gray-500 mt-2">Supports PDF, DOCX, TXT • Max 50MB per file</p>
+                                </div>
+                                <button class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                    Select Files
+                                </button>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: FileUpload -->
+
+                        <!-- Processing Queue -->
+                        <div class="mt-6" id="processing-queue" style="display: none;">
+                            <h3 class="text-sm font-medium text-secondary mb-3">Processing Queue</h3>
+                            <div class="space-y-3">
+                                <!-- @MAP: processingFiles.map(file => ( -->
+                                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-file-alt text-gray-400"></i>
+                                            <div>
+                                                <p class="text-sm font-medium text-secondary" data-bind="file.name">research_paper.pdf</p>
+                                                <p class="text-xs text-gray-600" data-bind="file.size">2.4 MB • Processing...</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-4 h-4">
+                                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-accent"></div>
+                                            </div>
+                                            <span class="text-xs text-accent font-medium">47%</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-accent h-2 rounded-full transition-all duration-300" style="width: 47%"></div>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processed Documents -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-lg font-semibold text-secondary">Processed Documents</h2>
+                                <p class="text-sm text-gray-600 mt-1">Recently analyzed documents with extracted insights</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <i class="fas fa-filter mr-2"></i>Filter
+                                </button>
+                                <button class="px-3 py-2 text-sm bg-accent text-white rounded-lg hover:bg-cyan-600 transition-colors">
+                                    <i class="fas fa-download mr-2"></i>Export All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divide-y divide-gray-200">
+                        <!-- @MAP: processedDocuments.map(doc => ( -->
+                        <!-- Document 1: Clinical Trial Protocol -->
+                        <div class="p-6 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-file-medical text-primary"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-base font-semibold text-secondary" data-bind="doc.title">Phase III Clinical Trial Protocol - CAR-T Therapy</h3>
+                                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                                            <span><i class="fas fa-file mr-1"></i>PDF • 127 pages</span>
+                                            <span><i class="fas fa-calendar mr-1"></i>Processed 2 hours ago</span>
+                                            <span><i class="fas fa-language mr-1"></i>English</span>
+                                        </div>
+                                        
+                                        <!-- Extracted Entities -->
+                                        <div class="mt-4">
+                                            <h4 class="text-sm font-medium text-secondary mb-2">Key Entities Extracted</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-user-md mr-1"></i>Dr. Sarah Chen
+                                                </span>
+                                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-building mr-1"></i>Stanford Medical Center
+                                                </span>
+                                                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-pills mr-1"></i>Tisagenlecleucel
+                                                </span>
+                                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-calendar mr-1"></i>March 2025
+                                                </span>
+                                                <span class="text-xs text-gray-500">+23 more</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Semantic Tags -->
+                                        <div class="mt-3">
+                                            <h4 class="text-sm font-medium text-secondary mb-2">Semantic Categories</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="px-2 py-1 bg-red-50 text-red-700 rounded text-xs border border-red-200">Clinical Trial</span>
+                                                <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs border border-blue-200">Oncology</span>
+                                                <span class="px-2 py-1 bg-green-50 text-green-700 rounded text-xs border border-green-200">FDA Submission</span>
+                                                <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs border border-purple-200">Phase III</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2 ml-4">
+                                    <span class="px-2 py-1 bg-success text-white rounded-full text-xs font-medium flex items-center">
+                                        <i class="fas fa-check mr-1"></i>Complete
+                                    </span>
+                                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors" title="View Details">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Processing Stats -->
+                            <div class="mt-4 grid grid-cols-4 gap-4 text-center">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary" data-bind="doc.stats.entities">342</p>
+                                    <p class="text-xs text-gray-600">Entities Found</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary" data-bind="doc.stats.confidence">94.2%</p>
+                                    <p class="text-xs text-gray-600">Confidence</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary" data-bind="doc.stats.processingTime">47s</p>
+                                    <p class="text-xs text-gray-600">Processing Time</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary" data-bind="doc.stats.wordCount">45,239</p>
+                                    <p class="text-xs text-gray-600">Words</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Document 2: Research Paper -->
+                        <div class="p-6 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-microscope text-green-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-base font-semibold text-secondary">CRISPR-Cas9 Gene Editing in Neurological Disorders</h3>
+                                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                                            <span><i class="fas fa-file mr-1"></i>PDF • 23 pages</span>
+                                            <span><i class="fas fa-calendar mr-1"></i>Processed 5 hours ago</span>
+                                            <span><i class="fas fa-language mr-1"></i>English</span>
+                                        </div>
+                                        
+                                        <!-- Extracted Entities -->
+                                        <div class="mt-4">
+                                            <h4 class="text-sm font-medium text-secondary mb-2">Key Entities Extracted</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-user mr-1"></i>Dr. Michael Rodriguez
+                                                </span>
+                                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-building mr-1"></i>MIT Research Lab
+                                                </span>
+                                                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-dna mr-1"></i>CRISPR-Cas9
+                                                </span>
+                                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-brain mr-1"></i>Huntington's Disease
+                                                </span>
+                                                <span class="text-xs text-gray-500">+18 more</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Semantic Tags -->
+                                        <div class="mt-3">
+                                            <h4 class="text-sm font-medium text-secondary mb-2">Semantic Categories</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="px-2 py-1 bg-red-50 text-red-700 rounded text-xs border border-red-200">Gene Therapy</span>
+                                                <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs border border-blue-200">Neuroscience</span>
+                                                <span class="px-2 py-1 bg-green-50 text-green-700 rounded text-xs border border-green-200">Research Paper</span>
+                                                <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs border border-purple-200">Peer Reviewed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2 ml-4">
+                                    <span class="px-2 py-1 bg-success text-white rounded-full text-xs font-medium flex items-center">
+                                        <i class="fas fa-check mr-1"></i>Complete
+                                    </span>
+                                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors" title="View Details">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Processing Stats -->
+                            <div class="mt-4 grid grid-cols-4 gap-4 text-center">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">187</p>
+                                    <p class="text-xs text-gray-600">Entities Found</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">96.8%</p>
+                                    <p class="text-xs text-gray-600">Confidence</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">23s</p>
+                                    <p class="text-xs text-gray-600">Processing Time</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">12,847</p>
+                                    <p class="text-xs text-gray-600">Words</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Document 3: Regulatory Document -->
+                        <div class="p-6 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-gavel text-orange-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-base font-semibold text-secondary">FDA Drug Approval Guidance Document</h3>
+                                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                                            <span><i class="fas fa-file mr-1"></i>PDF • 89 pages</span>
+                                            <span><i class="fas fa-calendar mr-1"></i>Processed 1 day ago</span>
+                                            <span><i class="fas fa-language mr-1"></i>English</span>
+                                        </div>
+                                        
+                                        <!-- Extracted Entities -->
+                                        <div class="mt-4">
+                                            <h4 class="text-sm font-medium text-secondary mb-2">Key Entities Extracted</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-building mr-1"></i>FDA
+                                                </span>
+                                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-balance-scale mr-1"></i>21 CFR Part 312
+                                                </span>
+                                                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-shield-alt mr-1"></i>IND Application
+                                                </span>
+                                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                                                    <i class="fas fa-calendar mr-1"></i>2025 Guidelines
+                                                </span>
+                                                <span class="text-xs text-gray-500">+31 more</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Semantic Tags -->
+                                        <div class="mt-3">
+                                            <h4 class="text-sm font-medium text-secondary mb-2">Semantic Categories</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="px-2 py-1 bg-red-50 text-red-700 rounded text-xs border border-red-200">Regulatory</span>
+                                                <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs border border-blue-200">FDA Guidance</span>
+                                                <span class="px-2 py-1 bg-green-50 text-green-700 rounded text-xs border border-green-200">Compliance</span>
+                                                <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs border border-purple-200">Legal Document</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2 ml-4">
+                                    <span class="px-2 py-1 bg-success text-white rounded-full text-xs font-medium flex items-center">
+                                        <i class="fas fa-check mr-1"></i>Complete
+                                    </span>
+                                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors" title="View Details">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Processing Stats -->
+                            <div class="mt-4 grid grid-cols-4 gap-4 text-center">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">278</p>
+                                    <p class="text-xs text-gray-600">Entities Found</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">91.5%</p>
+                                    <p class="text-xs text-gray-600">Confidence</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">89s</p>
+                                    <p class="text-xs text-gray-600">Processing Time</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-lg font-semibold text-secondary">28,943</p>
+                                    <p class="text-xs text-gray-600">Words</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+
+                <!-- Analytics Dashboard -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Entity Types Chart -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-secondary mb-4">Entity Types Distribution</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Organizations</span>
+                                </div>
+                                <span class="text-sm font-medium">2,847</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Persons</span>
+                                </div>
+                                <span class="text-sm font-medium">1,923</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 44%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Medical Terms</span>
+                                </div>
+                                <span class="text-sm font-medium">4,129</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Dates</span>
+                                </div>
+                                <span class="text-sm font-medium">891</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Performance -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-secondary mb-4">Processing Performance</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-secondary">Average Processing Time</p>
+                                    <p class="text-xs text-gray-600">Per document</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold text-accent">53s</p>
+                                    <p class="text-xs text-green-600">↓ 12% vs last week</p>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-secondary">Accuracy Rate</p>
+                                    <p class="text-xs text-gray-600">Entity extraction</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold text-success">94.1%</p>
+                                    <p class="text-xs text-green-600">↑ 2.3% vs last week</p>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-secondary">Documents Queue</p>
+                                    <p class="text-xs text-gray-600">Waiting for processing</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold text-warning">3</p>
+                                    <p class="text-xs text-yellow-600">Stable</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Status Modal -->
+    <div id="processing-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-secondary">Document Processing</h3>
+                    <button class="text-gray-400 hover:text-gray-600" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-success rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-secondary">File Upload</p>
+                            <p class="text-xs text-gray-600">Document received and validated</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-secondary">NLP Processing</p>
+                            <p class="text-xs text-gray-600">Extracting entities and metadata...</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <i class="fas fa-clock text-gray-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-400">Semantic Enrichment</p>
+                            <p class="text-xs text-gray-500">Pending...</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <i class="fas fa-clock text-gray-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-400">Graph Integration</p>
+                            <p class="text-xs text-gray-500">Pending...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-gray-200 rounded-full h-2">
+                    <div class="bg-accent h-2 rounded-full transition-all duration-300" style="width: 35%"></div>
+                </div>
+                <p class="text-center text-sm text-gray-600 mt-2">Processing... 35% complete</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TODO: Implement file upload, NLP processing, and document management
+        
+        (function() {
+            // File upload handling
+            const uploadArea = document.getElementById('upload-area');
+            const processingQueue = document.getElementById('processing-queue');
+            const modal = document.getElementById('processing-modal');
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('click', function() {
+                // TODO: Implement file selection dialog
+                console.log('File selection would be implemented here');
+                
+                // Mock file processing for demo
+                showProcessingQueue();
+                setTimeout(() => {
+                    showProcessingModal();
+                }, 1000);
+            });
+
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('border-accent', 'bg-blue-50');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('border-accent', 'bg-blue-50');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('border-accent', 'bg-blue-50');
+                // TODO: Handle dropped files
+                console.log('File drop would be handled here');
+            });
+
+            function showProcessingQueue() {
+                processingQueue.style.display = 'block';
+            }
+
+            function showProcessingModal() {
+                modal.style.display = 'flex';
+            }
+
+            window.closeModal = function() {
+                modal.style.display = 'none';
+            };
+
+            // Mock real-time updates
+            setInterval(() => {
+                // TODO: Implement real-time processing updates via WebSocket
+                console.log('Real-time updates would be fetched here');
+            }, 5000);
+
+            // Search and filter functionality
+            const filterButton = document.querySelector('[title="Filter"]');
+            if (filterButton) {
+                filterButton.addEventListener('click', function() {
+                    // TODO: Implement filtering interface
+                    console.log('Document filtering would be implemented here');
+                });
+            }
+
+            // Export functionality  
+            const exportButtons = document.querySelectorAll('[data-event*="export"]');
+            exportButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // TODO: Implement data export (JSON, CSV)
+                    console.log('Data export would be implemented here');
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

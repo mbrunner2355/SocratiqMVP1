@@ -1,0 +1,38 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - '# No backend build needed - using external services'
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        - echo "Installing dependencies..."
+    build:
+      commands:
+        - echo "Building SocratIQ Platform..."
+        - npm run build
+        - echo "Build completed successfully"
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .npm/**/*
+
+# Environment variables for different branches
+# Set these in AWS Amplify Console:
+# 
+# For main branch (staging):
+# - NODE_ENV=staging
+# - DATABASE_URL=<staging_db_url>
+# - AWS_S3_BUCKET=socratiqbeta1-staging
+# 
+# For production branch:
+# - NODE_ENV=production  
+# - DATABASE_URL=<production_db_url>
+# - AWS_S3_BUCKET=socratiqbeta1-production

@@ -1,0 +1,481 @@
+# SocratIQ™ Style Guide
+*Complete Design System for Platform Development*
+
+Version: 1.0  
+Platform: Multi-platform (Web, Mobile)  
+Technology Stack: Replit.com + Tab9  
+
+---
+
+## 🎯 Brand Overview
+
+SocratIQ™ is an AI-native pharmaceutical intelligence platform that transforms fragmented data into unified insights. The platform combines enterprise-grade breadth with AI-native intelligence, featuring the Sophie™ agent layer for autonomous decision orchestration.
+
+**Brand Positioning:** "The only platform that combines enterprise-grade breadth with AI-native intelligence"
+
+---
+
+## 🎨 Color Palette
+
+### Primary Colors
+- **Primary Teal**: `#0D9488` (Teal-600) - Main brand color, buttons, key actions
+- **Secondary Teal**: `#14B8A6` (Teal-500) - Interactive elements, highlights
+- **Light Teal**: `#CCFBF1` (Teal-100) - Backgrounds, subtle accents
+- **Charcoal**: `#374151` (Gray-700) - Primary text, important UI elements
+- **Slate Gray**: `#6B7280` (Gray-500) - Secondary text, subtle elements
+- **Background White**: `#FFFFFF` - Main backgrounds
+- **Warm Gray**: `#F9FAFB` (Gray-50) - Section backgrounds, cards
+
+### Partner/Module Specific (Example)
+- **Health Equity Theme**: `#2E8B57` (Sea Green)
+
+### Accent Colors (Data Visualization & Status)
+- **Success Green**: `#059669` (Emerald-600) - Positive trends, completed actions
+- **Warning Amber**: `#D97706` (Amber-600) - Warnings, attention needed
+- **Error Red**: `#DC2626` (Red-600) - Errors, negative trends
+- **Info Blue**: `#2563EB` (Blue-600) - Information, neutral data points
+- **Violet**: `#7C3AED` (Violet-600) - Special categories, premium features
+
+### Extended Palette (Module Differentiation)
+- **Ocean Blue**: `#1E40AF` (Blue-800) - Trials™ module
+- **Forest Green**: `#166534` (Green-800) - Profile™ module  
+- **Sunset Orange**: `#EA580C` (Orange-600) - Build™ module
+- **Deep Purple**: `#6B21A8` (Purple-800) - Emme™ module
+- **Indigo**: `#4338CA` (Indigo-700) - Forecast™ module
+
+### Color Usage Guidelines
+- **Primary teal** for main navigation, key CTAs, and brand elements
+- **Charcoal + Slate** for readable, professional text hierarchy
+- **Accent colors** used strategically for status indicators and data visualization
+- **Extended palette** provides subtle module differentiation while maintaining brand cohesion
+- Warm gray backgrounds create comfortable, less clinical feeling than pure white
+- Light teal for gentle highlights and selected states
+
+---
+
+## 📝 Typography
+
+### Font Family
+**Primary Font**: Roboto, Open Sans, Helvetica (Sans-serif priority)
+- Highly legible across all screen sizes
+- Clean, modern appearance
+- Excellent cross-platform support
+
+### Font Weights & Hierarchy
+- **Bold (700)**: Headings, key performance metrics, high-level indices
+- **Semi-Bold (600)**: Section headers, important labels
+- **Regular (400)**: Body text, detailed metric descriptions
+- **Light (300)**: Supplementary text, captions
+
+### Font Sizes (Responsive)
+
+#### Desktop
+- **H1 Headings**: 20pt (1.25rem)
+- **H2 Headings**: 18pt (1.125rem)
+- **H3 Headings**: 16pt (1rem)
+- **Body Text**: 14pt (0.875rem)
+- **Small Text**: 12pt (0.75rem)
+
+#### Tablet/Mobile
+- **H1 Headings**: 18pt (1.125rem)
+- **H2 Headings**: 16pt (1rem)  
+- **H3 Headings**: 14pt (0.875rem)
+- **Body Text**: 13pt (0.8125rem)
+- **Small Text**: 11pt (0.6875rem)
+
+### Typography Principles
+- Consistent hierarchy across all device types
+- Key metrics use larger fonts on mobile for visibility
+- Maintain readability without screen overcrowding
+
+---
+
+## 🧩 UI Components
+
+### Buttons
+
+#### Primary Button
+```css
+.btn-primary {
+  background: linear-gradient(135deg, #1E3A8A 0%, #0F766E 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1E40AF 0%, #14B8A6 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+}
+```
+
+#### Secondary Button (Goldenrod)
+```css
+.btn-secondary {
+  background-color: #D97706;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #F59E0B;
+  transform: translateY(-1px);
+}
+```
+
+#### Outline Button
+```css
+.btn-outline {
+  background-color: transparent;
+  color: #1E3A8A;
+  border: 2px solid #1E3A8A;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-weight: 600;
+}
+
+.btn-outline:hover {
+  background-color: #DBEAFE;
+  color: #1E3A8A;
+}
+```
+
+#### Module-Specific Buttons
+```css
+/* Profile - Navy + Purple */
+.btn-profile {
+  background: linear-gradient(135deg, #1E3A8A 0%, #7C3AED 100%);
+  color: #FFFFFF;
+}
+
+/* Emme - Teal + Light Purple */
+.btn-emme {
+  background: linear-gradient(135deg, #0F766E 0%, #A78BFA 100%);
+  color: #FFFFFF;
+}
+
+/* Trials - Navy + Teal */
+.btn-trials {
+  background: linear-gradient(135deg, #1E3A8A 0%, #0F766E 100%);
+  color: #FFFFFF;
+}
+
+/* Build - Purple + Goldenrod */
+.btn-build {
+  background: linear-gradient(135deg, #7C3AED 0%, #D97706 100%);
+  color: #FFFFFF;
+}
+
+/* Forecast - Goldenrod + Purple */
+.btn-forecast {
+  background: linear-gradient(135deg, #D97706 0%, #7C3AED 100%);
+  color: #FFFFFF;
+}
+
+/* Sophie Agent - Purple + Teal */
+.btn-sophie {
+  background: linear-gradient(135deg, #7C3AED 0%, #0F766E 100%);
+  color: #FFFFFF;
+}
+```
+
+### Cards & Containers
+
+#### Standard Card
+```css
+.card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E5E7EB;
+  padding: 24px;
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+```
+
+#### Module Card (Enhanced)
+```css
+.module-card {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #1E3A8A;
+  padding: 32px;
+}
+
+/* Module-specific border colors and gradients */
+.module-card.profile {
+  border-left-color: #1E3A8A;
+  background: linear-gradient(135deg, #FFFFFF 0%, #DBEAFE 100%);
+}
+
+.module-card.emme {
+  border-left-color: #0F766E;
+  background: linear-gradient(135deg, #FFFFFF 0%, #CCFBF1 100%);
+}
+
+.module-card.trials {
+  border-left-color: #1E3A8A;
+  background: linear-gradient(135deg, #FFFFFF 0%, #CCFBF1 100%);
+}
+
+.module-card.build {
+  border-left-color: #7C3AED;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FEF3C7 100%);
+}
+
+.module-card.forecast {
+  border-left-color: #D97706;
+  background: linear-gradient(135deg, #FFFFFF 0%, #EDE9FE 100%);
+}
+
+.module-card.sophie {
+  border-left-color: #7C3AED;
+  background: linear-gradient(135deg, #FFFFFF 0%, #EDE9FE 100%);
+}
+```
+
+### Forms & Inputs
+
+#### Text Input
+```css
+.form-input {
+  border: 2px solid #D1D5DB;
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  background: #FFFFFF;
+}
+
+.form-input:focus {
+  border-color: #7C3AED;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+/* Module-specific input focus states */
+.form-input.profile:focus {
+  border-color: #6D28D9;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+}
+
+.form-input.emme:focus {
+  border-color: #7DD3FC;
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.2);
+}
+```
+
+### Navigation
+
+#### Primary Navigation
+- Clean, minimalist navigation bar
+- Logo positioned top-left
+- Module access via dropdown or tabs
+- User profile/settings top-right
+- Mobile: Hamburger menu with slide-out drawer
+
+---
+
+## 📊 Data Visualization
+
+### Chart Color Coding
+- **Positive Trends**: `#059669` (Emerald-600)
+- **Negative Trends**: `#DC2626` (Red-600)
+- **Neutral/Comparison**: `#6B7280`, `#7C3AED` (Slate, Purple)
+- **Warning Indicators**: `#D97706` (Amber-600)
+- **AI Insights**: `#9333EA` (Purple-600) - Sophie-generated recommendations
+
+### Interactive States
+- **Hover**: Light purple accent (`#EDE9FE`) or blue (`#DBEAFE`)
+- **Active/Selected**: Purple-blue gradient with subtle shadow
+- **Loading**: Elegant pulse animation with blue-to-purple gradient
+- **Sophie Active**: Vibrant purple glow (`#9333EA`) for AI interactions
+
+### Module-Specific Chart Themes
+- **Profile™**: Deep purple (`#6D28D9`) with violet gradients - premium R&D intelligence
+- **Emme™**: Baby blue (`#7DD3FC`) with soft purple highlights - approachable medical affairs
+- **Trials™**: Clinical blue (`#1D4ED8`) with bright blue highlights - operational clarity
+- **Build™**: Deep purple (`#5B21B6`) with rich violet tones - sophisticated project intelligence
+- **Forecast™**: Indigo (`#4338CA`) with blue-purple gradients - future-focused analytics
+- **Sophie™**: Vibrant purple (`#9333EA`) with dynamic gradients - AI-native intelligence
+
+### Chart Guidelines
+- Subtle gradients to represent trends without overwhelming
+- Consistent color coding across all visualizations  
+- Clear data point highlighting on interaction
+- Accessible contrast ratios for all elements
+
+---
+
+## 📱 Responsive Design
+
+### Breakpoints
+- **Mobile**: 320px - 767px
+- **Tablet**: 768px - 1023px  
+- **Desktop**: 1024px+
+- **Large Desktop**: 1440px+
+
+### Mobile-First Principles
+- Progressive enhancement from mobile base
+- Touch-friendly interactive elements (minimum 44px)
+- Optimized font sizes for readability
+- Simplified navigation patterns
+- Key metrics prominently displayed
+
+### Layout Grid
+- **Desktop**: 12-column grid, 24px gutters
+- **Tablet**: 8-column grid, 20px gutters
+- **Mobile**: 4-column grid, 16px gutters
+
+---
+
+## 🔧 Platform-Specific Guidelines
+
+### Sophie™ Agent Interface
+- **Conversational UI**: Chat-like interface with purple-blue gradient message bubbles
+- **Agent Status**: Purple pulse indicators for active/thinking/complete states
+- **Decision Confidence**: Dynamic purple-to-blue gradient scoring (0-100%)
+- **Reasoning Display**: Expandable logic trees with purple node highlights
+- **AI Glow Effects**: Subtle purple glow for AI-generated content and recommendations
+
+### Module Branding
+Each SocratIQ module maintains core brand consistency while providing distinct personality through the blue-to-purple spectrum:
+
+- **Profile™**: Deep purple (`#6D28D9`) - premium R&D intelligence and strategic targeting
+- **Emme™**: Baby blue (`#7DD3FC`) with purple accents - approachable medical affairs with AI sophistication
+- **Trials™**: Clinical blue (`#1D4ED8`) - operational efficiency and regulatory compliance
+- **Build™**: Deep purple (`#5B21B6`) - sophisticated project intelligence and resource optimization  
+- **Forecast™**: Indigo (`#4338CA`) - future-looking predictive analytics
+- **Sophie™**: Vibrant purple (`#9333EA`) - AI-native intelligence and autonomous decision-making
+
+### Purple Psychology & Branding Benefits
+- **Innovation & Technology**: Purple signals cutting-edge AI and advanced analytics
+- **Premium Intelligence**: Deep purples convey high-value, sophisticated insights
+- **Trust & Reliability**: Blue-purple harmony maintains pharmaceutical industry credibility
+- **AI Differentiation**: Vibrant purples distinguish AI-generated vs. traditional content
+- **Luxury Feel**: Purple elevates SocratIQ above commodity software solutions
+
+---
+
+## ♿ Accessibility
+
+### Compliance Standards
+- **WCAG 2.1 AA** compliance minimum
+- **Color contrast ratio**: 4.5:1 for normal text, 3:1 for large text
+- **Color-blind friendly**: Never rely solely on color for information
+- **Keyboard navigation**: Full platform accessibility via keyboard
+- **Screen reader support**: Semantic HTML and ARIA labels
+
+### Implementation
+- Icons/labels supplement color-coding for data visualization
+- Focus indicators clearly visible for all interactive elements
+- Alt text for all meaningful images and charts
+- Proper heading structure (H1-H6) for screen readers
+
+---
+
+## 🌐 White-Label Customization
+
+### Partner Theming Capability
+```yaml
+partner_customization:
+  visual_identity:
+    - "Custom color schemes and typography"
+    - "Partner logos and brand assets" 
+    - "Custom domain and SSL certificates"
+    - "White-label email templates"
+  
+  functional_customization:
+    - "Partner-specific terminology"
+    - "Custom workflow configurations"
+    - "Compliance rule customization"
+    - "Multi-language localization"
+```
+
+### Theme Configuration
+Partners can customize:
+- Primary and accent colors
+- Logo placement and sizing
+- Typography choices (within approved families)
+- Domain and SSL configuration
+- Terminology and labeling
+
+---
+
+## 💻 Technical Implementation
+
+### CSS Framework Approach
+- **Utility-first**: Tailwind CSS compatible classes
+- **Component-based**: Reusable component library
+- **CSS Custom Properties**: For dynamic theming
+- **Responsive utilities**: Mobile-first breakpoint system
+
+### Replit.com + Tab9 Considerations
+- Optimize for web-based development environment
+- Ensure components work across different browsers
+- Consider performance for cloud-based development
+- Maintain compatibility with various deployment targets
+
+### Performance Guidelines
+- **Images**: WebP format with fallbacks, lazy loading
+- **Fonts**: Subset fonts, preload critical fonts
+- **CSS**: Critical CSS inlined, progressive enhancement
+- **JavaScript**: Module bundling, code splitting for large apps
+
+---
+
+## 🚀 Implementation Checklist
+
+### Phase 1: Foundation
+- [ ] Set up color palette as CSS custom properties
+- [ ] Implement typography scale and font loading
+- [ ] Create base component library (buttons, cards, forms)
+- [ ] Establish responsive grid system
+
+### Phase 2: Components
+- [ ] Build navigation components
+- [ ] Create data visualization components
+- [ ] Implement Sophie agent interface elements
+- [ ] Develop module-specific component variants
+
+### Phase 3: Integration
+- [ ] Test accessibility compliance
+- [ ] Implement white-label theming system
+- [ ] Optimize performance for target deployment
+- [ ] Create comprehensive component documentation
+
+---
+
+## 📚 Resources & Tools
+
+### Design Tools
+- **Figma**: Component library and design system
+- **Color Palette Generators**: For accessibility testing
+- **Contrast Checkers**: WebAIM, Stark for Figma
+
+### Development Tools
+- **Tailwind CSS**: Utility-first framework
+- **CSS Custom Properties**: For dynamic theming
+- **PostCSS**: For processing and optimization
+
+### Testing
+- **Accessibility**: axe-core, WAVE browser extension
+- **Responsive**: Browser dev tools, BrowserStack
+- **Performance**: Lighthouse, WebPageTest
+
+---
+
+*This style guide serves as the foundation for all SocratIQ platform development. For questions or clarifications, refer to the SocratIQ Technical Blueprint or contact the design system team.*

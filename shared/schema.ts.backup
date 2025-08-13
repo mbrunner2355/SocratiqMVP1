@@ -1,0 +1,2343 @@
+import { sql } from "drizzle-orm";
+import { pgTable, text, varchar, integer, jsonb, timestamp, real, boolean } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
+
+export const documents = pgTable("documents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  filename: text("filename").notNull(),
+  originalName: text("original_name").notNull(),
+  fileType: text("file_type").notNull(),
+  fileSize: integer("file_size").notNull(),
+  content: text("content"),
+  status: text("status").notNull().default("processing"), // processing, completed, failed
+  processingProgress: integer("processing_progress").default(0),
+  confidence: real("confidence"),
+  wordCount: integer("word_count"),
+  entities: jsonb("entities").default([]),
+  semanticTags: jsonb("semantic_tags").default([]),
+  metadata: jsonb("metadata").default({}),
+  processingTimeMs: integer("processing_time_ms"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const entities = pgTable("entities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  documentId: varchar("document_id").notNull().references(() => documents.id),
+  type: text("type").notNull(), // PERSON, ORGANIZATION, LOCATION, DATE, MEDICAL_TERM, etc.
+  value: text("value").notNull(),
+  confidence: real("confidence").notNull(),
+  startPosition: integer("start_position"),
+  endPosition: integer("end_position"),
+  context: text("context"),
+  metadata: jsonb("metadata").default({}),
+});
+
+export const insertDocumentSchema = createInsertSchema(documents).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEntitySchema = createInsertSchema(entities).omit({
+  id: true,
+});
+
+// SocratIQ Mesh™ - Knowledge Graph Tables
+export const graphNodes = pgTable("graph_nodes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  label: text("label").notNull(), // Human readable name
+  type: text("type").notNull(), // NODE_TYPES
+  entityId: varchar("entity_id").references(() => entities.id), // Optional reference to entity
+  properties: jsonb("properties").default({}), // Flexible node properties
+  embedding: jsonb("embedding"), // Vector embedding for similarity
+  confidence: real("confidence").default(1.0),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const graphRelationships = pgTable("graph_relationships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  fromNodeId: varchar("from_node_id").notNull().references(() => graphNodes.id),
+  toNodeId: varchar("to_node_id").notNull().references(() => graphNodes.id),
+  relationshipType: text("relationship_type").notNull(), // RELATIONSHIP_TYPES
+  strength: real("strength").default(1.0), // Relationship strength (0-1)
+  confidence: real("confidence").default(1.0), // AI confidence in relationship
+  properties: jsonb("properties").default({}), // Additional relationship metadata
+  sourceDocumentId: varchar("source_document_id").references(() => documents.id), // Where this relationship was discovered
+  inferenceReason: text("inference_reason"), // How this relationship was inferred
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Graph clustering and community detection
+export const graphClusters = pgTable("graph_clusters", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  nodeIds: jsonb("node_ids").notNull(), // Array of node IDs in this cluster
+  clusterType: text("cluster_type").notNull(), // CLUSTER_TYPES
+  metrics: jsonb("metrics").default({}), // Clustering metrics (modularity, etc.)
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+
+export const insertGraphNodeSchema = createInsertSchema(graphNodes).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertGraphRelationshipSchema = createInsertSchema(graphRelationships).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertGraphClusterSchema = createInsertSchema(graphClusters).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type Document = typeof documents.$inferSelect;
+export type InsertDocument = z.infer<typeof insertDocumentSchema>;
+export type Entity = typeof entities.$inferSelect;
+export type InsertEntity = z.infer<typeof insertEntitySchema>;
+export type GraphNode = typeof graphNodes.$inferSelect;
+export type InsertGraphNode = z.infer<typeof insertGraphNodeSchema>;
+export type GraphRelationship = typeof graphRelationships.$inferSelect;
+export type InsertGraphRelationship = z.infer<typeof insertGraphRelationshipSchema>;
+export type GraphCluster = typeof graphClusters.$inferSelect;
+export type InsertGraphCluster = z.infer<typeof insertGraphClusterSchema>;
+
+// Processing status types
+export const ProcessingStatus = {
+  QUEUED: "queued",
+  PROCESSING: "processing", 
+  COMPLETED: "completed",
+  FAILED: "failed"
+} as const;
+
+export type ProcessingStatusType = typeof ProcessingStatus[keyof typeof ProcessingStatus];
+
+// Mesh™ Processing Status
+export const MeshStatus = {
+  BUILDING: "building", // Building graph from entities
+  ANALYZING: "analyzing", // Computing relationships
+  CLUSTERING: "clustering", // Finding communities
+  READY: "ready", // Graph ready for queries
+  ERROR: "error" // Processing error
+} as const;
+
+export type MeshStatusType = typeof MeshStatus[keyof typeof MeshStatus];
+
+// Entity types
+export const EntityTypes = {
+  PERSON: "PERSON",
+  ORGANIZATION: "ORGANIZATION", 
+  LOCATION: "LOCATION",
+  DATE: "DATE",
+  MEDICAL_TERM: "MEDICAL_TERM",
+  DRUG: "DRUG",
+  DISEASE: "DISEASE",
+  PROTOCOL: "PROTOCOL",
+  REGULATION: "REGULATION"
+} as const;
+
+export type EntityType = typeof EntityTypes[keyof typeof EntityTypes];
+
+// Graph Node Types
+export const NodeTypes = {
+  ENTITY: "ENTITY", // Based on extracted entities
+  CONCEPT: "CONCEPT", // Abstract concepts
+  DOCUMENT: "DOCUMENT", // Document nodes
+  TOPIC: "TOPIC", // Topic clusters
+  KEYWORD: "KEYWORD", // Important keywords
+  TEMPORAL: "TEMPORAL", // Time-based nodes
+  SPATIAL: "SPATIAL", // Location-based nodes
+} as const;
+
+export type NodeType = typeof NodeTypes[keyof typeof NodeTypes];
+
+// Graph Relationship Types  
+export const RelationshipTypes = {
+  // Document relationships
+  CONTAINS: "CONTAINS", // Document contains entity
+  MENTIONS: "MENTIONS", // Entity mentioned in context
+  
+  // Entity relationships
+  RELATED_TO: "RELATED_TO", // General semantic relationship
+  PART_OF: "PART_OF", // Hierarchical relationship
+  SIMILAR_TO: "SIMILAR_TO", // Semantic similarity
+  OPPOSITE_TO: "OPPOSITE_TO", // Antonym/opposite
+  
+  // Temporal relationships
+  OCCURS_BEFORE: "OCCURS_BEFORE",
+  OCCURS_AFTER: "OCCURS_AFTER", 
+  OCCURS_WITH: "OCCURS_WITH",
+  
+  // Spatial relationships
+  LOCATED_IN: "LOCATED_IN",
+  NEAR: "NEAR",
+  CONTAINS_LOCATION: "CONTAINS_LOCATION",
+  
+  // Domain-specific relationships
+  TREATS: "TREATS", // Drug treats condition
+  CAUSES: "CAUSES", // A causes B
+  INHIBITS: "INHIBITS", // A inhibits B
+  INTERACTS_WITH: "INTERACTS_WITH", // Drug interactions
+  
+  // Organizational relationships
+  WORKS_FOR: "WORKS_FOR",
+  COLLABORATES_WITH: "COLLABORATES_WITH",
+  COMPETES_WITH: "COMPETES_WITH",
+} as const;
+
+export type RelationshipType = typeof RelationshipTypes[keyof typeof RelationshipTypes];
+
+// Graph Cluster Types
+export const ClusterTypes = {
+  TOPIC_CLUSTER: "TOPIC_CLUSTER", // Topically related nodes
+  ENTITY_CLUSTER: "ENTITY_CLUSTER", // Similar entities
+  DOCUMENT_CLUSTER: "DOCUMENT_CLUSTER", // Related documents
+  TEMPORAL_CLUSTER: "TEMPORAL_CLUSTER", // Time-based groupings
+  SEMANTIC_CLUSTER: "SEMANTIC_CLUSTER", // Semantically similar
+} as const;
+
+export type ClusterType = typeof ClusterTypes[keyof typeof ClusterTypes];
+
+// Graph Query and Analysis Types
+export interface GraphPathQuery {
+  startNodeId: string;
+  endNodeId?: string;
+  relationshipTypes?: RelationshipType[];
+  maxDepth?: number;
+  minConfidence?: number;
+}
+
+export interface GraphNeighborQuery {
+  nodeId: string;
+  depth?: number;
+  relationshipTypes?: RelationshipType[];
+  nodeTypes?: NodeType[];
+  minStrength?: number;
+}
+
+export interface GraphSearchQuery {
+  query: string;
+  nodeTypes?: NodeType[];
+  limit?: number;
+  minConfidence?: number;
+}
+
+// Graph Analysis Results
+export interface GraphPath {
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  totalStrength: number;
+  avgConfidence: number;
+}
+
+export interface GraphNeighborhood {
+  centerNode: GraphNode;
+  neighbors: Array<{
+    node: GraphNode;
+    relationship: GraphRelationship;
+    distance: number;
+  }>;
+}
+
+export interface GraphMetrics {
+  totalNodes: number;
+  totalRelationships: number;
+  avgDegree: number;
+  density: number;
+  clusters: number;
+  topEntities: Array<{
+    node: GraphNode;
+    degree: number;
+    centrality: number;
+  }>;
+}
+
+// =====================================
+// SocratIQ Build™ Module - Construction Project Intelligence
+// =====================================
+
+// Construction Projects - Main project entities
+export const constructionProjects = pgTable("construction_projects", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  type: text("type").notNull(), // COMMERCIAL, RESIDENTIAL, INFRASTRUCTURE, INDUSTRIAL
+  status: text("status").notNull().default("planning"), // planning, active, on_hold, completed, cancelled
+  phase: text("phase").notNull().default("design"), // design, pre_construction, construction, closeout
+  client: text("client").notNull(),
+  location: text("location").notNull(),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  plannedBudget: real("planned_budget").notNull(),
+  currentCost: real("current_cost").default(0),
+  percentComplete: real("percent_complete").default(0),
+  projectManager: varchar("project_manager").notNull(),
+  riskLevel: text("risk_level").default("medium"), // low, medium, high, critical
+  compliance: jsonb("compliance").default({}), // Regulatory compliance tracking
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Project Tasks - Tasks with dependencies and critical path analysis
+export const projectTasks = pgTable("project_tasks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => constructionProjects.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  type: text("type").notNull(), // DESIGN, PROCUREMENT, CONSTRUCTION, INSPECTION, TESTING
+  status: text("status").notNull().default("not_started"), // not_started, in_progress, completed, delayed, blocked
+  priority: text("priority").default("medium"), // low, medium, high, critical
+  isCriticalPath: boolean("is_critical_path").default(false),
+  plannedStartDate: timestamp("planned_start_date"),
+  plannedEndDate: timestamp("planned_end_date"),
+  actualStartDate: timestamp("actual_start_date"),
+  actualEndDate: timestamp("actual_end_date"),
+  estimatedHours: real("estimated_hours"),
+  actualHours: real("actual_hours"),
+  budgetAllocated: real("budget_allocated"),
+  actualCost: real("actual_cost").default(0),
+  assignedTeam: jsonb("assigned_team").default([]), // Array of team member IDs
+  dependencies: jsonb("dependencies").default([]), // Array of task IDs this depends on
+  blockers: jsonb("blockers").default([]), // Current blocking issues
+  percentComplete: real("percent_complete").default(0),
+  qualityScore: real("quality_score"), // Quality assessment 0-1
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Project Resources - Workforce, equipment, materials
+export const projectResources = pgTable("project_resources", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => constructionProjects.id),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // WORKFORCE, EQUIPMENT, MATERIAL, SUBCONTRACTOR
+  category: text("category"), // Specific category within type
+  quantity: real("quantity"),
+  unit: text("unit"), // hours, days, pieces, tons, etc.
+  costPerUnit: real("cost_per_unit"),
+  totalCost: real("total_cost"),
+  supplier: text("supplier"),
+  availability: text("availability").default("available"), // available, allocated, unavailable
+  scheduledDate: timestamp("scheduled_date"),
+  deliveryDate: timestamp("delivery_date"),
+  utilization: real("utilization").default(0), // 0-1 utilization rate
+  location: text("location"),
+  specifications: jsonb("specifications").default({}),
+  status: text("status").default("planned"), // planned, ordered, delivered, in_use, completed
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Budget tracking and cost management
+export const projectBudgets = pgTable("project_budgets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => constructionProjects.id),
+  category: text("category").notNull(), // LABOR, MATERIALS, EQUIPMENT, OVERHEAD, CONTINGENCY
+  subcategory: text("subcategory"),
+  budgetedAmount: real("budgeted_amount").notNull(),
+  actualAmount: real("actual_amount").default(0),
+  variance: real("variance").default(0), // Actual - Budgeted
+  variancePercent: real("variance_percent").default(0),
+  forecastAmount: real("forecast_amount"), // Projected final cost
+  isApproved: boolean("is_approved").default(false),
+  approvedBy: varchar("approved_by"),
+  approvalDate: timestamp("approval_date"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Change Orders - Scope changes and impact analysis
+export const changeOrders = pgTable("change_orders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => constructionProjects.id),
+  orderNumber: text("order_number").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  reason: text("reason").notNull(), // CLIENT_REQUEST, DESIGN_CHANGE, SITE_CONDITIONS, REGULATORY
+  status: text("status").default("pending"), // pending, approved, rejected, in_progress, completed
+  requestedBy: varchar("requested_by").notNull(),
+  requestDate: timestamp("request_date").defaultNow(),
+  reviewedBy: varchar("reviewed_by"),
+  reviewDate: timestamp("review_date"),
+  approvedBy: varchar("approved_by"),
+  approvalDate: timestamp("approval_date"),
+  costImpact: real("cost_impact"), // Additional cost (positive) or savings (negative)
+  scheduleImpact: integer("schedule_impact_days"), // Days added or reduced
+  affectedTasks: jsonb("affected_tasks").default([]), // Array of task IDs impacted
+  affectedResources: jsonb("affected_resources").default([]), // Array of resource IDs impacted
+  riskAssessment: jsonb("risk_assessment").default({}),
+  mitigationPlan: text("mitigation_plan"),
+  attachments: jsonb("attachments").default([]),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Risk Assessments - Risk monitoring and mitigation
+export const riskAssessments = pgTable("risk_assessments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => constructionProjects.id),
+  riskType: text("risk_type").notNull(), // SCHEDULE, BUDGET, QUALITY, SAFETY, WEATHER, SUPPLY_CHAIN
+  category: text("category"), // Subcategory within risk type
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  probability: real("probability").notNull(), // 0-1 probability of occurrence
+  impact: real("impact").notNull(), // 0-1 impact severity
+  riskScore: real("risk_score").notNull(), // probability * impact
+  status: text("status").default("active"), // active, mitigated, resolved, closed
+  identifiedBy: varchar("identified_by").notNull(),
+  identifiedDate: timestamp("identified_date").defaultNow(),
+  assignedTo: varchar("assigned_to"),
+  dueDate: timestamp("due_date"),
+  mitigationStrategy: text("mitigation_strategy"),
+  contingencyPlan: text("contingency_plan"),
+  statusNotes: text("status_notes"),
+  lastReviewDate: timestamp("last_review_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =====================================
+// SocratIQ Profile™ Module - Comprehensive Profiling System
+// =====================================
+
+export const userProfiles = pgTable("user_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().unique(), // External user ID
+  displayName: text("display_name").notNull(),
+  email: text("email").notNull().unique(),
+  role: text("role").notNull().default("analyst"), // admin, analyst, viewer, guest
+  preferences: jsonb("preferences").default({}), // UI preferences, notifications, etc.
+  permissions: jsonb("permissions").default([]), // Fine-grained permissions
+  activityStats: jsonb("activity_stats").default({}), // Usage statistics
+  lastLogin: timestamp("last_login"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const documentProfiles = pgTable("document_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  documentId: varchar("document_id").notNull().references(() => documents.id),
+  qualityScore: real("quality_score"), // 0-1 quality assessment
+  complexityScore: real("complexity_score"), // Document complexity metric
+  confidenceScore: real("confidence_score"), // Processing confidence
+  processingHistory: jsonb("processing_history").default([]), // Processing events
+  annotations: jsonb("annotations").default([]), // User annotations
+  classifications: jsonb("classifications").default([]), // Document classifications
+  relatedDocuments: jsonb("related_documents").default([]), // Similar/related docs
+  usageStats: jsonb("usage_stats").default({}), // View count, downloads, etc.
+  complianceFlags: jsonb("compliance_flags").default([]), // Regulatory compliance
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const entityProfiles = pgTable("entity_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  entityId: varchar("entity_id").notNull().references(() => entities.id),
+  canonicalName: text("canonical_name"), // Standardized entity name
+  aliases: jsonb("aliases").default([]), // Alternative names/spellings
+  description: text("description"),
+  category: text("category"), // Refined categorization
+  attributes: jsonb("attributes").default({}), // Entity-specific attributes
+  relationshipSummary: jsonb("relationship_summary").default({}), // Relationship counts by type
+  documentFrequency: integer("document_frequency").default(0), // Appears in N documents
+  importance: real("importance").default(0), // Importance score (0-1)
+  verificationStatus: text("verification_status").default("unverified"), // verified, unverified, disputed
+  sources: jsonb("sources").default([]), // Source references
+  notes: text("notes"), // User notes
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const systemProfiles = pgTable("system_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // ENVIRONMENT, PROCESSING, ANALYSIS, INTEGRATION
+  configuration: jsonb("configuration").notNull(), // System configuration
+  environment: text("environment").notNull(), // development, staging, production
+  version: text("version").notNull(),
+  isActive: boolean("is_active").default(true),
+  performanceMetrics: jsonb("performance_metrics").default({}), // Performance data
+  healthChecks: jsonb("health_checks").default([]), // System health status
+  dependencies: jsonb("dependencies").default([]), // External dependencies
+  maintenanceWindow: jsonb("maintenance_window"), // Scheduled maintenance
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Insert schemas for Build module - Construction Project Intelligence
+export const insertConstructionProjectSchema = createInsertSchema(constructionProjects).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertProjectTaskSchema = createInsertSchema(projectTasks).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertProjectResourceSchema = createInsertSchema(projectResources).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertProjectBudgetSchema = createInsertSchema(projectBudgets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertChangeOrderSchema = createInsertSchema(changeOrders).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertRiskAssessmentSchema = createInsertSchema(riskAssessments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Insert schemas for Profile module
+export const insertUserProfileSchema = createInsertSchema(userProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertDocumentProfileSchema = createInsertSchema(documentProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEntityProfileSchema = createInsertSchema(entityProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSystemProfileSchema = createInsertSchema(systemProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Type exports for Build module - Construction Project Intelligence
+export type ConstructionProject = typeof constructionProjects.$inferSelect;
+export type InsertConstructionProject = z.infer<typeof insertConstructionProjectSchema>;
+export type ProjectTask = typeof projectTasks.$inferSelect;
+export type InsertProjectTask = z.infer<typeof insertProjectTaskSchema>;
+export type ProjectResource = typeof projectResources.$inferSelect;
+export type InsertProjectResource = z.infer<typeof insertProjectResourceSchema>;
+export type ProjectBudget = typeof projectBudgets.$inferSelect;
+export type InsertProjectBudget = z.infer<typeof insertProjectBudgetSchema>;
+export type ChangeOrder = typeof changeOrders.$inferSelect;
+export type InsertChangeOrder = z.infer<typeof insertChangeOrderSchema>;
+export type RiskAssessment = typeof riskAssessments.$inferSelect;
+export type InsertRiskAssessment = z.infer<typeof insertRiskAssessmentSchema>;
+
+// Type exports for Profile module
+export type UserProfile = typeof userProfiles.$inferSelect;
+export type InsertUserProfile = z.infer<typeof insertUserProfileSchema>;
+export type DocumentProfile = typeof documentProfiles.$inferSelect;
+export type InsertDocumentProfile = z.infer<typeof insertDocumentProfileSchema>;
+export type EntityProfile = typeof entityProfiles.$inferSelect;
+export type InsertEntityProfile = z.infer<typeof insertEntityProfileSchema>;
+export type SystemProfile = typeof systemProfiles.$inferSelect;
+export type InsertSystemProfile = z.infer<typeof insertSystemProfileSchema>;
+
+// Build module constants
+export const PipelineTypes = {
+  DOCUMENT_PROCESSING: "DOCUMENT_PROCESSING",
+  GRAPH_CONSTRUCTION: "GRAPH_CONSTRUCTION", 
+  ANALYSIS: "ANALYSIS",
+  CUSTOM: "CUSTOM"
+} as const;
+
+export const BuilderTypes = {
+  GRAPH_BUILDER: "GRAPH_BUILDER",
+  QUERY_BUILDER: "QUERY_BUILDER",
+  REPORT_BUILDER: "REPORT_BUILDER",
+  WORKFLOW_BUILDER: "WORKFLOW_BUILDER"
+} as const;
+
+export const TemplateCategories = {
+  PIPELINE: "PIPELINE",
+  GRAPH: "GRAPH",
+  ANALYSIS: "ANALYSIS",
+  REPORT: "REPORT"
+} as const;
+
+// Profile module constants
+export const UserRoles = {
+  ADMIN: "admin",
+  ANALYST: "analyst",
+  VIEWER: "viewer", 
+  GUEST: "guest"
+} as const;
+
+export const ProfileTypes = {
+  ENVIRONMENT: "ENVIRONMENT",
+  PROCESSING: "PROCESSING",
+  ANALYSIS: "ANALYSIS",
+  INTEGRATION: "INTEGRATION"
+} as const;
+
+export const VerificationStatus = {
+  VERIFIED: "verified",
+  UNVERIFIED: "unverified",
+  DISPUTED: "disputed"
+} as const;
+
+export type UserRole = typeof UserRoles[keyof typeof UserRoles];
+export type VerificationStatusType = typeof VerificationStatus[keyof typeof VerificationStatus];
+
+// =====================================
+// SocratIQ Corpus Construction & Federation
+// =====================================
+
+// Domain-specific corpora for each module
+export const corpora = pgTable("corpora", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  module: text("module").notNull(), // TRANSFORM, MESH, TRACE, SOPHIE, BUILD, PROFILE
+  domain: text("domain").notNull(), // CONSTRUCTION, MEDICAL, LEGAL, FINANCIAL, etc.
+  type: text("type").notNull(), // DOCUMENTS, PROTOCOLS, REPORTS, TRANSCRIPTS, PROJECTS
+  version: text("version").notNull().default("1.0.0"),
+  ontologyVersion: text("ontology_version"), // Aligned ontology version
+  semanticTags: jsonb("semantic_tags").default([]), // Domain-specific tags
+  indexConfiguration: jsonb("index_configuration").default({}), // Search indexing config
+  federationRules: jsonb("federation_rules").default({}), // Cross-corpus linking rules
+  enrichmentMetadata: jsonb("enrichment_metadata").default({}), // Enrichment statistics
+  status: text("status").default("building"), // building, active, archived, deprecated
+  documentCount: integer("document_count").default(0),
+  totalSize: integer("total_size").default(0), // Size in bytes
+  lastEnrichment: timestamp("last_enrichment"),
+  createdBy: varchar("created_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Linking documents to specific corpora with enrichment metadata
+export const corpusDocuments = pgTable("corpus_documents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  corpusId: varchar("corpus_id").notNull().references(() => corpora.id),
+  documentId: varchar("document_id").notNull().references(() => documents.id),
+  role: text("role").notNull(), // PRIMARY, REFERENCE, SUPPORTING, CONTEXTUAL
+  enrichmentLevel: text("enrichment_level").default("basic"), // basic, enhanced, expert
+  semanticVector: jsonb("semantic_vector"), // Vector embedding for semantic search
+  extractedConcepts: jsonb("extracted_concepts").default([]), // Domain-specific concepts
+  qualityScore: real("quality_score"), // Document quality within corpus context
+  relevanceScore: real("relevance_score"), // Relevance to corpus domain
+  processingMetadata: jsonb("processing_metadata").default({}),
+  addedAt: timestamp("added_at").defaultNow(),
+  lastProcessed: timestamp("last_processed"),
+});
+
+// Cross-module corpus federation for semantic linking
+export const corpusFederation = pgTable("corpus_federation", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sourceCorpusId: varchar("source_corpus_id").notNull().references(() => corpora.id),
+  targetCorpusId: varchar("target_corpus_id").notNull().references(() => corpora.id),
+  relationshipType: text("relationship_type").notNull(), // SEMANTIC_LINK, DOMAIN_OVERLAP, TEMPORAL_SEQUENCE, CAUSAL_RELATION
+  strength: real("strength").notNull(), // 0-1 relationship strength
+  bidirectional: boolean("bidirectional").default(true),
+  semanticMapping: jsonb("semantic_mapping").default({}), // Concept mappings between corpora
+  contextRules: jsonb("context_rules").default({}), // Rules for context propagation
+  lastValidated: timestamp("last_validated"),
+  validationScore: real("validation_score"), // Automated validation score
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Context Memory Architecture - Short-term reasoning memory
+export const contextMemory = pgTable("context_memory", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull(), // Reasoning session identifier
+  memoryType: text("memory_type").notNull(), // SHORT_TERM, WORKING, EPISODIC
+  contextData: jsonb("context_data").notNull(), // Contextual information
+  semanticLinks: jsonb("semantic_links").default([]), // Links to relevant corpus elements
+  reasoning_chain: jsonb("reasoning_chain").default([]), // SophieLogic™ reasoning steps
+  relevanceScore: real("relevance_score").default(1.0),
+  accessCount: integer("access_count").default(0),
+  lastAccessed: timestamp("last_accessed").defaultNow(),
+  expiresAt: timestamp("expires_at"), // For short-term memory cleanup
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Long-term persistent semantic links across corpora
+export const semanticLinks = pgTable("semantic_links", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sourceType: text("source_type").notNull(), // DOCUMENT, ENTITY, CONCEPT, PROJECT, USER
+  sourceId: varchar("source_id").notNull(),
+  targetType: text("target_type").notNull(),
+  targetId: varchar("target_id").notNull(),
+  linkType: text("link_type").notNull(), // SEMANTIC_SIMILARITY, CAUSAL, TEMPORAL, SPATIAL, ONTOLOGICAL
+  corpusId: varchar("corpus_id").references(() => corpora.id), // Source corpus
+  strength: real("strength").notNull(), // 0-1 link strength
+  confidence: real("confidence").notNull(), // 0-1 confidence in link
+  evidence: jsonb("evidence").default([]), // Supporting evidence for link
+  metadata: jsonb("metadata").default({}), // Additional link metadata
+  validatedBy: varchar("validated_by"), // Human validation
+  validatedAt: timestamp("validated_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Immutable TraceUnits for context preservation
+export const traceUnits = pgTable("trace_units", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  traceId: varchar("trace_id").notNull(), // Grouping identifier
+  unitType: text("unit_type").notNull(), // REASONING_STEP, DECISION_POINT, CONTEXT_SNAPSHOT, FEDERATION_EVENT
+  contextSnapshot: jsonb("context_snapshot").notNull(), // Immutable context state
+  inputData: jsonb("input_data").default({}),
+  outputData: jsonb("output_data").default({}),
+  reasoning: jsonb("reasoning").default({}), // SophieLogic™ reasoning process
+  corporaInvolved: jsonb("corpora_involved").default([]), // Corpora used in this trace
+  federationLinks: jsonb("federation_links").default([]), // Cross-corpus links activated
+  qualityMetrics: jsonb("quality_metrics").default({}),
+  hash: varchar("hash").notNull(), // Cryptographic hash for immutability
+  previousTraceUnit: varchar("previous_trace_unit"), // Chain to previous unit
+  createdBy: varchar("created_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Ontology alignment and versioning for corpus federation
+export const ontologyAlignments = pgTable("ontology_alignments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sourceOntology: text("source_ontology").notNull(),
+  targetOntology: text("target_ontology").notNull(),
+  version: text("version").notNull(),
+  mappings: jsonb("mappings").notNull(), // Concept mappings between ontologies
+  confidence: real("confidence").notNull(), // 0-1 alignment confidence
+  validationStatus: text("validation_status").default("pending"), // pending, validated, rejected
+  usageCount: integer("usage_count").default(0),
+  lastUsed: timestamp("last_used"),
+  createdBy: varchar("created_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Insert schemas for Corpus Construction & Federation
+export const insertCorpusSchema = createInsertSchema(corpora).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCorpusDocumentSchema = createInsertSchema(corpusDocuments).omit({
+  id: true,
+  addedAt: true,
+});
+
+export const insertCorpusFederationSchema = createInsertSchema(corpusFederation).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertContextMemorySchema = createInsertSchema(contextMemory).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertSemanticLinkSchema = createInsertSchema(semanticLinks).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTraceUnitSchema = createInsertSchema(traceUnits).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertOntologyAlignmentSchema = createInsertSchema(ontologyAlignments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+
+// Type exports for Corpus Construction & Federation
+export type Corpus = typeof corpora.$inferSelect;
+export type InsertCorpus = z.infer<typeof insertCorpusSchema>;
+export type CorpusDocument = typeof corpusDocuments.$inferSelect;
+export type InsertCorpusDocument = z.infer<typeof insertCorpusDocumentSchema>;
+export type CorpusFederation = typeof corpusFederation.$inferSelect;
+export type InsertCorpusFederation = z.infer<typeof insertCorpusFederationSchema>;
+export type ContextMemory = typeof contextMemory.$inferSelect;
+export type InsertContextMemory = z.infer<typeof insertContextMemorySchema>;
+export type SemanticLink = typeof semanticLinks.$inferSelect;
+export type InsertSemanticLink = z.infer<typeof insertSemanticLinkSchema>;
+export type TraceUnit = typeof traceUnits.$inferSelect;
+export type InsertTraceUnit = z.infer<typeof insertTraceUnitSchema>;
+export type OntologyAlignment = typeof ontologyAlignments.$inferSelect;
+export type InsertOntologyAlignment = z.infer<typeof insertOntologyAlignmentSchema>;
+
+// Type exports for AI/ML Pipeline
+export type TransformerEnsemble = typeof transformerEnsemble.$inferSelect;
+export type InsertTransformerEnsemble = z.infer<typeof insertTransformerEnsembleSchema>;
+export type LoraAdapter = typeof loraAdapters.$inferSelect;
+export type InsertLoraAdapter = z.infer<typeof insertLoraAdapterSchema>;
+export type ProcessingPipeline = typeof processingPipeline.$inferSelect;
+export type InsertProcessingPipeline = z.infer<typeof insertProcessingPipelineSchema>;
+export type ModelVersion = typeof modelVersions.$inferSelect;
+export type InsertModelVersion = z.infer<typeof insertModelVersionSchema>;
+export type HumanFeedback = typeof humanFeedback.$inferSelect;
+export type InsertHumanFeedback = z.infer<typeof insertHumanFeedbackSchema>;
+export type FederatedLearning = typeof federatedLearning.$inferSelect;
+export type InsertFederatedLearning = z.infer<typeof insertFederatedLearningSchema>;
+export type DataQuality = typeof dataQuality.$inferSelect;
+export type InsertDataQuality = z.infer<typeof insertDataQualitySchema>;
+
+// Corpus Construction & Federation constants
+export const CorpusModules = {
+  TRANSFORM: "TRANSFORM",
+  MESH: "MESH",
+  TRACE: "TRACE", 
+  SOPHIE: "SOPHIE",
+  BUILD: "BUILD",
+  PROFILE: "PROFILE"
+} as const;
+
+export const CorpusDomains = {
+  CONSTRUCTION: "CONSTRUCTION",
+  MEDICAL: "MEDICAL",
+  LEGAL: "LEGAL",
+  FINANCIAL: "FINANCIAL",
+  ACADEMIC: "ACADEMIC",
+  TECHNICAL: "TECHNICAL"
+} as const;
+
+export const CorpusTypes = {
+  DOCUMENTS: "DOCUMENTS",
+  PROTOCOLS: "PROTOCOLS",
+  REPORTS: "REPORTS",
+  TRANSCRIPTS: "TRANSCRIPTS",
+  PROJECTS: "PROJECTS",
+  PROFILES: "PROFILES"
+} as const;
+
+export const FederationRelationshipTypes = {
+  SEMANTIC_LINK: "SEMANTIC_LINK",
+  DOMAIN_OVERLAP: "DOMAIN_OVERLAP",
+  TEMPORAL_SEQUENCE: "TEMPORAL_SEQUENCE",
+  CAUSAL_RELATION: "CAUSAL_RELATION"
+} as const;
+
+export const MemoryTypes = {
+  SHORT_TERM: "SHORT_TERM",
+  WORKING: "WORKING",
+  EPISODIC: "EPISODIC"
+} as const;
+
+export const TraceUnitTypes = {
+  REASONING_STEP: "REASONING_STEP",
+  DECISION_POINT: "DECISION_POINT",
+  CONTEXT_SNAPSHOT: "CONTEXT_SNAPSHOT",
+  FEDERATION_EVENT: "FEDERATION_EVENT"
+} as const;
+
+export const LinkTypes = {
+  SEMANTIC_SIMILARITY: "SEMANTIC_SIMILARITY",
+  CAUSAL: "CAUSAL",
+  TEMPORAL: "TEMPORAL",
+  SPATIAL: "SPATIAL",
+  ONTOLOGICAL: "ONTOLOGICAL"
+} as const;
+
+export const AlignmentTypes = {
+  EXACT_MATCH: "EXACT_MATCH",
+  SEMANTIC_EQUIVALENT: "SEMANTIC_EQUIVALENT",
+  PARTIAL_OVERLAP: "PARTIAL_OVERLAP",
+  RELATED_CONCEPT: "RELATED_CONCEPT",
+  INVERSE_RELATION: "INVERSE_RELATION"
+} as const;
+
+// AI/ML Pipeline Constants
+export const TransformerModels = {
+  BIOBERT: "BioBERT",
+  PUBMEDBERT: "PubMedBERT",
+  CLINICALBERT: "Clinical-BERT",
+  LEGALBERT: "Legal-BERT",
+  CONSTRUCTIONBERT: "Construction-BERT",
+  GENERALBERT: "BERT-Base"
+} as const;
+
+export const ModelTypes = {
+  DOMAIN_SPECIFIC: "DOMAIN_SPECIFIC",
+  GENERAL_PURPOSE: "GENERAL_PURPOSE",
+  FINE_TUNED: "FINE_TUNED"
+} as const;
+
+export const DomainTypes = {
+  BIOMEDICAL: "BIOMEDICAL",
+  CLINICAL: "CLINICAL",
+  LEGAL: "LEGAL",
+  CONSTRUCTION: "CONSTRUCTION",
+  GENERAL: "GENERAL"
+} as const;
+
+export const PipelineStages = {
+  INGESTION: "INGESTION",
+  PREPROCESSING: "PREPROCESSING",
+  SEMANTIC_ENHANCEMENT: "SEMANTIC_ENHANCEMENT"
+} as const;
+
+export const ProcessorTypes = {
+  TRANSFORMER: "TRANSFORMER",
+  RULE_BASED: "RULE_BASED",
+  HYBRID: "HYBRID"
+} as const;
+
+export const TaskTypes = {
+  NER: "NER", // Named Entity Recognition
+  RELATION_EXTRACTION: "RELATION_EXTRACTION",
+  CLASSIFICATION: "CLASSIFICATION",
+  QA: "QA", // Question Answering
+  SENTIMENT: "SENTIMENT"
+} as const;
+
+export const FeedbackTypes = {
+  CORRECTION: "CORRECTION",
+  VALIDATION: "VALIDATION",
+  ENHANCEMENT: "ENHANCEMENT"
+} as const;
+
+export const AggregationStrategies = {
+  FEDAVG: "FedAvg",
+  FEDPROX: "FedProx",
+  SCAFFOLD: "SCAFFOLD"
+} as const;
+
+export const QualityAssessors = {
+  MODEL: "MODEL",
+  HUMAN: "HUMAN",
+  HYBRID: "HYBRID"
+} as const;
+
+export type CorpusModule = typeof CorpusModules[keyof typeof CorpusModules];
+export type CorpusDomain = typeof CorpusDomains[keyof typeof CorpusDomains];
+export type CorpusType = typeof CorpusTypes[keyof typeof CorpusTypes];
+export type FederationRelationshipType = typeof FederationRelationshipTypes[keyof typeof FederationRelationshipTypes];
+export type MemoryType = typeof MemoryTypes[keyof typeof MemoryTypes];
+export type TraceUnitType = typeof TraceUnitTypes[keyof typeof TraceUnitTypes];
+export type LinkType = typeof LinkTypes[keyof typeof LinkTypes];
+export type AlignmentType = typeof AlignmentTypes[keyof typeof AlignmentTypes];
+export type TransformerModel = typeof TransformerModels[keyof typeof TransformerModels];
+export type ModelType = typeof ModelTypes[keyof typeof ModelTypes];
+export type DomainType = typeof DomainTypes[keyof typeof DomainTypes];
+export type PipelineStage = typeof PipelineStages[keyof typeof PipelineStages];
+export type ProcessorType = typeof ProcessorTypes[keyof typeof ProcessorTypes];
+export type TaskType = typeof TaskTypes[keyof typeof TaskTypes];
+export type FeedbackType = typeof FeedbackTypes[keyof typeof FeedbackTypes];
+export type AggregationStrategy = typeof AggregationStrategies[keyof typeof AggregationStrategies];
+export type QualityAssessor = typeof QualityAssessors[keyof typeof QualityAssessors];
+
+// =====================================
+// Advanced AI/ML Processing Pipeline
+// =====================================
+
+// Transformer Ensemble Management
+export const transformerEnsemble = pgTable("transformer_ensemble", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  modelName: text("model_name").notNull(), // BioBERT, PubMedBERT, Clinical-BERT, Legal-BERT, Construction-BERT
+  modelType: text("model_type").notNull(), // DOMAIN_SPECIFIC, GENERAL_PURPOSE, FINE_TUNED
+  domain: text("domain").notNull(), // BIOMEDICAL, CLINICAL, LEGAL, CONSTRUCTION, GENERAL
+  version: text("version").notNull(),
+  modelPath: text("model_path").notNull(), // Storage path for model files
+  configuration: jsonb("configuration").notNull(), // Model-specific config
+  performance: jsonb("performance").default({}), // Accuracy, F1-score, etc.
+  isActive: boolean("is_active").default(true),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// LoRA Adapters for Fine-tuning
+export const loraAdapters = pgTable("lora_adapters", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  baseModelId: varchar("base_model_id").notNull().references(() => transformerEnsemble.id),
+  adapterName: text("adapter_name").notNull(),
+  taskType: text("task_type").notNull(), // NER, RELATION_EXTRACTION, CLASSIFICATION, QA
+  domain: text("domain").notNull(),
+  rankSize: integer("rank_size").default(16), // LoRA rank parameter
+  alphaValue: real("alpha_value").default(32), // LoRA alpha parameter
+  adapterPath: text("adapter_path").notNull(),
+  trainingData: jsonb("training_data").default({}), // Dataset metadata
+  performance: jsonb("performance").default({}),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Processing Pipeline Stages
+export const processingPipeline = pgTable("processing_pipeline", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  documentId: varchar("document_id").notNull().references(() => documents.id),
+  stage: text("stage").notNull(), // INGESTION, PREPROCESSING, SEMANTIC_ENHANCEMENT
+  stageOrder: integer("stage_order").notNull(),
+  processorType: text("processor_type").notNull(), // TRANSFORMER, RULE_BASED, HYBRID
+  modelId: varchar("model_id").references(() => transformerEnsemble.id),
+  adapterIds: jsonb("adapter_ids").default([]), // Array of LoRA adapter IDs
+  inputData: jsonb("input_data").notNull(),
+  outputData: jsonb("output_data").default({}),
+  processingTime: integer("processing_time_ms"),
+  confidenceScore: real("confidence_score"),
+  errorLog: text("error_log"),
+  status: text("status").notNull().default("pending"), // pending, processing, completed, failed
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Model Version Control and A/B Testing
+export const modelVersions = pgTable("model_versions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  modelId: varchar("model_id").notNull().references(() => transformerEnsemble.id),
+  versionNumber: text("version_number").notNull(),
+  parentVersionId: varchar("parent_version_id").references(() => modelVersions.id),
+  changeLog: text("change_log"),
+  trainingMetrics: jsonb("training_metrics").default({}),
+  validationMetrics: jsonb("validation_metrics").default({}),
+  abTestResults: jsonb("ab_test_results").default({}),
+  isProduction: boolean("is_production").default(false),
+  deploymentDate: timestamp("deployment_date"),
+  rollbackDate: timestamp("rollback_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Human-in-the-Loop Feedback
+export const humanFeedback = pgTable("human_feedback", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  pipelineId: varchar("pipeline_id").notNull().references(() => processingPipeline.id),
+  expertId: varchar("expert_id").notNull(), // User who provided feedback
+  feedbackType: text("feedback_type").notNull(), // CORRECTION, VALIDATION, ENHANCEMENT
+  originalPrediction: jsonb("original_prediction").notNull(),
+  correctedPrediction: jsonb("corrected_prediction"),
+  confidence: real("confidence"), // Expert confidence in their feedback
+  explanation: text("explanation"),
+  isIncorporated: boolean("is_incorporated").default(false),
+  incorporationDate: timestamp("incorporation_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Federated Learning Coordination
+export const federatedLearning = pgTable("federated_learning", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  modelId: varchar("model_id").notNull().references(() => transformerEnsemble.id),
+  roundNumber: integer("round_number").notNull(),
+  participantNodes: jsonb("participant_nodes").notNull(), // Array of participating nodes
+  globalModelWeights: jsonb("global_model_weights"), // Encrypted model weights
+  aggregationStrategy: text("aggregation_strategy").default("FedAvg"), // FedAvg, FedProx, etc.
+  privacyBudget: real("privacy_budget"), // Differential privacy budget
+  convergenceMetrics: jsonb("convergence_metrics").default({}),
+  status: text("status").notNull().default("initiated"), // initiated, aggregating, completed, failed
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+});
+
+// Data Quality Assessment
+export const dataQuality = pgTable("data_quality", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  documentId: varchar("document_id").notNull().references(() => documents.id),
+  completenessScore: real("completeness_score"), // 0-1 completeness rating
+  accuracyScore: real("accuracy_score"), // Estimated accuracy
+  consistencyScore: real("consistency_score"), // Internal consistency
+  duplicateScore: real("duplicate_score"), // Similarity to existing docs
+  corruptionFlags: jsonb("corruption_flags").default([]), // Detected corruption issues
+  qualityIssues: jsonb("quality_issues").default([]), // Specific quality problems
+  enhancementSuggestions: jsonb("enhancement_suggestions").default([]),
+  assessedBy: text("assessed_by").notNull(), // MODEL, HUMAN, HYBRID
+  assessedAt: timestamp("assessed_at").defaultNow(),
+});
+
+// Insert schemas for AI/ML Pipeline
+export const insertTransformerEnsembleSchema = createInsertSchema(transformerEnsemble).omit({
+  id: true,
+  lastUpdated: true,
+  createdAt: true,
+});
+
+export const insertLoraAdapterSchema = createInsertSchema(loraAdapters).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertProcessingPipelineSchema = createInsertSchema(processingPipeline).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertModelVersionSchema = createInsertSchema(modelVersions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertHumanFeedbackSchema = createInsertSchema(humanFeedback).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertFederatedLearningSchema = createInsertSchema(federatedLearning).omit({
+  id: true,
+  startedAt: true,
+});
+
+export const insertDataQualitySchema = createInsertSchema(dataQuality).omit({
+  id: true,
+  assessedAt: true,
+});
+
+// =====================================
+// Graph Neural Network Pipeline
+// =====================================
+
+// GNN Node Embeddings
+export const gnnNodeEmbeddings = pgTable("gnn_node_embeddings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  nodeId: varchar("node_id").notNull().references(() => graphNodes.id),
+  embeddingVector: jsonb("embedding_vector").notNull(), // Dense vector representation
+  embeddingDimension: integer("embedding_dimension").notNull(),
+  generationMethod: text("generation_method").notNull(), // GCN, GAT, GraphSAGE, etc.
+  temporalVersion: integer("temporal_version").default(1), // For time-aware embeddings
+  domainContext: text("domain_context").notNull(), // BIOMEDICAL, LEGAL, CONSTRUCTION, etc.
+  localFeatures: jsonb("local_features").default({}), // Local neighborhood features
+  globalFeatures: jsonb("global_features").default({}), // Global graph structure features
+  attentionWeights: jsonb("attention_weights").default({}), // Attention mechanism weights
+  confidenceScore: real("confidence_score").default(1.0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// GNN Model Configurations
+export const gnnModels = pgTable("gnn_models", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  modelName: text("model_name").notNull(),
+  architecture: text("architecture").notNull(), // GCN, GAT, GraphSAGE, GIN, etc.
+  layerCount: integer("layer_count").notNull(),
+  hiddenDimensions: jsonb("hidden_dimensions").notNull(), // Array of layer dimensions
+  attentionHeads: integer("attention_heads"), // For GAT models
+  dropoutRate: real("dropout_rate").default(0.1),
+  learningRate: real("learning_rate").default(0.001),
+  domainSpecialization: text("domain_specialization"), // Specialized for specific domains
+  trainingConfig: jsonb("training_config").default({}),
+  performance: jsonb("performance").default({}), // Model performance metrics
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Link Prediction Results
+export const linkPredictions = pgTable("link_predictions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sourceNodeId: varchar("source_node_id").notNull().references(() => graphNodes.id),
+  targetNodeId: varchar("target_node_id").notNull().references(() => graphNodes.id),
+  predictedRelationType: text("predicted_relation_type").notNull(),
+  predictionScore: real("prediction_score").notNull(), // 0-1 probability
+  confidenceInterval: jsonb("confidence_interval"), // Statistical confidence bounds
+  gnnModelId: varchar("gnn_model_id").notNull().references(() => gnnModels.id),
+  evidenceNodes: jsonb("evidence_nodes").default([]), // Supporting evidence path
+  validationStatus: text("validation_status").default("pending"), // pending, validated, rejected
+  humanVerified: boolean("human_verified").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Node Classification Results
+export const nodeClassifications = pgTable("node_classifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  nodeId: varchar("node_id").notNull().references(() => graphNodes.id),
+  predictedType: text("predicted_type").notNull(),
+  predictedAttributes: jsonb("predicted_attributes").default({}),
+  classificationScore: real("classification_score").notNull(),
+  alternativePredictions: jsonb("alternative_predictions").default([]), // Top-k predictions
+  gnnModelId: varchar("gnn_model_id").notNull().references(() => gnnModels.id),
+  featureImportance: jsonb("feature_importance").default({}), // Feature attribution
+  validationStatus: text("validation_status").default("pending"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Graph Clustering Results
+export const graphClustering = pgTable("graph_clustering", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  clusterName: text("cluster_name").notNull(),
+  algorithm: text("algorithm").notNull(), // LOUVAIN, LEIDEN, SPECTRAL, etc.
+  nodeIds: jsonb("node_ids").notNull(), // Array of nodes in cluster
+  clusterSize: integer("cluster_size").notNull(),
+  modularityScore: real("modularity_score"), // Community structure quality
+  intraClusterDensity: real("intra_cluster_density"), // Internal connectivity
+  interClusterConnections: jsonb("inter_cluster_connections").default([]), // External connections
+  clusterFeatures: jsonb("cluster_features").default({}), // Derived cluster characteristics
+  domainContext: text("domain_context"),
+  stabilityScore: real("stability_score"), // Temporal stability across runs
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Anomaly Detection Results
+export const anomalyDetection = pgTable("anomaly_detection", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  nodeId: varchar("node_id").references(() => graphNodes.id),
+  relationshipId: varchar("relationship_id").references(() => graphRelationships.id),
+  anomalyType: text("anomaly_type").notNull(), // NODE_OUTLIER, EDGE_ANOMALY, PATTERN_DEVIATION
+  anomalyScore: real("anomaly_score").notNull(), // Higher = more anomalous
+  detectionMethod: text("detection_method").notNull(), // ISOLATION_FOREST, AUTOENCODER, GAE, etc.
+  anomalyDescription: text("anomaly_description"),
+  contextualFeatures: jsonb("contextual_features").default({}), // Features that contributed to detection
+  neighborhoodAnalysis: jsonb("neighborhood_analysis").default({}), // Local structure analysis
+  severity: text("severity").default("medium"), // low, medium, high, critical
+  investigationStatus: text("investigation_status").default("pending"), // pending, investigating, resolved, false_positive
+  investigationNotes: text("investigation_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Cross-Domain Reasoning Sessions
+export const crossDomainReasoning = pgTable("cross_domain_reasoning", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull(),
+  queryType: text("query_type").notNull(), // META_GRAPH_TRAVERSAL, SEMANTIC_BRIDGING, CAUSAL_INFERENCE, COUNTERFACTUAL
+  sourceDomains: jsonb("source_domains").notNull(), // Array of involved domains
+  targetDomains: jsonb("target_domains").notNull(),
+  queryDescription: text("query_description").notNull(),
+  reasoningPath: jsonb("reasoning_path").notNull(), // Step-by-step reasoning trace
+  semanticBridges: jsonb("semantic_bridges").default([]), // Cross-domain concept alignments
+  causalRelations: jsonb("causal_relations").default([]), // Identified causal links
+  counterfactualScenarios: jsonb("counterfactual_scenarios").default([]), // What-if scenarios
+  confidenceScore: real("confidence_score").notNull(),
+  executionTime: integer("execution_time_ms"),
+  resultSummary: text("result_summary"),
+  validationStatus: text("validation_status").default("pending"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Graph Distributed Storage Shards
+export const graphShards = pgTable("graph_shards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  shardName: text("shard_name").notNull(),
+  region: text("region").notNull(), // Geographic region
+  nodeRange: jsonb("node_range").notNull(), // Range of node IDs in this shard
+  relationshipCount: integer("relationship_count").default(0),
+  storageSize: integer("storage_size_bytes").default(0),
+  indexStatus: text("index_status").default("indexed"), // indexed, indexing, needs_reindex
+  lastRebalanced: timestamp("last_rebalanced"),
+  queryLatency: real("avg_query_latency_ms"), // Average query response time
+  isActive: boolean("is_active").default(true),
+  backupStatus: text("backup_status").default("current"), // current, backing_up, needs_backup
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Type exports for AI/ML Pipeline
+export type TransformerEnsemble = typeof transformerEnsemble.$inferSelect;
+export type InsertTransformerEnsemble = z.infer<typeof insertTransformerEnsembleSchema>;
+export type LoraAdapter = typeof loraAdapters.$inferSelect;
+export type InsertLoraAdapter = z.infer<typeof insertLoraAdapterSchema>;
+export type ProcessingPipeline = typeof processingPipeline.$inferSelect;
+export type InsertProcessingPipeline = z.infer<typeof insertProcessingPipelineSchema>;
+export type ModelVersion = typeof modelVersions.$inferSelect;
+export type InsertModelVersion = z.infer<typeof insertModelVersionSchema>;
+export type HumanFeedback = typeof humanFeedback.$inferSelect;
+export type InsertHumanFeedback = z.infer<typeof insertHumanFeedbackSchema>;
+export type FederatedLearning = typeof federatedLearning.$inferSelect;
+export type InsertFederatedLearning = z.infer<typeof insertFederatedLearningSchema>;
+export type DataQuality = typeof dataQuality.$inferSelect;
+export type InsertDataQuality = z.infer<typeof insertDataQualitySchema>;
+
+
+
+// Insert schemas for Graph Neural Network Pipeline
+export const insertGnnNodeEmbeddingSchema = createInsertSchema(gnnNodeEmbeddings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertGnnModelSchema = createInsertSchema(gnnModels).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertLinkPredictionSchema = createInsertSchema(linkPredictions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertNodeClassificationSchema = createInsertSchema(nodeClassifications).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertGraphClusteringSchema = createInsertSchema(graphClustering).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertAnomalyDetectionSchema = createInsertSchema(anomalyDetection).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertCrossDomainReasoningSchema = createInsertSchema(crossDomainReasoning).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertGraphShardSchema = createInsertSchema(graphShards).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Type exports for Graph Neural Network Pipeline
+export type GnnNodeEmbedding = typeof gnnNodeEmbeddings.$inferSelect;
+export type InsertGnnNodeEmbedding = z.infer<typeof insertGnnNodeEmbeddingSchema>;
+export type GnnModel = typeof gnnModels.$inferSelect;
+export type InsertGnnModel = z.infer<typeof insertGnnModelSchema>;
+export type LinkPrediction = typeof linkPredictions.$inferSelect;
+export type InsertLinkPrediction = z.infer<typeof insertLinkPredictionSchema>;
+export type NodeClassification = typeof nodeClassifications.$inferSelect;
+export type InsertNodeClassification = z.infer<typeof insertNodeClassificationSchema>;
+export type GraphClustering = typeof graphClustering.$inferSelect;
+export type InsertGraphClustering = z.infer<typeof insertGraphClusteringSchema>;
+export type AnomalyDetection = typeof anomalyDetection.$inferSelect;
+export type InsertAnomalyDetection = z.infer<typeof insertAnomalyDetectionSchema>;
+export type CrossDomainReasoning = typeof crossDomainReasoning.$inferSelect;
+export type InsertCrossDomainReasoning = z.infer<typeof insertCrossDomainReasoningSchema>;
+export type GraphShard = typeof graphShards.$inferSelect;
+export type InsertGraphShard = z.infer<typeof insertGraphShardSchema>;
+
+// Graph Neural Network Constants
+export const GnnArchitectures = {
+  GCN: "GCN", // Graph Convolutional Network
+  GAT: "GAT", // Graph Attention Network
+  GRAPHSAGE: "GraphSAGE", // Graph Sample and Aggregate
+  GIN: "GIN", // Graph Isomorphism Network
+  TRANSFORMER: "TRANSFORMER", // Graph Transformer
+  MPNN: "MPNN", // Message Passing Neural Network
+} as const;
+
+export const AnomalyTypes = {
+  NODE_OUTLIER: "NODE_OUTLIER",
+  EDGE_ANOMALY: "EDGE_ANOMALY",
+  PATTERN_DEVIATION: "PATTERN_DEVIATION",
+  TEMPORAL_ANOMALY: "TEMPORAL_ANOMALY",
+  COMMUNITY_ANOMALY: "COMMUNITY_ANOMALY",
+} as const;
+
+export const ReasoningTypes = {
+  META_GRAPH_TRAVERSAL: "META_GRAPH_TRAVERSAL",
+  SEMANTIC_BRIDGING: "SEMANTIC_BRIDGING", 
+  CAUSAL_INFERENCE: "CAUSAL_INFERENCE",
+  COUNTERFACTUAL: "COUNTERFACTUAL",
+} as const;
+
+export const ClusteringAlgorithms = {
+  LOUVAIN: "LOUVAIN",
+  LEIDEN: "LEIDEN",
+  SPECTRAL: "SPECTRAL",
+  KMEANS: "KMEANS",
+  HIERARCHICAL: "HIERARCHICAL",
+} as const;
+
+// =====================================
+// SocratIQ Trace™ Module - Immutable Audit System
+// =====================================
+
+// Audit Events - Core audit trail with cryptographic signatures
+export const auditEvents = pgTable("audit_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventType: text("event_type").notNull(), // DATA_OPERATION, DECISION_EVENT, SYSTEM_EVENT
+  eventSubtype: text("event_subtype").notNull(), // Specific operation type
+  actor: varchar("actor").notNull(), // User ID or system component
+  actorType: text("actor_type").notNull().default("USER"), // USER, SYSTEM, AGENT, API
+  targetEntity: varchar("target_entity"), // Entity being acted upon
+  targetEntityType: text("target_entity_type"), // DOCUMENT, MODEL, USER, etc.
+  operation: text("operation").notNull(), // CREATE, UPDATE, DELETE, QUERY, etc.
+  payload: jsonb("payload").notNull(), // Full operation details
+  payloadHash: text("payload_hash").notNull(), // SHA-256 hash of payload
+  previousEventHash: text("previous_event_hash"), // Hash chain for immutability
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  sessionId: varchar("session_id"), // Optional session grouping
+  transactionId: varchar("transaction_id"), // Optional transaction grouping
+  sourceSystem: text("source_system").notNull().default("SOCRATIQ"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  cryptographicSignature: text("cryptographic_signature").notNull(), // Digital signature
+  validationStatus: text("validation_status").default("VALID"), // VALID, INVALID, PENDING
+  retentionPolicy: text("retention_policy").default("PERMANENT"), // Retention classification
+  complianceFlags: jsonb("compliance_flags").default([]), // Regulatory compliance tags
+});
+
+// Decision Events - Capture agent and human decisions
+export const decisionEvents = pgTable("decision_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  auditEventId: varchar("audit_event_id").notNull().references(() => auditEvents.id),
+  decisionType: text("decision_type").notNull(), // AGENT_RECOMMENDATION, HUMAN_OVERRIDE, POLICY_APPLICATION, WORKFLOW_EXECUTION
+  decisionMaker: varchar("decision_maker").notNull(), // User ID or agent ID
+  decisionMakerType: text("decision_maker_type").notNull(), // HUMAN, AGENT, SYSTEM
+  confidence: real("confidence"), // Decision confidence (0-1)
+  reasoning: text("reasoning"), // Decision justification
+  alternatives: jsonb("alternatives").default([]), // Alternative options considered
+  evidence: jsonb("evidence").default([]), // Supporting evidence
+  riskAssessment: jsonb("risk_assessment").default({}), // Risk analysis
+  impactAnalysis: jsonb("impact_analysis").default({}), // Impact assessment
+  approvalChain: jsonb("approval_chain").default([]), // Approval workflow
+  policyReferences: jsonb("policy_references").default([]), // Policy citations
+  modelVersions: jsonb("model_versions").default([]), // AI model versions used
+  humanReviewRequired: boolean("human_review_required").default(false),
+  reviewStatus: text("review_status").default("PENDING"), // PENDING, APPROVED, REJECTED
+  reviewedBy: varchar("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+  reviewNotes: text("review_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Evidence Bundles - Regulatory submission packages
+export const evidenceBundles = pgTable("evidence_bundles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  bundleName: text("bundle_name").notNull(),
+  bundleType: text("bundle_type").notNull(), // REGULATORY_SUBMISSION, AUDIT_COMPLIANCE, INVESTIGATION
+  regulatoryContext: text("regulatory_context"), // FDA, EMA, SOX, GDPR, etc.
+  submissionId: varchar("submission_id"), // External submission reference
+  status: text("status").default("DRAFT"), // DRAFT, SUBMITTED, APPROVED, REJECTED
+  dataLineage: jsonb("data_lineage").notNull(), // Complete source-to-conclusion chain
+  modelReferences: jsonb("model_references").default([]), // Model versions and training data
+  humanReviewCycles: jsonb("human_review_cycles").default([]), // Review approval chain
+  externalValidations: jsonb("external_validations").default([]), // Third-party validations
+  auditEventIds: jsonb("audit_event_ids").notNull(), // Referenced audit events
+  timePeriod: jsonb("time_period").notNull(), // Start and end timestamps
+  entityScope: jsonb("entity_scope").default([]), // Entities included in bundle
+  documentReferences: jsonb("document_references").default([]), // Source documents
+  qualityMetrics: jsonb("quality_metrics").default({}), // Bundle completeness metrics
+  exportFormats: jsonb("export_formats").default([]), // Available export formats
+  submittedBy: varchar("submitted_by"),
+  submittedAt: timestamp("submitted_at"),
+  approvedBy: varchar("approved_by"),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =====================================
+// SocratIQ SophieTrust™ Module - Governance and Safety Framework  
+// =====================================
+
+// Risk Assessments - SophieTrust™ risk assessment engine
+export const riskAssessmentsSophieTrust = pgTable("risk_assessments_sophietrust", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  auditEventId: varchar("audit_event_id").notNull().references(() => auditEvents.id),
+  reasoningCycleId: varchar("reasoning_cycle_id").notNull(),
+  agentName: text("agent_name").notNull(), // Sophie, specialized agents
+  queryInput: text("query_input").notNull(), // Original user query
+  contextData: jsonb("context_data").notNull(), // Contextual information used
+  reasoningSteps: jsonb("reasoning_steps").notNull(), // Step-by-step reasoning
+  knowledgeReferences: jsonb("knowledge_references").default([]), // KB entities accessed
+  modelInferences: jsonb("model_inferences").default([]), // AI model outputs
+  confidenceScores: jsonb("confidence_scores").default({}), // Step-wise confidence
+  uncertaintyFlags: jsonb("uncertainty_flags").default([]), // Areas of uncertainty
+  alternativeReasoning: jsonb("alternative_reasoning").default([]), // Alternative paths
+  finalConclusion: text("final_conclusion").notNull(), // Reasoning outcome
+  evidenceStrength: real("evidence_strength"), // Overall evidence quality (0-1)
+  biasDetection: jsonb("bias_detection").default({}), // Bias analysis results
+  explainabilityScore: real("explainability_score"), // How explainable the reasoning is
+  verificationStatus: text("verification_status").default("UNVERIFIED"), // VERIFIED, UNVERIFIED, DISPUTED
+  humanReview: jsonb("human_review").default({}), // Human expert review
+  processingTime: integer("processing_time"), // Milliseconds to complete
+  memoryAccesses: jsonb("memory_accesses").default([]), // Context memory accessed
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// System State Snapshots - Point-in-time system configurations
+export const systemSnapshots = pgTable("system_snapshots", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  snapshotType: text("snapshot_type").notNull(), // DECISION_POINT, ERROR_CONDITION, SCHEDULED
+  triggerEventId: varchar("trigger_event_id").references(() => auditEvents.id),
+  systemConfiguration: jsonb("system_configuration").notNull(), // Full system config
+  activeModels: jsonb("active_models").default([]), // Models in use
+  userSessions: jsonb("user_sessions").default([]), // Active user sessions
+  processingQueues: jsonb("processing_queues").default([]), // Queue states
+  resourceUtilization: jsonb("resource_utilization").default({}), // CPU, memory, etc.
+  securityState: jsonb("security_state").default({}), // Security configurations
+  integrationStatus: jsonb("integration_status").default([]), // External system status
+  dataIntegrity: jsonb("data_integrity").default({}), // Data validation status
+  performanceMetrics: jsonb("performance_metrics").default({}), // System performance
+  complianceStatus: jsonb("compliance_status").default({}), // Regulatory compliance
+  backupStatus: jsonb("backup_status").default({}), // Backup system status
+  monitoringAlerts: jsonb("monitoring_alerts").default([]), // Active alerts
+  snapshotHash: text("snapshot_hash").notNull(), // SHA-256 of snapshot content
+  compressionRatio: real("compression_ratio"), // Storage efficiency
+  retentionExpiry: timestamp("retention_expiry"), // When to expire snapshot
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// External System Integrations - Track external system interactions
+export const externalIntegrations = pgTable("external_integrations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  auditEventId: varchar("audit_event_id").notNull().references(() => auditEvents.id),
+  systemName: text("system_name").notNull(), // External system identifier
+  systemType: text("system_type").notNull(), // API, DATABASE, SERVICE, etc.
+  operation: text("operation").notNull(), // GET, POST, PUT, DELETE, QUERY
+  endpoint: text("endpoint"), // API endpoint or connection string
+  requestPayload: jsonb("request_payload"), // Outgoing request data
+  responsePayload: jsonb("response_payload"), // Incoming response data
+  statusCode: integer("status_code"), // HTTP status or equivalent
+  responseTime: integer("response_time"), // Milliseconds
+  success: boolean("success").notNull(), // Operation success flag
+  errorMessage: text("error_message"), // Error details if failed
+  retryCount: integer("retry_count").default(0), // Number of retries
+  authenticationMethod: text("authentication_method"), // Auth type used
+  dataClassification: text("data_classification"), // Sensitivity level
+  complianceImpact: text("compliance_impact"), // Regulatory implications
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Audit Event Constants
+export const AuditEventTypes = {
+  DATA_OPERATION: "DATA_OPERATION",
+  DECISION_EVENT: "DECISION_EVENT",
+  SYSTEM_EVENT: "SYSTEM_EVENT",
+} as const;
+
+export const DataOperationTypes = {
+  DOCUMENT_INGESTION: "DOCUMENT_INGESTION",
+  TRANSFORMATION_STEP: "TRANSFORMATION_STEP",
+  GRAPH_UPDATE: "GRAPH_UPDATE",
+  QUERY_EXECUTION: "QUERY_EXECUTION",
+  ENTITY_EXTRACTION: "ENTITY_EXTRACTION",
+  CORPUS_CREATION: "CORPUS_CREATION",
+} as const;
+
+export const DecisionEventTypes = {
+  AGENT_RECOMMENDATION: "AGENT_RECOMMENDATION",
+  HUMAN_OVERRIDE: "HUMAN_OVERRIDE", 
+  POLICY_APPLICATION: "POLICY_APPLICATION",
+  WORKFLOW_EXECUTION: "WORKFLOW_EXECUTION",
+  RISK_ASSESSMENT: "RISK_ASSESSMENT",
+  COMPLIANCE_CHECK: "COMPLIANCE_CHECK",
+} as const;
+
+export const SystemEventTypes = {
+  USER_AUTHENTICATION: "USER_AUTHENTICATION",
+  CONFIGURATION_CHANGE: "CONFIGURATION_CHANGE",
+  MODEL_DEPLOYMENT: "MODEL_DEPLOYMENT",
+  ERROR_CONDITION: "ERROR_CONDITION",
+  BACKUP_OPERATION: "BACKUP_OPERATION",
+  SECURITY_ALERT: "SECURITY_ALERT",
+} as const;
+
+export const ActorTypes = {
+  USER: "USER",
+  SYSTEM: "SYSTEM",
+  AGENT: "AGENT",
+  API: "API",
+  SCHEDULER: "SCHEDULER",
+} as const;
+
+export const BundleTypes = {
+  REGULATORY_SUBMISSION: "REGULATORY_SUBMISSION",
+  AUDIT_COMPLIANCE: "AUDIT_COMPLIANCE",
+  INVESTIGATION: "INVESTIGATION",
+  FORENSIC: "FORENSIC",
+} as const;
+
+export const ValidationStatuses = {
+  VALID: "VALID",
+  INVALID: "INVALID",
+  PENDING: "PENDING",
+  EXPIRED: "EXPIRED",
+} as const;
+
+// Insert schemas for Trace™ module
+export const insertAuditEventSchema = createInsertSchema(auditEvents).omit({
+  id: true,
+});
+
+export const insertDecisionEventSchema = createInsertSchema(decisionEvents).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertEvidenceBundleSchema = createInsertSchema(evidenceBundles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTraceUnitSchema = createInsertSchema(traceUnits).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertSystemSnapshotSchema = createInsertSchema(systemSnapshots).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertExternalIntegrationSchema = createInsertSchema(externalIntegrations).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Type exports for Trace™ module
+export type AuditEvent = typeof auditEvents.$inferSelect;
+export type InsertAuditEvent = z.infer<typeof insertAuditEventSchema>;
+export type DecisionEvent = typeof decisionEvents.$inferSelect;
+export type InsertDecisionEvent = z.infer<typeof insertDecisionEventSchema>;
+export type EvidenceBundle = typeof evidenceBundles.$inferSelect;
+export type InsertEvidenceBundle = z.infer<typeof insertEvidenceBundleSchema>;
+export type TraceUnit = typeof traceUnits.$inferSelect;
+export type InsertTraceUnit = z.infer<typeof insertTraceUnitSchema>;
+export type SystemSnapshot = typeof systemSnapshots.$inferSelect;
+export type InsertSystemSnapshot = z.infer<typeof insertSystemSnapshotSchema>;
+export type ExternalIntegration = typeof externalIntegrations.$inferSelect;
+export type InsertExternalIntegration = z.infer<typeof insertExternalIntegrationSchema>;
+
+export type AuditEventType = typeof AuditEventTypes[keyof typeof AuditEventTypes];
+export type DataOperationType = typeof DataOperationTypes[keyof typeof DataOperationTypes];
+export type DecisionEventType = typeof DecisionEventTypes[keyof typeof DecisionEventTypes];
+export type SystemEventType = typeof SystemEventTypes[keyof typeof SystemEventTypes];
+export type ActorType = typeof ActorTypes[keyof typeof ActorTypes];
+export type BundleType = typeof BundleTypes[keyof typeof BundleTypes];
+export type ValidationStatus = typeof ValidationStatuses[keyof typeof ValidationStatuses];
+
+// =====================================
+// SocratIQ Sophie™ Module - Multi-Agent Orchestration System
+// =====================================
+
+// Agent Definitions - Core agent types and their capabilities
+export const agentDefinitions = pgTable("agent_definitions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  agentName: text("agent_name").notNull(), // Unique agent identifier
+  agentType: text("agent_type").notNull(), // PATTERN_DETECTION, HYPOTHESIS, DECISION_ENGINE, ACTION_DISPATCH
+  category: text("category"), // Subcategory within agent type
+  capabilities: jsonb("capabilities").notNull(), // Specific capabilities and functions
+  modelReferences: jsonb("model_references").default([]), // AI models used by this agent
+  resourceRequirements: jsonb("resource_requirements").default({}), // CPU, memory, GPU requirements
+  communicationProtocols: jsonb("communication_protocols").default([]), // Supported communication patterns
+  domainSpecialization: text("domain_specialization"), // Domain expertise (BIOMEDICAL, LEGAL, etc.)
+  confidenceThresholds: jsonb("confidence_thresholds").default({}), // Decision confidence requirements
+  timeoutSettings: jsonb("timeout_settings").default({}), // Execution timeout configurations
+  priority: integer("priority").default(5), // Agent priority (1-10)
+  isActive: boolean("is_active").default(true),
+  version: text("version").notNull().default("1.0.0"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Reasoning Sessions - SophieLogic™ reasoning cycles
+export const reasoningSessions = pgTable("reasoning_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionType: text("session_type").notNull(), // DATA_SIGNAL, AGENT_REQUEST, USER_PROMPT, SCHEDULED
+  triggerSource: text("trigger_source").notNull(), // What initiated the session
+  triggerPayload: jsonb("trigger_payload").notNull(), // Input data that triggered reasoning
+  status: text("status").default("ACTIVE"), // ACTIVE, COMPLETED, FAILED, CANCELLED
+  sessionContext: jsonb("session_context").notNull(), // Working memory and context
+  agentOrchestration: jsonb("agent_orchestration").default([]), // Agents involved in session
+  reasoningWorkflow: jsonb("reasoning_workflow").default([]), // Workflow steps and sequence
+  currentStep: integer("current_step").default(0), // Current step in reasoning workflow
+  totalSteps: integer("total_steps").default(1), // Total steps in workflow
+  startTime: timestamp("start_time").defaultNow(),
+  endTime: timestamp("end_time"),
+  processingTime: integer("processing_time"), // Total processing time in ms
+  confidenceScore: real("confidence_score"), // Overall session confidence
+  riskAssessment: jsonb("risk_assessment").default({}), // Risk analysis results
+  qualityMetrics: jsonb("quality_metrics").default({}), // Session quality indicators
+  parentSessionId: varchar("parent_session_id").references(() => reasoningSessions.id), // For nested sessions
+  correlationId: varchar("correlation_id"), // For tracking related sessions
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Agent Executions - Individual agent invocations within sessions
+export const agentExecutions = pgTable("agent_executions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => reasoningSessions.id),
+  agentId: varchar("agent_id").notNull().references(() => agentDefinitions.id),
+  executionOrder: integer("execution_order").notNull(), // Order within session
+  status: text("status").default("PENDING"), // PENDING, RUNNING, COMPLETED, FAILED, TIMEOUT
+  inputData: jsonb("input_data").notNull(), // Input provided to agent
+  outputData: jsonb("output_data"), // Agent output results
+  processingTime: integer("processing_time"), // Agent execution time in ms
+  memoryUsage: integer("memory_usage"), // Peak memory usage in bytes
+  cpuUsage: real("cpu_usage"), // CPU utilization percentage
+  confidenceScore: real("confidence_score"), // Agent-specific confidence
+  errorDetails: jsonb("error_details"), // Error information if failed
+  retryCount: integer("retry_count").default(0), // Number of retries attempted
+  modelInvocations: jsonb("model_invocations").default([]), // Models called by agent
+  communicationLog: jsonb("communication_log").default([]), // Agent communication events
+  startTime: timestamp("start_time").defaultNow(),
+  endTime: timestamp("end_time"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Pattern Detection Results - Output from PatternDetectionAgents
+export const patternDetectionResults = pgTable("pattern_detection_results", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  executionId: varchar("execution_id").notNull().references(() => agentExecutions.id),
+  patternType: text("pattern_type").notNull(), // STATISTICAL_ANOMALY, TEMPORAL_PATTERN, CROSS_DOMAIN_CORRELATION, EMERGING_SIGNAL
+  detectionMethod: text("detection_method").notNull(), // Algorithm or technique used
+  dataSource: text("data_source").notNull(), // Source of analyzed data
+  patternDescription: text("pattern_description").notNull(), // Human-readable pattern description
+  statisticalSignificance: real("statistical_significance"), // p-value or equivalent
+  confidenceInterval: jsonb("confidence_interval"), // Statistical confidence bounds
+  anomalyScore: real("anomaly_score"), // Anomaly detection score (0-1)
+  temporalFeatures: jsonb("temporal_features").default({}), // Time-series characteristics
+  spatialFeatures: jsonb("spatial_features").default({}), // Geographic or dimensional features
+  correlationMatrix: jsonb("correlation_matrix"), // Cross-domain correlations
+  emergingSignals: jsonb("emerging_signals").default([]), // New signals identified
+  baselineMetrics: jsonb("baseline_metrics").default({}), // Baseline comparison data
+  validationResults: jsonb("validation_results"), // Pattern validation outcomes
+  actionableInsights: jsonb("actionable_insights").default([]), // Recommended actions
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Hypothesis Generation - Output from HypothesisAgents
+export const hypothesisGeneration = pgTable("hypothesis_generation", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  executionId: varchar("execution_id").notNull().references(() => agentExecutions.id),
+  hypothesisType: text("hypothesis_type").notNull(), // CAUSAL_RELATIONSHIP, COUNTERFACTUAL_SCENARIO, PREDICTIVE_OUTCOME, ALTERNATIVE_PATHWAY
+  hypothesisStatement: text("hypothesis_statement").notNull(), // Formal hypothesis statement
+  evidenceBase: jsonb("evidence_base").notNull(), // Supporting evidence and data
+  causalModel: jsonb("causal_model"), // Causal relationship structure
+  counterfactualScenarios: jsonb("counterfactual_scenarios").default([]), // What-if scenarios
+  predictiveModeling: jsonb("predictive_modeling"), // Predictive model results
+  alternativePathways: jsonb("alternative_pathways").default([]), // Alternative solution paths
+  probabilityEstimation: real("probability_estimation"), // Hypothesis probability (0-1)
+  uncertaintyQuantification: jsonb("uncertainty_quantification"), // Uncertainty measures
+  sensitivityAnalysis: jsonb("sensitivity_analysis"), // Parameter sensitivity results
+  validationCriteria: jsonb("validation_criteria").default([]), // How to validate hypothesis
+  testableImplications: jsonb("testable_implications").default([]), // Testable predictions
+  riskFactors: jsonb("risk_factors").default([]), // Associated risks
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Decision Recommendations - Output from DecisionEngineAgents
+export const decisionRecommendations = pgTable("decision_recommendations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  executionId: varchar("execution_id").notNull().references(() => agentExecutions.id),
+  recommendationType: text("recommendation_type").notNull(), // MULTI_CRITERIA_OPTIMIZATION, RISK_BENEFIT_ANALYSIS, RESOURCE_ALLOCATION, TIMELINE_OPTIMIZATION
+  decisionContext: jsonb("decision_context").notNull(), // Context and constraints
+  alternatives: jsonb("alternatives").notNull(), // Available options
+  evaluationCriteria: jsonb("evaluation_criteria").notNull(), // Decision criteria and weights
+  optimizationResults: jsonb("optimization_results"), // Optimization outcomes
+  riskBenefitAnalysis: jsonb("risk_benefit_analysis"), // Risk-benefit assessment
+  resourceRequirements: jsonb("resource_requirements"), // Required resources per option
+  timelineProjections: jsonb("timeline_projections"), // Time estimates per option
+  sensitivityAnalysis: jsonb("sensitivity_analysis"), // Parameter sensitivity
+  stakeholderImpact: jsonb("stakeholder_impact").default([]), // Impact on stakeholders
+  recommendedAction: text("recommended_action").notNull(), // Primary recommendation
+  alternativeActions: jsonb("alternative_actions").default([]), // Secondary options
+  confidenceLevel: real("confidence_level").notNull(), // Recommendation confidence (0-1)
+  implementationPlan: jsonb("implementation_plan"), // How to implement recommendation
+  monitoringPlan: jsonb("monitoring_plan"), // How to monitor outcomes
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Action Dispatches - Output from ActionDispatchAgents
+export const actionDispatches = pgTable("action_dispatches", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  executionId: varchar("execution_id").notNull().references(() => agentExecutions.id),
+  actionType: text("action_type").notNull(), // WORKFLOW_AUTOMATION, ALERT_GENERATION, TASK_ASSIGNMENT, FEEDBACK_LOOP
+  targetSystem: text("target_system"), // System or service to receive action
+  actionPayload: jsonb("action_payload").notNull(), // Action data and parameters
+  workflowDefinition: jsonb("workflow_definition"), // Automated workflow steps
+  alertConfiguration: jsonb("alert_configuration"), // Alert settings and routing
+  taskAssignments: jsonb("task_assignments").default([]), // Task assignments to users/systems
+  feedbackLoops: jsonb("feedback_loops").default([]), // Feedback mechanisms
+  executionStatus: text("execution_status").default("PENDING"), // PENDING, EXECUTING, COMPLETED, FAILED
+  scheduledTime: timestamp("scheduled_time"), // When to execute action
+  executedTime: timestamp("executed_time"), // When action was executed
+  executionResults: jsonb("execution_results"), // Results of action execution
+  errorHandling: jsonb("error_handling"), // Error handling configuration
+  retryPolicy: jsonb("retry_policy"), // Retry configuration
+  dependencies: jsonb("dependencies").default([]), // Dependencies on other actions
+  priority: integer("priority").default(5), // Action priority (1-10)
+  timeout: integer("timeout").default(300000), // Timeout in milliseconds
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Agent Communication - Inter-agent communication events
+export const agentCommunication = pgTable("agent_communication", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => reasoningSessions.id),
+  fromAgentId: varchar("from_agent_id").notNull().references(() => agentDefinitions.id),
+  toAgentId: varchar("to_agent_id").references(() => agentDefinitions.id), // Null for broadcast
+  communicationType: text("communication_type").notNull(), // EVENT_DRIVEN, REQUEST_RESPONSE, BROADCAST, NEGOTIATION
+  messageType: text("message_type").notNull(), // DATA_SHARE, RESULT_NOTIFICATION, RESOURCE_REQUEST, STATUS_UPDATE
+  messagePayload: jsonb("message_payload").notNull(), // Message content
+  responsePayload: jsonb("response_payload"), // Response if request-response
+  messageId: varchar("message_id").notNull(), // Unique message identifier
+  correlationId: varchar("correlation_id"), // For tracking related messages
+  priority: integer("priority").default(5), // Message priority (1-10)
+  timeout: integer("timeout"), // Response timeout in milliseconds
+  retryCount: integer("retry_count").default(0), // Number of retries
+  deliveryStatus: text("delivery_status").default("PENDING"), // PENDING, DELIVERED, FAILED, TIMEOUT
+  acknowledgmentReceived: boolean("acknowledgment_received").default(false),
+  processingTime: integer("processing_time"), // Message processing time
+  createdAt: timestamp("created_at").defaultNow(),
+  deliveredAt: timestamp("delivered_at"),
+});
+
+// Resource Allocations - Dynamic resource management
+export const resourceAllocations = pgTable("resource_allocations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => reasoningSessions.id),
+  agentId: varchar("agent_id").notNull().references(() => agentDefinitions.id),
+  resourceType: text("resource_type").notNull(), // CPU, MEMORY, GPU, NETWORK, STORAGE
+  allocatedAmount: real("allocated_amount").notNull(), // Amount allocated
+  utilizationPeak: real("utilization_peak"), // Peak utilization observed
+  utilizationAverage: real("utilization_average"), // Average utilization
+  allocationTime: timestamp("allocation_time").defaultNow(),
+  releaseTime: timestamp("release_time"),
+  allocationDuration: integer("allocation_duration"), // Duration in milliseconds
+  costIncurred: real("cost_incurred"), // Resource cost
+  efficiency: real("efficiency"), // Utilization efficiency (0-1)
+  bottlenecks: jsonb("bottlenecks").default([]), // Identified bottlenecks
+  optimizationSuggestions: jsonb("optimization_suggestions").default([]), // Performance improvements
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Agent Constants
+export const AgentTypes = {
+  PATTERN_DETECTION: "PATTERN_DETECTION",
+  HYPOTHESIS: "HYPOTHESIS", 
+  DECISION_ENGINE: "DECISION_ENGINE",
+  ACTION_DISPATCH: "ACTION_DISPATCH",
+} as const;
+
+export const PatternDetectionCategories = {
+  STATISTICAL_ANOMALY: "STATISTICAL_ANOMALY",
+  TEMPORAL_PATTERN: "TEMPORAL_PATTERN",
+  CROSS_DOMAIN_CORRELATION: "CROSS_DOMAIN_CORRELATION", 
+  EMERGING_SIGNAL: "EMERGING_SIGNAL",
+} as const;
+
+export const HypothesisCategories = {
+  CAUSAL_RELATIONSHIP: "CAUSAL_RELATIONSHIP",
+  COUNTERFACTUAL_SCENARIO: "COUNTERFACTUAL_SCENARIO",
+  PREDICTIVE_OUTCOME: "PREDICTIVE_OUTCOME",
+  ALTERNATIVE_PATHWAY: "ALTERNATIVE_PATHWAY",
+} as const;
+
+export const DecisionEngineCategories = {
+  MULTI_CRITERIA_OPTIMIZATION: "MULTI_CRITERIA_OPTIMIZATION",
+  RISK_BENEFIT_ANALYSIS: "RISK_BENEFIT_ANALYSIS",
+  RESOURCE_ALLOCATION: "RESOURCE_ALLOCATION",
+  TIMELINE_OPTIMIZATION: "TIMELINE_OPTIMIZATION",
+} as const;
+
+export const ActionDispatchCategories = {
+  WORKFLOW_AUTOMATION: "WORKFLOW_AUTOMATION",
+  ALERT_GENERATION: "ALERT_GENERATION",
+  TASK_ASSIGNMENT: "TASK_ASSIGNMENT",
+  FEEDBACK_LOOP: "FEEDBACK_LOOP",
+} as const;
+
+export const SessionTypes = {
+  DATA_SIGNAL: "DATA_SIGNAL",
+  AGENT_REQUEST: "AGENT_REQUEST",
+  USER_PROMPT: "USER_PROMPT",
+  SCHEDULED: "SCHEDULED",
+} as const;
+
+export const SessionStatuses = {
+  ACTIVE: "ACTIVE",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+  CANCELLED: "CANCELLED",
+} as const;
+
+export const ExecutionStatuses = {
+  PENDING: "PENDING",
+  RUNNING: "RUNNING",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+  TIMEOUT: "TIMEOUT",
+} as const;
+
+export const CommunicationTypes = {
+  EVENT_DRIVEN: "EVENT_DRIVEN",
+  REQUEST_RESPONSE: "REQUEST_RESPONSE",
+  BROADCAST: "BROADCAST",
+  NEGOTIATION: "NEGOTIATION",
+} as const;
+
+export const ResourceTypes = {
+  CPU: "CPU",
+  MEMORY: "MEMORY",
+  GPU: "GPU",
+  NETWORK: "NETWORK",
+  STORAGE: "STORAGE",
+} as const;
+
+// Insert schemas for Sophie™ module
+export const insertAgentDefinitionSchema = createInsertSchema(agentDefinitions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertReasoningSessionSchema = createInsertSchema(reasoningSessions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAgentExecutionSchema = createInsertSchema(agentExecutions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertPatternDetectionResultSchema = createInsertSchema(patternDetectionResults).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertHypothesisGenerationSchema = createInsertSchema(hypothesisGeneration).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertDecisionRecommendationSchema = createInsertSchema(decisionRecommendations).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertActionDispatchSchema = createInsertSchema(actionDispatches).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAgentCommunicationSchema = createInsertSchema(agentCommunication).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertResourceAllocationSchema = createInsertSchema(resourceAllocations).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Type exports for Sophie™ module
+export type AgentDefinition = typeof agentDefinitions.$inferSelect;
+export type InsertAgentDefinition = z.infer<typeof insertAgentDefinitionSchema>;
+export type ReasoningSession = typeof reasoningSessions.$inferSelect;
+export type InsertReasoningSession = z.infer<typeof insertReasoningSessionSchema>;
+export type AgentExecution = typeof agentExecutions.$inferSelect;
+export type InsertAgentExecution = z.infer<typeof insertAgentExecutionSchema>;
+export type PatternDetectionResult = typeof patternDetectionResults.$inferSelect;
+export type InsertPatternDetectionResult = z.infer<typeof insertPatternDetectionResultSchema>;
+export type HypothesisGeneration = typeof hypothesisGeneration.$inferSelect;
+export type InsertHypothesisGeneration = z.infer<typeof insertHypothesisGenerationSchema>;
+export type DecisionRecommendation = typeof decisionRecommendations.$inferSelect;
+export type InsertDecisionRecommendation = z.infer<typeof insertDecisionRecommendationSchema>;
+export type ActionDispatch = typeof actionDispatches.$inferSelect;
+export type InsertActionDispatch = z.infer<typeof insertActionDispatchSchema>;
+export type AgentCommunication = typeof agentCommunication.$inferSelect;
+export type InsertAgentCommunication = z.infer<typeof insertAgentCommunicationSchema>;
+export type ResourceAllocation = typeof resourceAllocations.$inferSelect;
+export type InsertResourceAllocation = z.infer<typeof insertResourceAllocationSchema>;
+
+export type AgentType = typeof AgentTypes[keyof typeof AgentTypes];
+export type PatternDetectionCategory = typeof PatternDetectionCategories[keyof typeof PatternDetectionCategories];
+export type HypothesisCategory = typeof HypothesisCategories[keyof typeof HypothesisCategories];
+export type DecisionEngineCategory = typeof DecisionEngineCategories[keyof typeof DecisionEngineCategories];
+export type ActionDispatchCategory = typeof ActionDispatchCategories[keyof typeof ActionDispatchCategories];
+export type SessionType = typeof SessionTypes[keyof typeof SessionTypes];
+export type SessionStatus = typeof SessionStatuses[keyof typeof SessionStatuses];
+export type ExecutionStatus = typeof ExecutionStatuses[keyof typeof ExecutionStatuses];
+export type CommunicationType = typeof CommunicationTypes[keyof typeof CommunicationTypes];
+export type ResourceType = typeof ResourceTypes[keyof typeof ResourceTypes];
+
+// =====================================
+// SocratIQ SophieTrust™ Module - Governance and Safety Framework
+// =====================================
+
+// Risk Assessments - SophieTrust™ risk assessment engine
+export const riskAssessmentsSophieTrust = pgTable("risk_assessments_sophietrust", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  riskCategory: text("risk_category").notNull(), // COMPLIANCE_VIOLATION, DATA_PRIVACY_BREACH, FINANCIAL_THRESHOLD, TIMELINE_RISK, QUALITY_DEGRADATION
+  detectionMethod: text("detection_method").notNull(), // RULE_BASED_VALIDATION, ACCESS_PATTERN_ANALYSIS, BUDGET_TRACKING, CRITICAL_PATH_ANALYSIS, PERFORMANCE_MONITORING
+  riskLevel: text("risk_level").notNull().default("medium"), // low, medium, high, critical
+  riskScore: real("risk_score").notNull(), // 0-1 risk score
+  probabilityScore: real("probability_score"), // Probability of occurrence
+  impactScore: real("impact_score"), // Impact severity
+  targetEntity: varchar("target_entity"), // Entity being assessed
+  targetEntityType: text("target_entity_type"), // Type of entity
+  assessmentContext: jsonb("assessment_context").default({}), // Context information
+  detectedIssues: jsonb("detected_issues").default([]), // Array of detected issues
+  recommendedActions: jsonb("recommended_actions").default([]), // Recommended response actions
+  escalationTriggers: jsonb("escalation_triggers").default([]), // Conditions for escalation
+  mitigationStrategies: jsonb("mitigation_strategies").default([]), // Risk mitigation approaches
+  complianceFrameworks: jsonb("compliance_frameworks").default([]), // Applicable compliance frameworks
+  status: text("status").default("active"), // active, mitigated, escalated, resolved
+  reviewedBy: varchar("reviewed_by"), // Risk reviewer
+  reviewDate: timestamp("review_date"),
+  dueDate: timestamp("due_date"), // Date for resolution
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Compliance Policies - Governance rules and policies
+export const compliancePolicies = pgTable("compliance_policies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  policyName: text("policy_name").notNull(),
+  policyType: text("policy_type").notNull(), // DATA_PRIVACY, BUDGET_CONTROL, ACCESS_CONTROL, AUDIT_REQUIREMENT, REGULATORY_COMPLIANCE
+  policyCategory: text("policy_category"), // GxP, GDPR, SOX, BUDGET, TIMELINE
+  description: text("description").notNull(),
+  ruleSpecification: jsonb("rule_specification").notNull(), // Natural language and formal rule specification
+  enforcementLevel: text("enforcement_level").default("warn"), // block, warn, log, audit
+  applicableEntities: jsonb("applicable_entities").default([]), // Entities this policy applies to
+  conditions: jsonb("conditions").default([]), // Conditions for policy activation
+  actions: jsonb("actions").default([]), // Actions to take when policy is triggered
+  exceptions: jsonb("exceptions").default([]), // Policy exceptions
+  priority: integer("priority").default(5), // Policy priority (1-10)
+  isActive: boolean("is_active").default(true),
+  effectiveDate: timestamp("effective_date").defaultNow(),
+  expirationDate: timestamp("expiration_date"),
+  approvedBy: varchar("approved_by"), // Policy approver
+  approvalDate: timestamp("approval_date"),
+  version: text("version").default("1.0"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Sophie Guardrails™ - Real-time constraint enforcement
+export const sophieGuardrails = pgTable("sophie_guardrails", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  guardrailName: text("guardrail_name").notNull(),
+  guardrailType: text("guardrail_type").notNull(), // POLICY_ENFORCEMENT, CONSTRAINT_VALIDATION, ACCESS_CONTROL, BUDGET_LIMIT, DATA_PROTECTION
+  enforcementEngine: text("enforcement_engine").notNull(), // RULE_BASED, CONSTRAINT_LOGIC, FUZZY_LOGIC, ML_BASED
+  triggerConditions: jsonb("trigger_conditions").notNull(), // Conditions that activate guardrail
+  constraintLogic: jsonb("constraint_logic").notNull(), // Logic for constraint evaluation
+  actionOnViolation: text("action_on_violation").default("block"), // block, reroute, escalate, log
+  rerouttingRules: jsonb("rerouting_rules").default([]), // Rules for action rerouting
+  escalationPath: jsonb("escalation_path").default([]), // Escalation workflow
+  dependencyTracking: jsonb("dependency_tracking").default([]), // Dependency relationships
+  rollbackControls: jsonb("rollback_controls").default({}), // Rollback mechanisms
+  confidenceThreshold: real("confidence_threshold").default(0.8), // Confidence threshold for action
+  priority: integer("priority").default(5), // Guardrail priority
+  isActive: boolean("is_active").default(true),
+  performanceMetrics: jsonb("performance_metrics").default({}), // Performance tracking
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Sophie Ascend™ - Autonomy calibration and promotion
+export const sophieAscend = pgTable("sophie_ascend", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  agentId: varchar("agent_id").notNull(),
+  actionType: text("action_type").notNull(), // Action being calibrated
+  autonomyLevel: text("autonomy_level").notNull().default("supervised"), // supervised, semi_autonomous, autonomous
+  confidenceScore: real("confidence_score").notNull(), // Current confidence score
+  successRate: real("success_rate").default(0), // Historical success rate
+  supervisionHistory: jsonb("supervision_history").default([]), // Previous supervision events
+  promotionCriteria: jsonb("promotion_criteria").default({}), // Criteria for autonomy promotion
+  demotionTriggers: jsonb("demotion_triggers").default([]), // Triggers for autonomy reduction
+  learningMetrics: jsonb("learning_metrics").default({}), // Reinforcement learning metrics
+  statisticalBaseline: jsonb("statistical_baseline").default({}), // Statistical performance baseline
+  riskTolerance: real("risk_tolerance").default(0.1), // Risk tolerance for autonomous actions
+  rollbackCapability: boolean("rollback_capability").default(true), // Can actions be rolled back
+  humanOverrideCount: integer("human_override_count").default(0), // Count of human overrides
+  lastPromotionDate: timestamp("last_promotion_date"),
+  lastDemotionDate: timestamp("last_demotion_date"),
+  nextReviewDate: timestamp("next_review_date"),
+  calibrationNotes: text("calibration_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Sophie Ripple™ - Impact simulation and modeling
+export const sophieRipple = pgTable("sophie_ripple", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  simulationName: text("simulation_name").notNull(),
+  simulationType: text("simulation_type").notNull(), // AGENT_BASED_CASCADE, GRAPH_NEURAL_PROPAGATION, MONTE_CARLO, MULTI_STAKEHOLDER
+  triggerAction: jsonb("trigger_action").notNull(), // Action that triggers the simulation
+  stakeholders: jsonb("stakeholders").default([]), // Affected stakeholders
+  impactDomains: jsonb("impact_domains").default([]), // Domains affected (teams, processes, timeline)
+  cascadeEffects: jsonb("cascade_effects").default([]), // Multi-hop cascade effects
+  timeHorizon: integer("time_horizon").default(30), // Simulation time horizon in days
+  propagationRules: jsonb("propagation_rules").default([]), // Rules for impact propagation
+  simulationResults: jsonb("simulation_results").default({}), // Simulation outcomes
+  probabilisticOutcomes: jsonb("probabilistic_outcomes").default([]), // Probabilistic results
+  riskMetrics: jsonb("risk_metrics").default({}), // Risk quantification
+  mitigationOptions: jsonb("mitigation_options").default([]), // Mitigation strategies
+  confidenceInterval: real("confidence_interval").default(0.95), // Statistical confidence
+  simulationParameters: jsonb("simulation_parameters").default({}), // Model parameters
+  computationTime: integer("computation_time"), // Time taken for simulation
+  status: text("status").default("pending"), // pending, running, completed, failed
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Sophie Risk Lens™ - Probabilistic risk quantification
+export const sophieRiskLens = pgTable("sophie_risk_lens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  riskAnalysisName: text("risk_analysis_name").notNull(),
+  analysisType: text("analysis_type").notNull(), // BAYESIAN_SIMULATION, MONTE_CARLO, AGENT_BASED_MODELING, SENSITIVITY_ANALYSIS
+  targetAction: jsonb("target_action").notNull(), // Action being analyzed
+  riskCategories: jsonb("risk_categories").default([]), // Categories of risk analyzed
+  probabilisticModels: jsonb("probabilistic_models").default([]), // Models used in analysis
+  bayesianNetworks: jsonb("bayesian_networks").default([]), // Bayesian network structure
+  simulationRuns: integer("simulation_runs").default(10000), // Number of simulation runs
+  riskQuantification: jsonb("risk_quantification").default({}), // Quantified risk results
+  costProjections: jsonb("cost_projections").default({}), // Cost impact projections
+  timelineImpacts: jsonb("timeline_impacts").default({}), // Timeline risk analysis
+  complianceRisks: jsonb("compliance_risks").default({}), // Compliance risk assessment
+  downstreamEffects: jsonb("downstream_effects").default([]), // Downstream consequences
+  riskDistribution: jsonb("risk_distribution").default({}), // Risk probability distribution
+  confidenceBounds: jsonb("confidence_bounds").default({}), // Statistical confidence bounds
+  sensitivityAnalysis: jsonb("sensitivity_analysis").default({}), // Parameter sensitivity
+  recommendations: jsonb("recommendations").default([]), // Risk-based recommendations
+  validationMetrics: jsonb("validation_metrics").default({}), // Model validation results
+  status: text("status").default("pending"), // pending, running, completed, failed
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Policy Violations - Tracking violations and responses
+export const policyViolations = pgTable("policy_violations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  policyId: varchar("policy_id").notNull().references(() => compliancePolicies.id),
+  violationType: text("violation_type").notNull(), // COMPLIANCE_BREACH, ACCESS_VIOLATION, BUDGET_OVERRUN, DATA_MISUSE
+  severity: text("severity").notNull(), // low, medium, high, critical
+  violatingEntity: varchar("violating_entity"), // Entity that caused violation
+  violatingEntityType: text("violating_entity_type"),
+  violationContext: jsonb("violation_context").default({}), // Context of violation
+  detectionMethod: text("detection_method"), // How violation was detected
+  automaticResponse: jsonb("automatic_response").default({}), // Automatic response taken
+  humanResponse: jsonb("human_response").default({}), // Human response/override
+  blockingAction: boolean("blocking_action").default(false), // Was action blocked
+  rerouting: jsonb("rerouting").default({}), // Action rerouting details
+  escalationLevel: integer("escalation_level").default(0), // Current escalation level
+  resolutionStatus: text("resolution_status").default("open"), // open, investigating, resolved, false_positive
+  resolutionActions: jsonb("resolution_actions").default([]), // Actions taken to resolve
+  impactAssessment: jsonb("impact_assessment").default({}), // Assessment of violation impact
+  lessonsLearned: text("lessons_learned"), // Lessons learned from violation
+  assignedTo: varchar("assigned_to"), // Person assigned to handle violation
+  reportedAt: timestamp("reported_at").defaultNow(),
+  resolvedAt: timestamp("resolved_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Governance Actions - Actions taken by governance system
+export const governanceActions = pgTable("governance_actions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  actionType: text("action_type").notNull(), // BLOCK_ACTION, ESCALATE_ISSUE, AUDIT_LOG, REVOKE_ACCESS, APPROVE_WORKFLOW, REROUTE_ACTION
+  triggerEvent: varchar("trigger_event"), // Event that triggered the action
+  triggerEventType: text("trigger_event_type"), // Type of triggering event
+  governanceComponent: text("governance_component").notNull(), // GUARDRAILS, RISK_LENS, ASCEND, RIPPLE
+  targetEntity: varchar("target_entity"), // Entity affected by action
+  targetEntityType: text("target_entity_type"),
+  actionDetails: jsonb("action_details").notNull(), // Details of action taken
+  automationLevel: text("automation_level").default("automated"), // automated, semi_automated, manual
+  humanOverride: boolean("human_override").default(false), // Was there human override
+  overrideReason: text("override_reason"), // Reason for override
+  actionResult: text("action_result"), // Result of action
+  impactMeasurement: jsonb("impact_measurement").default({}), // Measured impact of action
+  followUpRequired: boolean("follow_up_required").default(false), // Is follow-up needed
+  followUpActions: jsonb("follow_up_actions").default([]), // Required follow-up actions
+  complianceFlags: jsonb("compliance_flags").default([]), // Compliance-related flags
+  auditTrail: jsonb("audit_trail").default([]), // Audit trail for action
+  executedBy: varchar("executed_by"), // Who/what executed the action
+  approvedBy: varchar("approved_by"), // Who approved the action
+  executedAt: timestamp("executed_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// SophieTrust™ Constants
+export const RiskCategories = {
+  COMPLIANCE_VIOLATION: "COMPLIANCE_VIOLATION",
+  DATA_PRIVACY_BREACH: "DATA_PRIVACY_BREACH",
+  FINANCIAL_THRESHOLD: "FINANCIAL_THRESHOLD",
+  TIMELINE_RISK: "TIMELINE_RISK",
+  QUALITY_DEGRADATION: "QUALITY_DEGRADATION",
+  SECURITY_RISK: "SECURITY_RISK",
+  OPERATIONAL_RISK: "OPERATIONAL_RISK"
+} as const;
+
+export const DetectionMethods = {
+  RULE_BASED_VALIDATION: "RULE_BASED_VALIDATION",
+  ACCESS_PATTERN_ANALYSIS: "ACCESS_PATTERN_ANALYSIS",
+  BUDGET_TRACKING: "BUDGET_TRACKING",
+  CRITICAL_PATH_ANALYSIS: "CRITICAL_PATH_ANALYSIS",
+  PERFORMANCE_MONITORING: "PERFORMANCE_MONITORING",
+  ML_ANOMALY_DETECTION: "ML_ANOMALY_DETECTION",
+  STATISTICAL_ANALYSIS: "STATISTICAL_ANALYSIS"
+} as const;
+
+export const PolicyTypes = {
+  DATA_PRIVACY: "DATA_PRIVACY",
+  BUDGET_CONTROL: "BUDGET_CONTROL",
+  ACCESS_CONTROL: "ACCESS_CONTROL",
+  AUDIT_REQUIREMENT: "AUDIT_REQUIREMENT",
+  REGULATORY_COMPLIANCE: "REGULATORY_COMPLIANCE",
+  QUALITY_ASSURANCE: "QUALITY_ASSURANCE",
+  SECURITY_POLICY: "SECURITY_POLICY"
+} as const;
+
+export const EnforcementLevels = {
+  BLOCK: "block",
+  WARN: "warn",
+  LOG: "log",
+  AUDIT: "audit"
+} as const;
+
+export const GuardrailTypes = {
+  POLICY_ENFORCEMENT: "POLICY_ENFORCEMENT",
+  CONSTRAINT_VALIDATION: "CONSTRAINT_VALIDATION",
+  ACCESS_CONTROL: "ACCESS_CONTROL",
+  BUDGET_LIMIT: "BUDGET_LIMIT",
+  DATA_PROTECTION: "DATA_PROTECTION",
+  TIMELINE_CONSTRAINT: "TIMELINE_CONSTRAINT"
+} as const;
+
+export const EnforcementEngines = {
+  RULE_BASED: "RULE_BASED",
+  CONSTRAINT_LOGIC: "CONSTRAINT_LOGIC",
+  FUZZY_LOGIC: "FUZZY_LOGIC",
+  ML_BASED: "ML_BASED"
+} as const;
+
+export const AutonomyLevels = {
+  SUPERVISED: "supervised",
+  SEMI_AUTONOMOUS: "semi_autonomous",
+  AUTONOMOUS: "autonomous"
+} as const;
+
+export const SimulationTypes = {
+  AGENT_BASED_CASCADE: "AGENT_BASED_CASCADE",
+  GRAPH_NEURAL_PROPAGATION: "GRAPH_NEURAL_PROPAGATION",
+  MONTE_CARLO: "MONTE_CARLO",
+  MULTI_STAKEHOLDER: "MULTI_STAKEHOLDER"
+} as const;
+
+export const AnalysisTypes = {
+  BAYESIAN_SIMULATION: "BAYESIAN_SIMULATION",
+  MONTE_CARLO_ANALYSIS: "MONTE_CARLO_ANALYSIS",
+  AGENT_BASED_MODELING: "AGENT_BASED_MODELING",
+  SENSITIVITY_ANALYSIS: "SENSITIVITY_ANALYSIS"
+} as const;
+
+export const ViolationTypes = {
+  COMPLIANCE_BREACH: "COMPLIANCE_BREACH",
+  ACCESS_VIOLATION: "ACCESS_VIOLATION",
+  BUDGET_OVERRUN: "BUDGET_OVERRUN",
+  DATA_MISUSE: "DATA_MISUSE",
+  TIMELINE_VIOLATION: "TIMELINE_VIOLATION"
+} as const;
+
+export const GovernanceActionTypes = {
+  BLOCK_ACTION: "BLOCK_ACTION",
+  ESCALATE_ISSUE: "ESCALATE_ISSUE",
+  AUDIT_LOG: "AUDIT_LOG",
+  REVOKE_ACCESS: "REVOKE_ACCESS",
+  APPROVE_WORKFLOW: "APPROVE_WORKFLOW",
+  REROUTE_ACTION: "REROUTE_ACTION"
+} as const;
+
+// Insert schemas for SophieTrust™ module
+export const insertRiskAssessmentSophieTrustSchema = createInsertSchema(riskAssessmentsSophieTrust).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCompliancePolicySchema = createInsertSchema(compliancePolicies).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSophieGuardrailSchema = createInsertSchema(sophieGuardrails).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSophieAscendSchema = createInsertSchema(sophieAscend).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSophieRippleSchema = createInsertSchema(sophieRipple).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSophieRiskLensSchema = createInsertSchema(sophieRiskLens).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPolicyViolationSchema = createInsertSchema(policyViolations).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertGovernanceActionSchema = createInsertSchema(governanceActions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Type exports for SophieTrust™ module
+export type RiskAssessmentSophieTrust = typeof riskAssessmentsSophieTrust.$inferSelect;
+export type InsertRiskAssessmentSophieTrust = z.infer<typeof insertRiskAssessmentSophieTrustSchema>;
+export type CompliancePolicy = typeof compliancePolicies.$inferSelect;
+export type InsertCompliancePolicy = z.infer<typeof insertCompliancePolicySchema>;
+export type SophieGuardrail = typeof sophieGuardrails.$inferSelect;
+export type InsertSophieGuardrail = z.infer<typeof insertSophieGuardrailSchema>;
+export type SophieAscend = typeof sophieAscend.$inferSelect;
+export type InsertSophieAscend = z.infer<typeof insertSophieAscendSchema>;
+export type SophieRipple = typeof sophieRipple.$inferSelect;
+export type InsertSophieRipple = z.infer<typeof insertSophieRippleSchema>;
+export type SophieRiskLens = typeof sophieRiskLens.$inferSelect;
+export type InsertSophieRiskLens = z.infer<typeof insertSophieRiskLensSchema>;
+export type PolicyViolation = typeof policyViolations.$inferSelect;
+export type InsertPolicyViolation = z.infer<typeof insertPolicyViolationSchema>;
+export type GovernanceAction = typeof governanceActions.$inferSelect;
+export type InsertGovernanceAction = z.infer<typeof insertGovernanceActionSchema>;
+
+export type RiskCategory = typeof RiskCategories[keyof typeof RiskCategories];
+export type DetectionMethod = typeof DetectionMethods[keyof typeof DetectionMethods];
+export type PolicyType = typeof PolicyTypes[keyof typeof PolicyTypes];
+export type EnforcementLevel = typeof EnforcementLevels[keyof typeof EnforcementLevels];
+export type GuardrailType = typeof GuardrailTypes[keyof typeof GuardrailTypes];
+export type EnforcementEngine = typeof EnforcementEngines[keyof typeof EnforcementEngines];
+export type AutonomyLevel = typeof AutonomyLevels[keyof typeof AutonomyLevels];
+export type SimulationType = typeof SimulationTypes[keyof typeof SimulationTypes];
+export type AnalysisType = typeof AnalysisTypes[keyof typeof AnalysisTypes];
+export type ViolationType = typeof ViolationTypes[keyof typeof ViolationTypes];
+export type GovernanceActionType = typeof GovernanceActionTypes[keyof typeof GovernanceActionTypes];
