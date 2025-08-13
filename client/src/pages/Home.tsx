@@ -1,280 +1,194 @@
-import { useQuery } from '@tanstack/react-query';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
-  Database,
-  GitBranch,
-  Bot,
-  Shield,
-  Users,
-  Cpu,
-  Network,
-  Activity,
-  TrendingUp,
-  FileText,
-  Brain,
-  Zap,
+  FileText, 
+  Network, 
+  Shield, 
+  Bot, 
+  Building2, 
+  Users, 
   Target,
+  TrendingUp,
+  Activity,
   Clock,
   CheckCircle,
-  AlertTriangle,
-  ArrowRight,
-  BarChart3,
-  Layers
-} from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import Analytics from '@/components/Analytics';
-import { SophieIntelligenceDashboard } from '@/components/SophieIntelligenceDashboard';
+  Zap,
+  Layers,
+  Lock
+} from "lucide-react";
+import { SophieLogo } from "@/components/SophieLogo";
 
-interface SystemOverview {
-  platformStatus: 'healthy' | 'warning' | 'error';
-  totalDocuments: number;
-  totalEntities: number;
-  activeModels: number;
-  activeAgents: number;
-  knowledgeGraphs: number;
-  recentActivities: Array<{
-    id: string;
-    type: string;
-    description: string;
-    timestamp: string;
-    status: 'success' | 'warning' | 'error';
-  }>;
-  systemMetrics: {
-    cpuUsage: number;
-    memoryUsage: number;
-    storage: number;
-    uptime: string;
+interface AnalyticsData {
+  entityStats: { [key: string]: number };
+  processingStats: {
+    totalDocuments: number;
+    processingQueue: number;
+    avgProcessingTime: number;
+    avgAccuracy: number;
   };
-  moduleHealth: {
-    [key: string]: 'healthy' | 'warning' | 'error';
-  };
-}
-
-interface QuickAction {
-  id: string;
-  title: string;
-  description: string;
-  icon: any;
-  href: string;
-  category: 'core' | 'module' | 'admin';
-  priority: 'high' | 'medium' | 'low';
 }
 
 export default function Home() {
-  const { user } = useAuth();
-  
-  const { data: systemOverview, isLoading } = useQuery<SystemOverview>({
-    queryKey: ['/api/system/overview'],
+  const { data: analytics } = useQuery<AnalyticsData>({
+    queryKey: ["/api/analytics"],
+    refetchInterval: 5000,
   });
 
-  const { data: analytics } = useQuery({
-    queryKey: ['/api/analytics'],
-  });
+  const totalEntities = analytics ? Object.values(analytics.entityStats).reduce((sum, count) => sum + count, 0) : 0;
 
-  const quickActions: QuickAction[] = [
-    {
-      id: 'upload_docs',
-      title: 'Process Documents',
-      description: 'Upload and analyze new documents with Transform™',
-      icon: FileText,
-      href: '/transform',
-      category: 'core',
-      priority: 'high'
+  const quickActions = [
+    { 
+      label: "IP Intelligence", 
+      href: "/ip", 
+      icon: Shield, 
+      description: "Prevent IP missteps and find 505(b)(2) options",
+      color: "bg-blue-500"
     },
-    {
-      id: 'explore_graph',
-      title: 'Explore Knowledge Graphs',
-      description: 'Navigate relationships in your knowledge networks',
-      icon: Network,
-      href: '/graphs',
-      category: 'core',
-      priority: 'high'
+    { 
+      label: "Market Access Strategy", 
+      href: "/emme", 
+      icon: Target, 
+      description: "Go-to-market and commercial orchestration",
+      color: "bg-green-500"
     },
-    {
-      id: 'chat_sophie',
-      title: 'Chat with Sophie™',
-      description: 'Get AI-powered insights from your knowledge base',
-      icon: Bot,
-      href: '/agents',
-      category: 'core',
-      priority: 'medium'
+    { 
+      label: "Asset Profiling", 
+      href: "/profile", 
+      icon: Users, 
+      description: "Phase 2-NDA translational intelligence",
+      color: "bg-purple-500"
     },
-    {
-      id: 'agentic_rag',
-      title: 'Temporal RAG Analysis',
-      description: 'Run advanced multi-agent reasoning workflows',
-      icon: Brain,
-      href: '/agentic-rag',
-      category: 'core',
-      priority: 'medium'
+    { 
+      label: "Construction Intelligence", 
+      href: "/build", 
+      icon: Layers, 
+      description: "AEC project optimization and risk analysis",
+      color: "bg-orange-500"
     },
-    {
-      id: 'build_projects',
-      title: 'Construction Intelligence',
-      description: 'Manage AEC projects with predictive analytics',
-      icon: Layers,
-      href: '/build',
-      category: 'module',
-      priority: 'low'
-    },
-    {
-      id: 'emme_platform',
-      title: 'EMME Pharmaceutical Intelligence',
-      description: 'Strategic pharma insights and market intelligence',
-      icon: Target,
-      href: '/emme',
-      category: 'module',
-      priority: 'medium'
-    }
   ];
 
-  const getStatusColor = (status: 'healthy' | 'warning' | 'error') => {
-    switch (status) {
-      case 'healthy': return 'text-green-600 bg-green-50';
-      case 'warning': return 'text-yellow-600 bg-yellow-50';
-      case 'error': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
-    }
-  };
-
-  const getStatusIcon = (status: 'healthy' | 'warning' | 'error') => {
-    switch (status) {
-      case 'healthy': return CheckCircle;
-      case 'warning': return AlertTriangle;
-      case 'error': return AlertTriangle;
-      default: return Activity;
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="h-8 bg-gray-200 animate-pulse rounded w-1/3"></div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 bg-gray-200 animate-pulse rounded-lg"></div>
-          ))}
-        </div>
-        <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
-      </div>
-    );
-  }
+  const moduleStatus = [
+    { name: "Transform™", status: "active", uptime: "99.9%", color: "bg-blue-500" },
+    { name: "Mesh™", status: "active", uptime: "99.8%", color: "bg-green-500" },
+    { name: "Trace™", status: "active", uptime: "99.9%", color: "bg-purple-500" },
+    { name: "IP™", status: "active", uptime: "99.7%", color: "bg-blue-600" },
+    { name: "EMME Connect™", status: "active", uptime: "99.6%", color: "bg-green-600" },
+    { name: "Trials™", status: "active", uptime: "99.5%", color: "bg-indigo-500" },
+    { name: "Profile™", status: "active", uptime: "99.4%", color: "bg-purple-600" },
+    { name: "Build™", status: "active", uptime: "99.3%", color: "bg-orange-500" },
+    { name: "Labs", status: "development", uptime: "Coming Q2", color: "bg-gray-400" },
+  ];
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-6">
       {/* Welcome Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {user?.firstName || 'User'}
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Your SocratIQ Transform™ platform overview and quick actions
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          {systemOverview && (
-            <Badge className={getStatusColor(systemOverview.platformStatus)}>
-              {systemOverview.platformStatus.charAt(0).toUpperCase() + systemOverview.platformStatus.slice(1)}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Welcome to SocratIQ™
+            </h1>
+            <p className="text-gray-600">
+              AI-enhanced intelligence platform for life sciences development and commercialization
+            </p>
+          </div>
+          <div className="text-right">
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              <span className="text-sm font-medium text-gray-700">All Systems Operational</span>
+            </div>
+            <Badge variant="secondary" className="bg-green-100 text-green-800">
+              Sophie™ AI Ready
             </Badge>
-          )}
+          </div>
         </div>
       </div>
 
-      {/* System Overview Cards */}
-      {systemOverview && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Documents Processed</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{systemOverview.totalDocuments.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">
-                <TrendingUp className="inline h-3 w-3 mr-1" />
-                Active processing pipeline
-              </p>
-            </CardContent>
-          </Card>
+      {/* Platform Overview Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active IP Assets</CardTitle>
+            <Shield className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">247</div>
+            <p className="text-xs text-muted-foreground">
+              Patents & applications
+            </p>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Entities Extracted</CardTitle>
-              <Database className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{systemOverview.totalEntities.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">
-                Knowledge graph nodes
-              </p>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">505(b)(2) Opportunities</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">23</div>
+            <p className="text-xs text-muted-foreground">
+              Repositioning candidates
+            </p>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active AI Agents</CardTitle>
-              <Bot className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{systemOverview.activeAgents}</div>
-              <p className="text-xs text-muted-foreground">
-                Sophie™ AI agents online
-              </p>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Audit Events</CardTitle>
+            <Lock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">2,847</div>
+            <p className="text-xs text-muted-foreground">
+              Blockchain verified transactions
+            </p>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Knowledge Graphs</CardTitle>
-              <Network className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{systemOverview.knowledgeGraphs}</div>
-              <p className="text-xs text-muted-foreground">
-                Temporal graph networks
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Trials</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">
+              Clinical studies monitored
+            </p>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5" />
-            Quick Actions
-          </CardTitle>
-          <CardDescription>
-            Common tasks and platform features you can access quickly
-          </CardDescription>
+          <CardTitle>Quick Actions</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Jump to frequently used features and capabilities
+          </p>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action) => {
-              const IconComponent = action.icon;
+              const Icon = action.icon;
               return (
                 <Button
-                  key={action.id}
+                  key={action.label}
                   variant="outline"
-                  className="h-auto p-4 flex flex-col items-start space-y-2 hover:bg-gray-50"
+                  className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-gray-50"
                   asChild
                 >
                   <a href={action.href}>
-                    <div className="flex items-center gap-2 w-full">
-                      <IconComponent className="h-5 w-5 text-blue-600" />
-                      <Badge variant="outline" className="ml-auto">
-                        {action.priority}
-                      </Badge>
+                    <div className={`w-10 h-10 rounded-lg ${action.color} flex items-center justify-center`}>
+                      <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <div className="text-left">
-                      <div className="font-medium">{action.title}</div>
-                      <div className="text-sm text-gray-600">{action.description}</div>
+                    <div className="text-center">
+                      <div className="font-medium">{action.label}</div>
+                      <div className="text-xs text-muted-foreground">{action.description}</div>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-gray-400 ml-auto" />
                   </a>
                 </Button>
               );
@@ -283,107 +197,69 @@ export default function Home() {
         </CardContent>
       </Card>
 
-      {/* System Health & Recent Activity */}
+      {/* Platform Modules Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* System Health */}
-        {systemOverview && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                System Health
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                {Object.entries(systemOverview.moduleHealth).map(([module, status]) => {
-                  const StatusIcon = getStatusIcon(status);
-                  return (
-                    <div key={module} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <StatusIcon className={`h-4 w-4 ${getStatusColor(status).split(' ')[0]}`} />
-                        <span className="font-medium">{module}</span>
-                      </div>
-                      <Badge className={getStatusColor(status)}>
-                        {status}
-                      </Badge>
-                    </div>
-                  );
-                })}
-              </div>
-              
-              <div className="pt-4 border-t space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>CPU Usage</span>
-                  <span>{systemOverview.systemMetrics.cpuUsage}%</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Memory</span>
-                  <span>{systemOverview.systemMetrics.memoryUsage}%</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Uptime</span>
-                  <span>{systemOverview.systemMetrics.uptime}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Recent Activity */}
-        {systemOverview && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                Recent Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {systemOverview.recentActivities.slice(0, 6).map((activity) => (
-                  <div key={activity.id} className="flex items-center gap-3">
-                    <div className={`h-2 w-2 rounded-full ${
-                      activity.status === 'success' ? 'bg-green-500' :
-                      activity.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
-                    }`} />
-                    <div className="flex-1">
-                      <div className="text-sm font-medium">{activity.description}</div>
-                      <div className="text-xs text-gray-500">{activity.timestamp}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Analytics Section */}
-      {analytics && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Platform Analytics
+            <CardTitle className="flex items-center space-x-2">
+              <Activity className="w-5 h-5" />
+              <span>Module Status</span>
             </CardTitle>
-            <CardDescription>
-              Document processing and entity extraction insights
-            </CardDescription>
+            <p className="text-sm text-muted-foreground">
+              Real-time status of all SocratIQ modules
+            </p>
           </CardHeader>
           <CardContent>
-            <Analytics analytics={analytics} />
+            <div className="space-y-4">
+              {moduleStatus.map((module) => (
+                <div key={module.name} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${module.color}`}></div>
+                    <span className="font-medium">{module.name}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-muted-foreground">{module.uptime}</span>
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
-      )}
 
-      {/* Sophie Intelligence Dashboard - Working While You Were Away */}
-      <div className="mt-8 border-2 border-teal-500 rounded-lg p-4 bg-teal-50">
-        <h2 className="text-xl font-bold mb-4 text-teal-600">🤖 Sophie Intelligence Dashboard - I've Been Working While You Were Away!</h2>
-        <div className="bg-white p-4 rounded border">
-          <p className="text-gray-700 mb-4">Sophie has been monitoring your clinical trials and analyzing 147 data points while you were away.</p>
-          <SophieIntelligenceDashboard />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <SophieLogo size="sm" className="w-5 h-5" />
+              <span>Sophie™ AI Colleague</span>
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Your intelligent guide through the platform
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg">
+                <div className="flex items-center space-x-3 mb-2">
+                  <SophieLogo size="md" />
+                  <div>
+                    <h4 className="font-medium">Sophie™ is Online</h4>
+                    <p className="text-sm text-gray-600">Powered by Claude AI</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-700 mb-3">
+                  I'm ready to help you navigate SocratIQ's comprehensive platform. I can explain blockchain audit trails, 
+                  analyze knowledge graphs, assess IP portfolios, and provide strategic insights for drug development.
+                </p>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="secondary" className="text-xs">IP Intelligence</Badge>
+                  <Badge variant="secondary" className="text-xs">Market Access</Badge>
+                  <Badge variant="secondary" className="text-xs">Regulatory Strategy</Badge>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

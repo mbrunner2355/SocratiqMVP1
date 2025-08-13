@@ -9,7 +9,7 @@ import type { Express, RequestHandler } from "express";
 
 // AWS Cognito configuration
 const cognitoClient = new CognitoIdentityProviderClient({
-  region: process.env.AWS_COGNITO_REGION || process.env.AWS_REGION || "us-east-1",
+  region: process.env.COGNITO_REGION || process.env.AWS_REGION || "us-east-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
@@ -20,11 +20,11 @@ const cognitoClient = new CognitoIdentityProviderClient({
 let verifier: any = null;
 
 function getVerifier() {
-  if (!verifier && process.env.AWS_COGNITO_USER_POOL_ID && process.env.AWS_COGNITO_CLIENT_ID) {
+  if (!verifier && process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
     verifier = CognitoJwtVerifier.create({
-      userPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
+      userPoolId: process.env.COGNITO_USER_POOL_ID!,
       tokenUse: "access",
-      clientId: process.env.AWS_COGNITO_CLIENT_ID!,
+      clientId: process.env.COGNITO_CLIENT_ID!,
     });
   }
   return verifier;
@@ -36,7 +36,7 @@ function generateSecretHash(username: string): string {
     return ''; // No secret hash needed if no client secret
   }
   
-  const message = username + process.env.AWS_COGNITO_CLIENT_ID;
+  const message = username + process.env.COGNITO_CLIENT_ID;
   const hmac = createHmac('sha256', process.env.AWS_COGNITO_CLIENT_SECRET);
   hmac.update(message);
   return hmac.digest('base64');
@@ -44,13 +44,10 @@ function generateSecretHash(username: string): string {
 
 export function getCognitoSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
-  const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: true,
-    ttl: sessionTtl,
-    tableName: "sessions",
-  });
+  
+  // Use memory store to avoid database connection issues
+  const sessionStore = new session.MemoryStore();
+  
   return session({
     secret: process.env.SESSION_SECRET || "fallback-secret-change-in-production",
     store: sessionStore,
@@ -156,7 +153,7 @@ export async function setupCognitoAuth(app: Express) {
 
       // Use InitiateAuth instead of AdminInitiateAuth to avoid admin privilege requirements
       const authCommand = new InitiateAuthCommand({
-        ClientId: process.env.AWS_COGNITO_CLIENT_ID!,
+        ClientId: process.env.COGNITO_CLIENT_ID!,
         AuthFlow: "USER_PASSWORD_AUTH",
         AuthParameters: authParams,
       });
@@ -227,7 +224,7 @@ export async function setupCognitoAuth(app: Express) {
 
       // Use SignUp instead of AdminCreateUser (doesn't require admin privileges)
       const signUpParams: any = {
-        ClientId: process.env.AWS_COGNITO_CLIENT_ID!,
+        ClientId: process.env.COGNITO_CLIENT_ID!,
         Username: email,
         Password: password,
         UserAttributes: [
@@ -245,23 +242,18 @@ export async function setupCognitoAuth(app: Express) {
       const signUpCommand = new SignUpCommand(signUpParams);
       const signUpResponse = await cognitoClient.send(signUpCommand);
 
-      // For development, auto-confirm the user (in production, users would confirm via email)
-      if (signUpResponse.UserSub) {
+      // For development, use admin confirm user to bypass email confirmation
+      if (signUpResponse.UserSub && process.env.NODE_ENV === 'development') {
         try {
-          const confirmParams: any = {
-            ClientId: process.env.AWS_COGNITO_CLIENT_ID!,
+          const { AdminConfirmSignUpCommand } = await import("@aws-sdk/client-cognito-identity-provider");
+          const confirmCommand = new AdminConfirmSignUpCommand({
+            UserPoolId: process.env.COGNITO_USER_POOL_ID!,
             Username: email,
-            ConfirmationCode: "000000", // This won't work, but we'll handle the error gracefully
-          };
-
-          if (process.env.AWS_COGNITO_CLIENT_SECRET) {
-            confirmParams.SecretHash = generateSecretHash(email);
-          }
-
-          await cognitoClient.send(new ConfirmSignUpCommand(confirmParams));
+          });
+          await cognitoClient.send(confirmCommand);
+          console.log("User auto-confirmed for development");
         } catch (confirmError: any) {
-          // Expected to fail - in production, user would get email confirmation
-          console.log("User signup successful, email confirmation required");
+          console.log("Auto-confirmation failed, manual email confirmation required:", confirmError.message);
         }
       }
 

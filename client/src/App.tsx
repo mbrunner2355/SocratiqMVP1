@@ -96,22 +96,9 @@ function Router() {
   }
 
   if (!isAuthenticated) {
-    // For Cognito authentication, show the Cognito login for end users
+    // For Cognito authentication, show the Cognito login
     if (isCognitoEnabled) {
-      return (
-        <div>
-          <CognitoLogin onLoginSuccess={() => window.location.reload()} />
-          {/* Admin access link */}
-          <div className="fixed bottom-4 right-4">
-            <a 
-              href="/login" 
-              className="text-xs text-gray-500 hover:text-gray-700 underline"
-            >
-              Admin Access
-            </a>
-          </div>
-        </div>
-      );
+      return <CognitoLogin onLoginSuccess={() => window.location.reload()} />;
     }
     
     // For production deployments, show the production login

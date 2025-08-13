@@ -9,11 +9,10 @@ import { setupCognitoAuth, isAuthenticated as cognitoAuth } from "./cognitoAuth"
  */
 
 export async function setupAuthentication(app: Express) {
-  // Set up dual authentication: Cognito for users + Replit for admins
-  if (process.env.AWS_COGNITO_USER_POOL_ID && process.env.AWS_COGNITO_CLIENT_ID) {
-    console.log("Setting up dual authentication: AWS Cognito + Replit Admin");
+  // Use only AWS Cognito authentication
+  if (process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
+    console.log("Setting up AWS Cognito authentication");
     await setupCognitoAuth(app);
-    await setupReplitAuth(app); // Enable Replit auth for admins
     return;
   }
   
@@ -30,8 +29,8 @@ export async function setupAuthentication(app: Express) {
 
 export function getAuthMiddleware() {
   // Check for Cognito configuration first
-  if (process.env.AWS_COGNITO_USER_POOL_ID && process.env.AWS_COGNITO_CLIENT_ID) {
-    return dualAuth; // Use dual authentication middleware
+  if (process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
+    return cognitoAuth; // Use only Cognito authentication
   }
   
   const isProductionDeploy = !process.env.REPLIT_DOMAINS || process.env.NODE_ENV === "production";
@@ -43,27 +42,5 @@ export function getAuthMiddleware() {
   }
 }
 
-// Dual authentication middleware that tries Cognito first, then Replit admin
-export const dualAuth: any = async (req: any, res: any, next: any) => {
-  // First try Cognito authentication for regular users
-  cognitoAuth(req, res, (cognitoError?: any) => {
-    if (!cognitoError && req.user) {
-      // Cognito auth succeeded
-      req.user.authMethod = 'cognito';
-      return next();
-    }
-    
-    // If Cognito fails, try Replit authentication for admins
-    replitAuth(req, res, (replitError?: any) => {
-      if (!replitError && req.user) {
-        // Replit auth succeeded - mark as admin
-        req.user.isAdmin = true;
-        req.user.authMethod = 'replit';
-        return next();
-      }
-      
-      // Both authentication methods failed
-      res.status(401).json({ message: "Authentication required" });
-    });
-  });
-};
+// Single Cognito authentication - simplified
+// Removed dual auth complexity

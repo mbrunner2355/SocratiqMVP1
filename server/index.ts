@@ -3,8 +3,15 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 // Set Cognito environment variables
-process.env.AWS_COGNITO_USER_POOL_ID = "us-east-1_FBeAewbir";
-process.env.AWS_COGNITO_REGION = "us-east-1";
+process.env.COGNITO_USER_POOL_ID = "us-east-1_FBeAewbir";
+process.env.COGNITO_CLIENT_ID = "20in1ee6g6j5ql9pfcv3avbn2a";
+process.env.COGNITO_REGION = "us-east-1";
+
+// Set Vite environment variables for frontend access
+process.env.VITE_COGNITO_USER_POOL_ID = "us-east-1_FBeAewbir";
+process.env.VITE_COGNITO_CLIENT_ID = "20in1ee6g6j5ql9pfcv3avbn2a";
+process.env.VITE_COGNITO_REGION = "us-east-1";
+process.env.VITE_AWS_REGION = "us-east-1";
 
 const app = express();
 app.use(express.json());
