@@ -50,10 +50,31 @@ import EMMEEngageWhiteLabel from "@/components/EMMEEngageWhiteLabel";
 import { PlatformDashboard } from "@/pages/PlatformDashboard";
 import { BlockchainDashboard } from "@/components/BlockchainDashboard";
 import { PostLoginLanding } from "@/components/PostLoginLanding";
+import { ProductionLogin } from "@/components/ProductionLogin";
+import { CognitoLogin } from "@/components/CognitoLogin";
+import { useState, useEffect } from "react";
 
 function Router() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [location] = useLocation();
+  const [isProductionDeploy, setIsProductionDeploy] = useState(false);
+  const [isCognitoEnabled, setIsCognitoEnabled] = useState(false);
+
+  // Detect environment and authentication mode
+  useEffect(() => {
+    const checkEnvironment = () => {
+      // Check if Cognito is configured (via meta tags or environment detection)
+      const cognitoEnabled = document.querySelector('meta[name="auth-type"]')?.getAttribute('content') === 'cognito';
+      setIsCognitoEnabled(cognitoEnabled);
+      
+      // If we're not on a replit.co domain and have certain indicators, this is likely production
+      const hostname = window.location.hostname;
+      const isReplit = hostname.includes('replit.co') || hostname.includes('repl.co');
+      const isAmplify = hostname.includes('amplifyapp.com') || hostname.includes('cloudfront.net');
+      setIsProductionDeploy(!isReplit || isAmplify);
+    };
+    checkEnvironment();
+  }, []);
   
   // White-label routes work for both authenticated and unauthenticated users
   if (location === '/engage' || location === '/mock5-client') {
@@ -75,6 +96,30 @@ function Router() {
   }
 
   if (!isAuthenticated) {
+    // For Cognito authentication, show the Cognito login for end users
+    if (isCognitoEnabled) {
+      return (
+        <div>
+          <CognitoLogin onLoginSuccess={() => window.location.reload()} />
+          {/* Admin access link */}
+          <div className="fixed bottom-4 right-4">
+            <a 
+              href="/login" 
+              className="text-xs text-gray-500 hover:text-gray-700 underline"
+            >
+              Admin Access
+            </a>
+          </div>
+        </div>
+      );
+    }
+    
+    // For production deployments, show the production login
+    if (isProductionDeploy) {
+      return <ProductionLogin onLoginSuccess={() => window.location.reload()} />;
+    }
+    
+    // For development (Replit), use the original landing pages
     return (
       <Switch>
         <Route path="/" component={Landing} />

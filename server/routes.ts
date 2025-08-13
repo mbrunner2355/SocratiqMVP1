@@ -5,7 +5,7 @@ import path from 'path';
 import { storage } from "./storage";
 import { fileProcessor } from "./services/fileProcessor";
 import { insertDocumentSchema } from "@shared/schema";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+// Import will be handled dynamically by authManager
 import meshRoutes from "./routes-mesh";
 import sophieRoutes from "./routes-sophie";
 import buildRoutes from "./routes-build";
@@ -110,8 +110,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Auth middleware
-  await setupAuth(app);
+  // Auth middleware - choose between Replit and Production auth
+  const { setupAuthentication, getAuthMiddleware } = await import("./authManager");
+  await setupAuthentication(app);
+  const isAuthenticated = getAuthMiddleware();
+
+  // Production auth endpoints are handled in authManager
 
   // Auth routes with role enhancement
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {

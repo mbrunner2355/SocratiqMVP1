@@ -2,6 +2,18 @@
 
 SocratIQ Transform™ is an AI-powered document intelligence platform that processes diverse document formats (PDF, DOCX, TXT) to create rich semantic knowledge networks. It comprises Transform™ (document processing), Mesh™ (knowledge graph), Trace™ (audit system), and Sophie™ (AI agent layer). The platform provides advanced conversational AI, semantic search, risk assessment, and intelligent analytics, facilitating efficient knowledge extraction and utilization across various domains, including predictive intelligence for architecture, engineering, and construction (AEC) programs and pharmaceutical intelligence. Its business vision is to reduce marketing spend waste for pharmaceutical companies and accelerate go-to-market strategies by providing strategic intelligence.
 
+## Recent Changes (August 13, 2025)
+- **Project Management Fixed**: Resolved project creation and listing issue in EMME Engage
+- **Navigation Enhancement**: Added dedicated "Projects" menu item to main navigation
+- **API Integration**: Fixed EMMEProjectManager API calls to work with new apiRequest format
+- **Component Routing**: Connected EMMEProjectManager to EMME interface for proper project display
+- **AWS Amplify Deployment Fixed**: Implemented dual authentication system for production deployments
+- **Production Authentication**: Created session-based auth system for AWS Amplify (no Replit dependencies)
+- **Environment Detection**: Automatic switching between Replit auth (dev) and production auth (deploy)
+- **AWS Cognito Integration**: Added full AWS Cognito authentication support with JWT token verification
+- **Multi-Auth System**: Platform now supports Replit, AWS Cognito, and simple production authentication
+- **Dual Authentication System**: End users authenticate via AWS Cognito, platform admins via Replit for system management
+
 ## Current Status: Production-Ready EMME Engage Enhanced
 - AWS S3 cloud storage fully integrated (`socratiqbeta1` bucket confirmed working)
 - Neon Database serverless PostgreSQL for scalable data management
@@ -13,6 +25,7 @@ SocratIQ Transform™ is an AI-powered document intelligence platform that proce
 - **Enhanced EMME Features**: Strategic overview, market intelligence, active projects tracking, payer landscape
 - **Real Data Integration**: Therapeutic areas performance, competitive analysis, regulatory risk assessment
 - Multi-environment deployment ready (staging/production branches)
+- **Security Update Complete**: node-nlp updated to v3.10.2 for security compliance (August 13, 2025)
 
 # User Preferences
 
@@ -32,7 +45,7 @@ Landing Page Preference: Always start with the main landing page for all users (
 ## Backend Architecture
 - **Framework**: Express.js with TypeScript on Node.js
 - **File Processing**: Multer for PDF, DOCX, TXT
-- **NLP Services**: Natural.js, Compromise.js
+- **NLP Services**: Natural.js, Compromise.js, node-nlp v3.10.2 (security-compliant)
 - **API Design**: RESTful with JSON responses
 - **Processing Pipeline**: File validation, content extraction, NLP processing (entity extraction, sentiment, semantic tagging), knowledge graph construction, AI analysis layer with real-time status updates and error handling.
 - **Authentication and Security**: Upload directory isolation, file type validation, Zod schema validation, error boundaries, CORS, and comprehensive Role-Based Access Control (RBAC) with multi-tier user hierarchies.

@@ -2,6 +2,10 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// Set Cognito environment variables
+process.env.AWS_COGNITO_USER_POOL_ID = "us-east-1_FBeAewbir";
+process.env.AWS_COGNITO_REGION = "us-east-1";
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

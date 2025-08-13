@@ -137,8 +137,7 @@ export function EMMEProjectManager() {
       if (searchTerm) params.set('search', searchTerm);
       if (statusFilter && statusFilter !== 'all') params.set('status', statusFilter);
       if (typeFilter && typeFilter !== 'all') params.set('type', typeFilter);
-      const response = await apiRequest('GET', `/api/emme/projects?${params.toString()}`);
-      return response.json();
+      return await apiRequest(`/api/emme/projects?${params.toString()}`);
     }
   });
 
@@ -146,14 +145,13 @@ export function EMMEProjectManager() {
   const { data: analytics } = useQuery({
     queryKey: ['/api/emme/projects/analytics/overview'],
     queryFn: async () => {
-      const response = await apiRequest('GET', '/api/emme/projects/analytics/overview');
-      return response.json();
+      return await apiRequest('/api/emme/projects/analytics/overview');
     }
   });
 
   // Create project mutation
   const createProjectMutation = useMutation({
-    mutationFn: (data: ProjectFormData) => apiRequest('POST', '/api/emme/projects', data),
+    mutationFn: (data: ProjectFormData) => apiRequest('/api/emme/projects', { method: 'POST', body: data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects/analytics/overview'] });
@@ -176,7 +174,7 @@ export function EMMEProjectManager() {
   // Update project mutation
   const updateProjectMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<ProjectFormData> }) => 
-      apiRequest('PUT', `/api/emme/projects/${id}`, data),
+      apiRequest(`/api/emme/projects/${id}`, { method: 'PUT', body: data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects/analytics/overview'] });
@@ -199,7 +197,7 @@ export function EMMEProjectManager() {
 
   // Delete project mutation
   const deleteProjectMutation = useMutation({
-    mutationFn: (id: string) => apiRequest('DELETE', `/api/emme/projects/${id}`),
+    mutationFn: (id: string) => apiRequest(`/api/emme/projects/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects/analytics/overview'] });

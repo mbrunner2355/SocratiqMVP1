@@ -119,6 +119,13 @@ interface ModelComparison {
   }>;
 }
 
+interface SystemMetrics {
+  avgLatency: number;
+  totalRequests: number;
+  activeModels: number;
+  errorRate: number;
+}
+
 interface FineTuningJob {
   id: string;
   model_name: string;
@@ -154,7 +161,7 @@ export default function LLMManager() {
     queryKey: ['/api/llm/fine-tuning-jobs'],
   });
 
-  const { data: systemMetrics } = useQuery({
+  const { data: systemMetrics } = useQuery<SystemMetrics>({
     queryKey: ['/api/llm/system-metrics'],
   });
 
@@ -721,7 +728,7 @@ export default function LLMManager() {
                       {model.multimodal_support?.vision && <Badge variant="outline" className="text-xs">Vision</Badge>}
                       {model.multimodal_support?.text && <Badge variant="outline" className="text-xs">Text</Badge>}
                     </div>
-                    <Badge className={getStatusColor(model.status)} variant="outline" className="mt-2">
+                    <Badge className={`${getStatusColor(model.status)} mt-2`} variant="outline">
                       {model.status}
                     </Badge>
                   </div>
@@ -752,7 +759,7 @@ export default function LLMManager() {
                       {model.multimodal_support?.actions && <Badge variant="outline" className="text-xs">Actions</Badge>}
                       {model.multimodal_support?.code && <Badge variant="outline" className="text-xs">Code</Badge>}
                     </div>
-                    <Badge className={getStatusColor(model.status)} variant="outline" className="mt-2">
+                    <Badge className={`${getStatusColor(model.status)} mt-2`} variant="outline">
                       {model.status}
                     </Badge>
                   </div>

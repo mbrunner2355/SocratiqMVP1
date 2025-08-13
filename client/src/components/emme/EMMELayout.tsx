@@ -218,6 +218,11 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       icon: <Users className="w-5 h-5" />
     },
     {
+      id: "projects",
+      label: "Projects",
+      icon: <FolderOpen className="w-5 h-5" />
+    },
+    {
       id: "create-project",
       label: "Create new project",
       icon: <Plus className="w-5 h-5" />

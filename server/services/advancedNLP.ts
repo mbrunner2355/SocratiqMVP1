@@ -1,6 +1,7 @@
 import { pipeline, env } from '@xenova/transformers';
 // @ts-ignore - node-nlp types not available
-import { NlpManager } from 'node-nlp';
+import nlp from 'node-nlp';
+const { NlpManager } = nlp;
 import compromise from 'compromise';
 import { EntityTypes, type EntityType } from '@shared/schema';
 import { storage } from '../storage';
@@ -668,7 +669,7 @@ export class AdvancedNLPService {
     const words2 = text2.toLowerCase().split(/\s+/);
     
     const intersection = words1.filter(word => words2.includes(word));
-    const union = [...new Set([...words1, ...words2])];
+    const union = Array.from(new Set([...words1, ...words2]));
     
     return intersection.length / union.length;
   }
@@ -1036,7 +1037,7 @@ export class AdvancedNLPService {
           knowledge.add('market_position');
           knowledge.add('pipeline_analysis');
           break;
-        case 'THERAPY':
+        case 'MEDICAL_TERM':
           knowledge.add('mechanism_of_action');
           knowledge.add('efficacy_data');
           knowledge.add('safety_profile');
@@ -1231,13 +1232,16 @@ export class AdvancedNLPService {
 
   // Calculate context relevance between question and provided context
   private calculateContextRelevance(questionAnalysis: AdvancedNLPResult, contextAnalysis: AdvancedNLPResult): number {
-    const questionEntities = new Set(questionAnalysis.entities.map(e => e.value.toLowerCase()));
-    const contextEntities = new Set(contextAnalysis.entities.map(e => e.value.toLowerCase()));
+    const questionEntities = questionAnalysis.entities.map(e => e.value.toLowerCase());
+    const contextEntities = contextAnalysis.entities.map(e => e.value.toLowerCase());
     
-    const intersection = new Set([...questionEntities].filter(e => contextEntities.has(e)));
-    const union = new Set([...questionEntities, ...contextEntities]);
+    const questionSet = new Set(questionEntities);
+    const contextSet = new Set(contextEntities);
     
-    return union.size > 0 ? intersection.size / union.size : 0;
+    const intersection = questionEntities.filter(e => contextSet.has(e));
+    const union = Array.from(new Set([...questionEntities, ...contextEntities]));
+    
+    return union.length > 0 ? intersection.length / union.length : 0;
   }
 
   // Get confidence-based recommendation
@@ -1266,6 +1270,7 @@ interface EMMEQuestionAnalysis {
   confidenceMetrics: ConfidenceMetrics;
   requiredKnowledge: string[];
   validationChecks: ValidationCheck[];
+  bertInsights?: any; // BERT analysis insights
 }
 
 interface AgentGuidance {
