@@ -128,7 +128,6 @@ function Router() {
       </Switch>
     );
   }
-
   if (isEMMEHealthUser) {
     return (
       <div className="p-6 text-center">
