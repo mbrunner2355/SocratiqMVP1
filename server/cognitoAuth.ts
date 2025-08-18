@@ -100,7 +100,13 @@ export const isAuthenticated: RequestHandler = async (req: any, res, next) => {
           throw new Error("JWT verifier not configured");
         }
         const payload = await tokenVerifier.verify(token);
-        const user = await storage.getUserByEmail(payload.email || payload.username);
+        console.log('JWT payload verified:', payload);
+        
+        // Extract email from payload (check multiple possible fields)
+        const email = payload.email || payload.username || payload['cognito:username'];
+        console.log('Extracted email from JWT:', email);
+        
+        const user = await storage.getUserByEmail(email);
         if (user) {
           req.user = {
             claims: {

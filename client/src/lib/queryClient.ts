@@ -44,17 +44,13 @@ export async function apiRequest(
     headers.Authorization = `Bearer ${cognitoToken}`;
   }
   
-  console.log('Making API request to:', fullUrl, { method, body });
-  console.log('Fetch options:', { method, headers, credentials: "include" });
-  
+  // Temporarily remove verbose logging
   const fetchOptions: RequestInit = {
     method,
     headers: body && !isFormData ? { "Content-Type": "application/json", ...headers } : headers,
     body: isFormData ? body : (body ? JSON.stringify(body) : undefined),
     credentials: "include",
   };
-  
-  console.log('About to fetch with options:', fetchOptions);
   
   let res: Response;
   try {

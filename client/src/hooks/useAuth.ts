@@ -10,10 +10,15 @@ export function useAuth() {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
+  // Check if we have a Cognito token as fallback authentication indicator
+  const cognitoToken = typeof window !== 'undefined' ? localStorage.getItem('cognito_access_token') : null;
+  
+  console.log('useAuth state:', { user, isLoading, error, hasCognitoToken: !!cognitoToken });
+
   return {
     user,
     isLoading,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user || !!cognitoToken,
     error,
   };
 }

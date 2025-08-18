@@ -117,24 +117,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Production auth endpoints are handled in authManager
 
-  // Auth routes with role enhancement
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      let user = await storage.getUser(userId);
-      
-      // If user exists, attach role info to request for middleware
-      if (user) {
-        req.user.role = user.role;
-        req.user.permissions = user.permissions;
-      }
-      
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  // Auth routes with role enhancement - skip if Cognito handles it
+  // The /api/auth/user endpoint is handled by cognitoAuth.ts
 
   // Admin user management endpoints
   app.get('/api/admin/users', isAuthenticated, async (req: any, res) => {
