@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest, queryClient } from '@/lib/queryClient';
 import { Sparkles, Brain, Target, Users, FileText, TrendingUp, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 
 interface ProjectFormData {
@@ -26,6 +28,51 @@ export function EMMECreateProject() {
     therapeuticArea: '',
     projectType: '',
     targetAudiences: []
+  });
+  
+  const { toast } = useToast();
+
+  // Project creation mutation
+  const createProjectMutation = useMutation({
+    mutationFn: (projectData: any) => apiRequest('/api/emme/projects', { 
+      method: 'POST', 
+      body: {
+        name: projectData.name,
+        client: projectData.client,
+        therapeuticArea: projectData.therapeuticArea,
+        projectType: projectData.projectType,
+        targetAudiences: projectData.targetAudiences,
+        status: 'active',
+        phase: 'planning',
+        description: `${projectData.projectType} project for ${projectData.therapeuticArea}`,
+        metadata: {
+          createdFromWizard: true,
+          targetAudiences: projectData.targetAudiences
+        }
+      }
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
+      toast({
+        title: "Success!",
+        description: "Project created successfully. Redirecting to project dashboard...",
+      });
+      
+      // Navigate to projects view
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('navigateToModule', {
+          detail: { moduleId: 'projects' }
+        }));
+      }, 1500);
+    },
+    onError: (error) => {
+      console.error('Error creating project:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create project. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   // Pharmaceutical therapeutic areas for development
@@ -88,6 +135,19 @@ export function EMMECreateProject() {
         ? prev.targetAudiences.filter(a => a !== audience)
         : [...prev.targetAudiences, audience]
     }));
+  };
+
+  const handleCreateProject = () => {
+    if (!formData.name || !formData.client || !formData.therapeuticArea || !formData.projectType || formData.targetAudiences.length === 0) {
+      toast({
+        title: "Missing Information",
+        description: "Please complete all required fields before creating the project.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    createProjectMutation.mutate(formData);
   };
 
   const getProgressPercentage = () => {
@@ -445,8 +505,12 @@ export function EMMECreateProject() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <Button className="bg-green-600 hover:bg-green-700">
-                Create Project
+              <Button 
+                onClick={handleCreateProject}
+                disabled={createProjectMutation.isPending}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                {createProjectMutation.isPending ? 'Creating...' : 'Create Project'}
                 <CheckCircle className="w-4 h-4 ml-2" />
               </Button>
             )}
