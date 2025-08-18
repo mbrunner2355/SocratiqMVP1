@@ -18,12 +18,24 @@ export async function apiRequest(
   const { method = 'GET', body, headers = {} } = options || {};
   const isFormData = body instanceof FormData;
   
-  // Add base URL if not already absolute - force local development for Replit
+  // Add base URL if not already absolute - use current origin for Replit development
   const isDevelopment = window.location.hostname.includes('replit') || 
                        window.location.hostname.includes('repl.co') || 
                        window.location.hostname === 'localhost' ||
                        import.meta.env.DEV;
-  const baseUrl = isDevelopment ? 'http://localhost:5000' : 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod';
+  
+  let baseUrl: string;
+  if (isDevelopment && (window.location.hostname.includes('replit') || window.location.hostname.includes('repl.co'))) {
+    // Use current origin for Replit webview (backend serves on same domain)
+    baseUrl = window.location.origin;
+  } else if (isDevelopment) {
+    // Local development
+    baseUrl = 'http://localhost:5000';
+  } else {
+    // Production AWS
+    baseUrl = 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod';
+  }
+  
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
   
   // Add Cognito authorization header if token exists
