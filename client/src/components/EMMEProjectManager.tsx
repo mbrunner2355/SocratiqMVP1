@@ -661,10 +661,10 @@ export function EMMEProjectManager() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Completion Rate</p>
-                  <p className="text-2xl font-bold">{Math.round(analytics.summary.completionRate)}%</p>
+                  <p className="text-sm text-gray-600">Draft Projects</p>
+                  <p className="text-2xl font-bold">{analytics.summary.draftProjects}</p>
                 </div>
-                <Target className="w-8 h-8 text-purple-500" />
+                <FileText className="w-8 h-8 text-yellow-500" />
               </div>
             </CardContent>
           </Card>
