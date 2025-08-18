@@ -313,7 +313,14 @@ export function EMMEProjectManager() {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Project Integration</h1>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-purple-600">emme</span>
+                  <span className="text-sm bg-purple-100 text-purple-700 px-2 py-1 rounded">engage</span>
+                </div>
+                <span className="text-gray-400">•</span>
+                <h1 className="text-xl font-bold text-gray-900">Project Integration</h1>
+              </div>
               <p className="text-gray-600">Select a project to view its Strategic Intelligence, Stakeholder Engagement, and Content Orchestration details</p>
             </div>
             <Button onClick={() => setView('list')} variant="outline">

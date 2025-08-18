@@ -49,12 +49,24 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">{project.projectTitle} - Intelligence Integration</h2>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-purple-600">emme</span>
+              <span className="text-sm bg-purple-100 text-purple-700 px-2 py-1 rounded">engage</span>
+            </div>
+            <span className="text-gray-400">•</span>
+            <h2 className="text-xl font-bold text-gray-900">{project.projectTitle}</h2>
+          </div>
           <p className="text-gray-600">Strategic Intelligence • Stakeholder Engagement • Content Orchestration</p>
         </div>
-        <Badge variant="outline" className="text-sm">
-          {project.status?.replace('_', ' ').toUpperCase()}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge variant="outline" className="text-sm">
+            {project.status?.replace('_', ' ').toUpperCase()}
+          </Badge>
+          <Button variant="outline" size="sm" onClick={() => window.history.back()}>
+            Back to Projects
+          </Button>
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
