@@ -34,12 +34,14 @@ export async function apiRequest(
   
   console.log('Making API request to:', fullUrl, { method, body });
   
-  const res = await fetch(fullUrl, {
+  const fetchOptions: RequestInit = {
     method,
     headers: body && !isFormData ? { "Content-Type": "application/json", ...headers } : headers,
     body: isFormData ? body : (body ? JSON.stringify(body) : undefined),
     credentials: "include",
-  });
+  };
+  
+  const res = await fetch(fullUrl, fetchOptions);
 
   console.log('API response:', res.status, res.statusText);
 
