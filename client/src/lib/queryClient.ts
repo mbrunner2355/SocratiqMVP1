@@ -33,6 +33,7 @@ export async function apiRequest(
   }
   
   console.log('Making API request to:', fullUrl, { method, body });
+  console.log('Fetch options:', { method, headers, credentials: "include" });
   
   const fetchOptions: RequestInit = {
     method,
@@ -41,7 +42,16 @@ export async function apiRequest(
     credentials: "include",
   };
   
-  const res = await fetch(fullUrl, fetchOptions);
+  console.log('About to fetch with options:', fetchOptions);
+  
+  let res: Response;
+  try {
+    res = await fetch(fullUrl, fetchOptions);
+    console.log('Fetch completed successfully. Response status:', res.status);
+  } catch (fetchError) {
+    console.error('Fetch failed:', fetchError);
+    throw new Error(`Network error: ${fetchError.message}`);
+  }
 
   console.log('API response:', res.status, res.statusText);
 
@@ -53,14 +63,27 @@ export async function apiRequest(
   }
 
   if (!res.ok) {
-    const errorText = await res.text();
+    let errorText;
+    try {
+      errorText = await res.text();
+    } catch (e) {
+      errorText = res.statusText;
+    }
     console.log('API error response:', errorText);
-    throw new Error(`${res.status}: ${errorText}`);
+    const error = new Error(`${res.status}: ${errorText}`);
+    console.error('Throwing API error:', error);
+    throw error;
   }
   
-  const responseData = await res.json();
-  console.log('API response data:', responseData);
-  return responseData;
+  let responseData;
+  try {
+    responseData = await res.json();
+    console.log('API response data:', responseData);
+    return responseData;
+  } catch (e) {
+    console.error('Failed to parse JSON response:', e);
+    throw new Error('Invalid JSON response from server');
+  }
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
