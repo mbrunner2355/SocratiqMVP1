@@ -76,7 +76,7 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-900 to-indigo-950 rounded-full flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg italic">e</span>
               </div>
             </div>
@@ -129,7 +129,7 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
           <Card className="bg-blue-50 border-blue-200">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center shadow-sm mt-1">
+                <div className="w-6 h-6 bg-gradient-to-br from-purple-900 to-indigo-950 rounded-full flex items-center justify-center shadow-sm mt-1">
                   <span className="text-white font-bold text-xs italic">e</span>
                 </div>
                 <div>
@@ -228,7 +228,7 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
           <Card className="bg-green-50 border-green-200">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center shadow-sm mt-1">
+                <div className="w-6 h-6 bg-gradient-to-br from-purple-900 to-indigo-950 rounded-full flex items-center justify-center shadow-sm mt-1">
                   <span className="text-white font-bold text-xs italic">e</span>
                 </div>
                 <div>
@@ -336,7 +336,7 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
           <Card className="bg-orange-50 border-orange-200">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center shadow-sm mt-1">
+                <div className="w-6 h-6 bg-gradient-to-br from-purple-900 to-indigo-950 rounded-full flex items-center justify-center shadow-sm mt-1">
                   <span className="text-white font-bold text-xs italic">e</span>
                 </div>
                 <div>
