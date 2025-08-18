@@ -150,7 +150,7 @@ function EMMEEngageWhiteLabel() {
       case "create-project":
         return <EMMECreateProject />;
       case "smart-wizard":
-        return <EMMEProjectManager />;
+        return <EMMECreateProject />;
       case "projects":
         return <EMMEProjectManager />;
       // Strategic Intelligence
