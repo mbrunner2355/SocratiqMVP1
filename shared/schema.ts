@@ -3317,6 +3317,37 @@ export const emmeProjects = pgTable("emme_projects", {
   milestones: jsonb("milestones").default([]), // Project milestones
   tags: jsonb("tags").default([]), // Project tags for categorization
   metadata: jsonb("metadata").default({}), // Additional project metadata
+  
+  // Strategic Intelligence Integration
+  strategicIntelligence: jsonb("strategic_intelligence").default({
+    marketAnalysis: {},
+    competitorMapping: {},
+    payerInsights: {},
+    scenarioModeling: {},
+    riskAssessment: {},
+    launchReadiness: 0
+  }),
+  
+  // Stakeholder Engagement Integration  
+  stakeholderEngagement: jsonb("stakeholder_engagement").default({
+    hcpTargets: [],
+    patientPrograms: [],
+    payerRelations: [],
+    kolNetwork: [],
+    engagementMetrics: {},
+    touchpoints: []
+  }),
+  
+  // Content Orchestration Integration
+  contentOrchestration: jsonb("content_orchestration").default({
+    workflows: [],
+    assets: [],
+    mlrStatus: {},
+    complianceTracking: {},
+    multilingualContent: {},
+    approvalQueue: []
+  }),
+  
   createdBy: varchar("created_by").notNull(),
   assignedTo: varchar("assigned_to"),
   startDate: timestamp("start_date"),

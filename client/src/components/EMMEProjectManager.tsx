@@ -15,10 +15,12 @@ import {
   FolderOpen, Plus, Edit, Trash2, Eye, Calendar, 
   User, Building, FileText, Target, Activity,
   Clock, CheckCircle, AlertTriangle, Search,
-  Filter, MoreHorizontal
+  Filter, MoreHorizontal, BarChart3, Users, Globe
 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { EMMEProjectIntegration } from './emme/EMMEProjectIntegration';
+import { EMMECrossProjectAnalytics } from './emme/EMMECrossProjectAnalytics';
 
 // Form validation schema
 const projectFormSchema = z.object({
@@ -125,6 +127,7 @@ export function EMMEProjectManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [view, setView] = useState<'list' | 'integration' | 'analytics'>('list');
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -289,6 +292,22 @@ export function EMMEProjectManager() {
 
   const projects = projectsData?.projects || [];
 
+  // Render different views
+  if (view === 'analytics') {
+    return <EMMECrossProjectAnalytics />;
+  }
+
+  if (view === 'integration' && selectedProject) {
+    return (
+      <EMMEProjectIntegration 
+        project={selectedProject} 
+        onUpdate={(projectId, data) => {
+          updateProjectMutation.mutate({ id: projectId, data });
+        }}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -296,6 +315,38 @@ export function EMMEProjectManager() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Project Information Completion</h1>
           <p className="text-gray-600">Manage and track your EMME projects</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* View Toggle */}
+          <div className="flex items-center gap-1 border rounded-lg p-1">
+            <Button
+              variant={view === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setView('list')}
+              className="h-8"
+            >
+              <FolderOpen className="w-4 h-4 mr-1" />
+              Projects
+            </Button>
+            <Button
+              variant={view === 'integration' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setView('integration')}
+              className="h-8"
+            >
+              <Target className="w-4 h-4 mr-1" />
+              Integration
+            </Button>
+            <Button
+              variant={view === 'analytics' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setView('analytics')}
+              className="h-8"
+            >
+              <BarChart3 className="w-4 h-4 mr-1" />
+              Analytics
+            </Button>
+          </div>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
@@ -775,6 +826,17 @@ export function EMMEProjectManager() {
                   </div>
 
                   <div className="flex items-center space-x-2 ml-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        setSelectedProject(project);
+                        setView('integration');
+                      }}
+                      title="View Integration Details"
+                    >
+                      <Target className="w-4 h-4" />
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => handleEditProject(project)}>
                       <Edit className="w-4 h-4" />
                     </Button>
