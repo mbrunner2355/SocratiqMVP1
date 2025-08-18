@@ -7,7 +7,8 @@ import { Progress } from '@/components/ui/progress';
 import { 
   Target, Users, FileText, BarChart3, Lightbulb, 
   CheckCircle2, AlertTriangle, Clock, TrendingUp,
-  Globe, Shield, Workflow, MessageSquare
+  Globe, Shield, Workflow, MessageSquare, Bot,
+  Sparkles, ArrowRight, Info
 } from 'lucide-react';
 
 interface ProjectIntegrationProps {
@@ -47,6 +48,7 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
 
   return (
     <div className="space-y-6">
+      {/* EMME Header */}
       <div className="flex justify-between items-center">
         <div>
           <div className="flex items-center gap-3 mb-2">
@@ -69,6 +71,43 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
         </div>
       </div>
 
+      {/* EMME Conversational Guide */}
+      <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                <Bot className="w-5 h-5 text-purple-600" />
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-semibold text-purple-700">EMME AI Agent</span>
+                <Sparkles className="w-4 h-4 text-purple-500" />
+              </div>
+              <p className="text-gray-700 mb-3">
+                Hi! I'm analyzing your <strong>{project.projectTitle}</strong> project across three key dimensions. 
+                Let me guide you through the strategic intelligence, stakeholder engagement, and content orchestration insights.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary" className="text-xs">
+                  <Target className="w-3 h-3 mr-1" />
+                  Strategic Analysis Ready
+                </Badge>
+                <Badge variant="secondary" className="text-xs">
+                  <Users className="w-3 h-3 mr-1" />
+                  Stakeholder Data Loaded
+                </Badge>
+                <Badge variant="secondary" className="text-xs">
+                  <FileText className="w-3 h-3 mr-1" />
+                  Content Pipeline Active
+                </Badge>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid grid-cols-3 w-full">
           <TabsTrigger value="strategic" className="flex items-center gap-2">
@@ -86,6 +125,26 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
         </TabsList>
 
         <TabsContent value="strategic" className="space-y-6">
+          {/* EMME Strategic Guidance */}
+          <Card className="bg-blue-50 border-blue-200">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <Bot className="w-5 h-5 text-blue-600 mt-1" />
+                <div>
+                  <p className="text-sm text-blue-800 font-medium mb-1">Strategic Intelligence Insights</p>
+                  <p className="text-sm text-blue-700">
+                    I've analyzed market conditions, competitive landscape, and payer dynamics for your {project.therapeuticArea} project. 
+                    Your launch readiness score suggests focusing on regulatory compliance and stakeholder alignment.
+                  </p>
+                  <Button variant="outline" size="sm" className="mt-2 text-blue-700 border-blue-200">
+                    <ArrowRight className="w-3 h-3 mr-1" />
+                    View Recommendations
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -163,6 +222,26 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
         </TabsContent>
 
         <TabsContent value="stakeholders" className="space-y-6">
+          {/* EMME Stakeholder Guidance */}
+          <Card className="bg-green-50 border-green-200">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <Bot className="w-5 h-5 text-green-600 mt-1" />
+                <div>
+                  <p className="text-sm text-green-800 font-medium mb-1">Stakeholder Engagement Strategy</p>
+                  <p className="text-sm text-green-700">
+                    Based on your {project.therapeuticArea} focus, I recommend prioritizing HCP education and KOL partnerships. 
+                    Your current engagement metrics show strong potential for expanding your professional network.
+                  </p>
+                  <Button variant="outline" size="sm" className="mt-2 text-green-700 border-green-200">
+                    <Users className="w-3 h-3 mr-1" />
+                    Optimize Engagement
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -249,6 +328,26 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
         </TabsContent>
 
         <TabsContent value="content" className="space-y-6">
+          {/* EMME Content Guidance */}
+          <Card className="bg-orange-50 border-orange-200">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <Bot className="w-5 h-5 text-orange-600 mt-1" />
+                <div>
+                  <p className="text-sm text-orange-800 font-medium mb-1">Content Orchestration Status</p>
+                  <p className="text-sm text-orange-700">
+                    Your content workflow is performing well with a 97.3% compliance rate. I notice some bottlenecks in legal review - 
+                    I can help optimize your MLR process and multilingual content distribution.
+                  </p>
+                  <Button variant="outline" size="sm" className="mt-2 text-orange-700 border-orange-200">
+                    <Workflow className="w-3 h-3 mr-1" />
+                    Streamline Workflow
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
