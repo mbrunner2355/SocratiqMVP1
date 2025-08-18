@@ -19,7 +19,7 @@ export async function apiRequest(
   const isFormData = body instanceof FormData;
   
   // Add base URL if not already absolute
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod';
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
   
   // Add Cognito authorization header if token exists
@@ -52,7 +52,7 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
     const url = queryKey.join("/") as string;
     const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
     
