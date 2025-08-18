@@ -153,7 +153,10 @@ export function EMMEProjectManager() {
   const createProjectMutation = useMutation({
     mutationFn: (data: ProjectFormData) => apiRequest('/api/emme/projects', { method: 'POST', body: data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
+      // Force refetch of the current query with its exact parameters
+      queryClient.invalidateQueries({ 
+        predicate: (query) => query.queryKey[0] === '/api/emme/projects'
+      });
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects/analytics/overview'] });
       setIsCreateDialogOpen(false);
       toast({
@@ -176,7 +179,9 @@ export function EMMEProjectManager() {
     mutationFn: ({ id, data }: { id: string; data: Partial<ProjectFormData> }) => 
       apiRequest(`/api/emme/projects/${id}`, { method: 'PUT', body: data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
+      queryClient.invalidateQueries({ 
+        predicate: (query) => query.queryKey[0] === '/api/emme/projects'
+      });
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects/analytics/overview'] });
       setIsEditDialogOpen(false);
       setSelectedProject(null);
@@ -199,7 +204,9 @@ export function EMMEProjectManager() {
   const deleteProjectMutation = useMutation({
     mutationFn: (id: string) => apiRequest(`/api/emme/projects/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/emme/projects'] });
+      queryClient.invalidateQueries({ 
+        predicate: (query) => query.queryKey[0] === '/api/emme/projects'
+      });
       queryClient.invalidateQueries({ queryKey: ['/api/emme/projects/analytics/overview'] });
       toast({
         title: "Success",
