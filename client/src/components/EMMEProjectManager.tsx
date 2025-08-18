@@ -130,7 +130,7 @@ export function EMMEProjectManager() {
   const queryClient = useQueryClient();
 
   // Fetch projects
-  const { data: projectsData, isLoading } = useQuery({
+  const { data: projectsData, isLoading, error } = useQuery({
     queryKey: ['/api/emme/projects', { search: searchTerm, status: statusFilter, type: typeFilter }],
     queryFn: async () => {
       const params = new URLSearchParams();

@@ -124,20 +124,16 @@ export const getQueryFn: <T>(options: {
     return await res.json();
   };
 
-// Disable queries for development mode to prevent fetch errors
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      enabled: false, // Disable all queries in development to prevent fetch errors
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
-      throwOnError: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 3,
     },
     mutations: {
       retry: false,
-      throwOnError: false,
     },
   },
 });
