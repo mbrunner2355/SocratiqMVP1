@@ -18,8 +18,9 @@ export async function apiRequest(
   const { method = 'GET', body, headers = {} } = options || {};
   const isFormData = body instanceof FormData;
   
-  // Add base URL if not already absolute
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+  // Add base URL if not already absolute - support both development and AWS Lambda deployment
+  const isDevelopment = window.location.hostname.includes('replit.co') || window.location.hostname.includes('repl.co') || window.location.hostname === 'localhost';
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || (isDevelopment ? '' : 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod');
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
   
   // Add Cognito authorization header if token exists
@@ -52,7 +53,8 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+    const isDevelopment = window.location.hostname.includes('replit.co') || window.location.hostname.includes('repl.co') || window.location.hostname === 'localhost';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || (isDevelopment ? '' : 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod');
     const url = queryKey.join("/") as string;
     const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
     

@@ -2,19 +2,35 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
-// Set Cognito environment variables
+// Set Cognito environment variables from AWS configuration
 process.env.COGNITO_USER_POOL_ID = "us-east-1_FBeAewbir";
 process.env.COGNITO_CLIENT_ID = "20in1ee6g6j5ql9pfcv3avbn2a";
 process.env.COGNITO_REGION = "us-east-1";
 
-// Set Vite environment variables for frontend access
+// Set Vite environment variables for frontend access using AWS values
 process.env.VITE_COGNITO_USER_POOL_ID = "us-east-1_FBeAewbir";
 process.env.VITE_COGNITO_CLIENT_ID = "20in1ee6g6j5ql9pfcv3avbn2a";
 process.env.VITE_COGNITO_REGION = "us-east-1";
 process.env.VITE_AWS_REGION = "us-east-1";
 
+// Set AWS credentials from environment variables for dual deployment compatibility
+if (process.env.VITE_ACCESS_KEY_ID) {
+  process.env.VITE_ACCESS_KEY_ID = process.env.VITE_ACCESS_KEY_ID;
+}
+if (process.env.VITE_SECRET_ACCESS_KEY) {
+  process.env.VITE_SECRET_ACCESS_KEY = process.env.VITE_SECRET_ACCESS_KEY;
+}
+
+// Set API base URL for AWS Lambda compatibility
+if (process.env.VITE_API_BASE_URL) {
+  process.env.VITE_API_BASE_URL = process.env.VITE_API_BASE_URL;
+} else {
+  // Default to AWS Lambda URL for production deployment compatibility
+  process.env.VITE_API_BASE_URL = "https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod";
+}
+
 // Set server environment variables for Cognito authentication
-process.env.VITE_COGNITO_CLIENT_SECRET = process.env.COGNITO_CLIENT_SECRET;
+process.env.VITE_COGNITO_CLIENT_SECRET = process.env.VITE_COGNITO_CLIENT_SECRET || process.env.COGNITO_CLIENT_SECRET;
 
 const app = express();
 
