@@ -148,7 +148,7 @@ function EMMEEngageWhiteLabel() {
       case "clients":
         return <ClientManager />;
       case "create-project":
-        return <EMMECreateProject />;
+        return <EMMEProjectManager />;
       case "smart-wizard":
         return <EMMECreateProject />;
       case "projects":
