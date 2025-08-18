@@ -13,6 +13,9 @@ process.env.VITE_COGNITO_CLIENT_ID = "20in1ee6g6j5ql9pfcv3avbn2a";
 process.env.VITE_COGNITO_REGION = "us-east-1";
 process.env.VITE_AWS_REGION = "us-east-1";
 
+// Set server environment variables for Cognito authentication
+process.env.VITE_COGNITO_CLIENT_SECRET = process.env.COGNITO_CLIENT_SECRET;
+
 const app = express();
 
 // CORS middleware to allow frontend-backend communication
