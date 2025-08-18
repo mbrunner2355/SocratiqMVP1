@@ -48,9 +48,9 @@ export async function apiRequest(
   try {
     res = await fetch(fullUrl, fetchOptions);
     console.log('Fetch completed successfully. Response status:', res.status);
-  } catch (fetchError) {
+  } catch (fetchError: any) {
     console.error('Fetch failed:', fetchError);
-    throw new Error(`Network error: ${fetchError.message}`);
+    throw new Error(`Network error: ${fetchError?.message || 'Unknown fetch error'}`);
   }
 
   console.log('API response:', res.status, res.statusText);
