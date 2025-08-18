@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useTenantStyling } from "@/components/TenantProvider";
 import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
+import { EMMEHomeChat } from "./EMMEHomeChat";
 
 export function EMMEHome() {
   // Get EMME Connect branding configuration
@@ -203,7 +204,8 @@ export function EMMEHome() {
         </div>
       </div>
 
-
+      {/* EMME Chat Interface */}
+      <EMMEHomeChat />
 
       {/* EMME Engage Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
