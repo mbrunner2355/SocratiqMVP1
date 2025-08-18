@@ -305,6 +305,7 @@ export function EMMEProjectManager() {
           onUpdate={(projectId, data) => {
             updateProjectMutation.mutate({ id: projectId, data });
           }}
+          onBackToProjects={() => setView('list')}
         />
       );
     } else {

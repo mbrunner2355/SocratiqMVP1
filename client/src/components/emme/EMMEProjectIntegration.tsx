@@ -14,9 +14,10 @@ import {
 interface ProjectIntegrationProps {
   project: any;
   onUpdate: (projectId: string, data: any) => void;
+  onBackToProjects?: () => void;
 }
 
-export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegrationProps) {
+export function EMMEProjectIntegration({ project, onUpdate, onBackToProjects }: ProjectIntegrationProps) {
   const [activeTab, setActiveTab] = useState("strategic");
 
   const strategicIntelligence = project.strategicIntelligence || {
@@ -65,7 +66,7 @@ export function EMMEProjectIntegration({ project, onUpdate }: ProjectIntegration
           <Badge variant="outline" className="text-sm">
             {project.status?.replace('_', ' ').toUpperCase()}
           </Badge>
-          <Button variant="outline" size="sm" onClick={() => window.history.back()}>
+          <Button variant="outline" size="sm" onClick={onBackToProjects}>
             Back to Projects
           </Button>
         </div>
