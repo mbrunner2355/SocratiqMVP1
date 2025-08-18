@@ -297,15 +297,44 @@ export function EMMEProjectManager() {
     return <EMMECrossProjectAnalytics />;
   }
 
-  if (view === 'integration' && selectedProject) {
-    return (
-      <EMMEProjectIntegration 
-        project={selectedProject} 
-        onUpdate={(projectId, data) => {
-          updateProjectMutation.mutate({ id: projectId, data });
-        }}
-      />
-    );
+  if (view === 'integration') {
+    if (selectedProject) {
+      return (
+        <EMMEProjectIntegration 
+          project={selectedProject} 
+          onUpdate={(projectId, data) => {
+            updateProjectMutation.mutate({ id: projectId, data });
+          }}
+        />
+      );
+    } else {
+      // Show message to select a project for integration view
+      return (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Project Integration</h1>
+              <p className="text-gray-600">Select a project to view its Strategic Intelligence, Stakeholder Engagement, and Content Orchestration details</p>
+            </div>
+            <Button onClick={() => setView('list')} variant="outline">
+              <FolderOpen className="w-4 h-4 mr-2" />
+              Back to Projects
+            </Button>
+          </div>
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Target className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Project Selected</h3>
+              <p className="text-gray-600 mb-4">Go back to the projects list and click the target icon on any project to view its integration details</p>
+              <Button onClick={() => setView('list')}>
+                <FolderOpen className="w-4 h-4 mr-2" />
+                View Projects
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
   }
 
   return (
