@@ -50,7 +50,12 @@ export async function apiRequest(
     return;
   }
 
-  await throwIfResNotOk(res);
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.log('API error response:', errorText);
+    throw new Error(`${res.status}: ${errorText}`);
+  }
+  
   const responseData = await res.json();
   console.log('API response data:', responseData);
   return responseData;

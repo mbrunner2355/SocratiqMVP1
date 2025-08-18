@@ -57,6 +57,7 @@ export function CognitoLogin({ onLoginSuccess }: CognitoLoginProps) {
       onLoginSuccess();
     },
     onError: (error: any) => {
+      console.error('Login error:', error);
       // Reset challenge state on error
       setShowNewPasswordChallenge(false);
     }
