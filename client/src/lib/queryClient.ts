@@ -18,9 +18,12 @@ export async function apiRequest(
   const { method = 'GET', body, headers = {} } = options || {};
   const isFormData = body instanceof FormData;
   
-  // Add base URL if not already absolute - support both development and AWS Lambda deployment
-  const isDevelopment = window.location.hostname.includes('replit.co') || window.location.hostname.includes('repl.co') || window.location.hostname === 'localhost';
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || (isDevelopment ? '' : 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod');
+  // Add base URL if not already absolute - force local development for Replit
+  const isDevelopment = window.location.hostname.includes('replit') || 
+                       window.location.hostname.includes('repl.co') || 
+                       window.location.hostname === 'localhost' ||
+                       import.meta.env.DEV;
+  const baseUrl = isDevelopment ? 'http://localhost:5000' : 'https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod';
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
   
   // Add Cognito authorization header if token exists
