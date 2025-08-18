@@ -44,6 +44,8 @@ export function CognitoLogin({ onLoginSuccess }: CognitoLoginProps) {
       });
     },
     onSuccess: (data) => {
+      console.log('Login success! Data received:', data);
+      
       if (data.challengeRequired === 'NEW_PASSWORD_REQUIRED') {
         setShowNewPasswordChallenge(true);
         setChallengeSession(data.session || '');
@@ -53,8 +55,16 @@ export function CognitoLogin({ onLoginSuccess }: CognitoLoginProps) {
       // Store the access token for API requests
       if (data.tokens && data.tokens.accessToken) {
         localStorage.setItem('cognito_access_token', data.tokens.accessToken);
+        console.log('Access token stored successfully');
       }
-      onLoginSuccess();
+      
+      console.log('Calling onLoginSuccess callback...');
+      try {
+        onLoginSuccess();
+        console.log('onLoginSuccess completed successfully');
+      } catch (error) {
+        console.error('Error in onLoginSuccess callback:', error);
+      }
     },
     onError: (error: any) => {
       console.error('Login error details:', error);

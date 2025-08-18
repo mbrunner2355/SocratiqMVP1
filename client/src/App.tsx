@@ -59,22 +59,32 @@ function Router() {
   const [location] = useLocation();
   const [isProductionDeploy, setIsProductionDeploy] = useState(false);
   const [isCognitoEnabled, setIsCognitoEnabled] = useState(false);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
 
   // Detect environment and authentication mode
   useEffect(() => {
     const checkEnvironment = () => {
-      // Check if Cognito is configured (via meta tags or environment detection)
-      const cognitoEnabled = document.querySelector('meta[name="auth-type"]')?.getAttribute('content') === 'cognito';
+      // Enable Cognito authentication by default in Replit development
+      const hostname = window.location.hostname;
+      const isReplit = hostname.includes('replit.co') || hostname.includes('repl.co');
+      
+      // Check if Cognito is configured (enable by default for Replit)
+      const cognitoEnabled = isReplit || document.querySelector('meta[name="auth-type"]')?.getAttribute('content') === 'cognito';
       setIsCognitoEnabled(cognitoEnabled);
       
       // If we're not on a replit.co domain and have certain indicators, this is likely production
-      const hostname = window.location.hostname;
-      const isReplit = hostname.includes('replit.co') || hostname.includes('repl.co');
       const isAmplify = hostname.includes('amplifyapp.com') || hostname.includes('cloudfront.net');
       setIsProductionDeploy(!isReplit || isAmplify);
     };
     checkEnvironment();
   }, []);
+
+  // Reset login state when authentication is successful
+  useEffect(() => {
+    if (isAuthenticated && justLoggedIn) {
+      setJustLoggedIn(false);
+    }
+  }, [isAuthenticated, justLoggedIn]);
   
   // White-label routes work for both authenticated and unauthenticated users
   if (location === '/engage' || location === '/mock5-client') {
@@ -95,15 +105,15 @@ function Router() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !justLoggedIn) {
     // For Cognito authentication, show the Cognito login
     if (isCognitoEnabled) {
-      return <CognitoLogin onLoginSuccess={() => window.location.reload()} />;
+      return <CognitoLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
     }
     
     // For production deployments, show the production login
     if (isProductionDeploy) {
-      return <ProductionLogin onLoginSuccess={() => window.location.reload()} />;
+      return <ProductionLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
     }
     
     // For development (Replit), use the original landing pages
