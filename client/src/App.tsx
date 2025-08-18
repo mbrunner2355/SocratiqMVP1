@@ -64,17 +64,9 @@ function Router() {
   // Detect environment and authentication mode
   useEffect(() => {
     const checkEnvironment = () => {
-      // Enable Cognito authentication by default in Replit development
-      const hostname = window.location.hostname;
-      const isReplit = hostname.includes('replit.co') || hostname.includes('repl.co');
-      
-      // Check if Cognito is configured (enable by default for Replit)
-      const cognitoEnabled = isReplit || document.querySelector('meta[name="auth-type"]')?.getAttribute('content') === 'cognito';
-      setIsCognitoEnabled(cognitoEnabled);
-      
-      // If we're not on a replit.co domain and have certain indicators, this is likely production
-      const isAmplify = hostname.includes('amplifyapp.com') || hostname.includes('cloudfront.net');
-      setIsProductionDeploy(!isReplit || isAmplify);
+      // DISABLE AUTHENTICATION for development
+      setIsCognitoEnabled(false);
+      setIsProductionDeploy(false);
     };
     checkEnvironment();
   }, []);
