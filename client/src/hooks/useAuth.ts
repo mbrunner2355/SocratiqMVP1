@@ -13,12 +13,20 @@ export function useAuth() {
   // Check if we have a Cognito token as fallback authentication indicator
   const cognitoToken = typeof window !== 'undefined' ? localStorage.getItem('cognito_access_token') : null;
   
-  console.log('useAuth state:', { user, isLoading, error, hasCognitoToken: !!cognitoToken });
+  // If we have an error and a token, the token might be invalid - clear it
+  if (error && cognitoToken && typeof window !== 'undefined') {
+    console.log('Clearing invalid Cognito token due to auth error');
+    localStorage.removeItem('cognito_access_token');
+    // Force a page refresh after clearing the token to show login screen
+    setTimeout(() => window.location.reload(), 100);
+  }
+  
+  console.log('useAuth state:', { user, isLoading, error, hasCognitoToken: !!cognitoToken, isAuthenticated: !!user });
 
   return {
     user,
     isLoading,
-    isAuthenticated: !!user || !!cognitoToken,
+    isAuthenticated: !!user,
     error,
   };
 }
