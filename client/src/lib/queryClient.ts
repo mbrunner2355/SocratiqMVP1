@@ -29,12 +29,16 @@ export async function apiRequest(
     headers.Authorization = `Bearer ${cognitoToken}`;
   }
   
+  console.log('Making API request to:', fullUrl, { method, body });
+  
   const res = await fetch(fullUrl, {
     method,
     headers: body && !isFormData ? { "Content-Type": "application/json", ...headers } : headers,
     body: isFormData ? body : (body ? JSON.stringify(body) : undefined),
     credentials: "include",
   });
+
+  console.log('API response:', res.status, res.statusText);
 
   // Handle token expiration
   if (res.status === 401 && cognitoToken) {
@@ -44,7 +48,9 @@ export async function apiRequest(
   }
 
   await throwIfResNotOk(res);
-  return res.json();
+  const responseData = await res.json();
+  console.log('API response data:', responseData);
+  return responseData;
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
