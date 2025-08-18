@@ -28,10 +28,19 @@ export function EMMECreateProject() {
     targetAudiences: []
   });
 
-  // Fetch real pharmaceutical data from EMME
-  const { data: therapeuticAreas } = useQuery({
-    queryKey: ['/api/emme/therapeutic-areas'],
-  });
+  // Pharmaceutical therapeutic areas for development
+  const therapeuticAreas = [
+    { value: 'oncology', label: 'Oncology' },
+    { value: 'cardiology', label: 'Cardiology' },
+    { value: 'neurology', label: 'Neurology' },
+    { value: 'immunology', label: 'Immunology' },
+    { value: 'endocrinology', label: 'Endocrinology' },
+    { value: 'respiratory', label: 'Respiratory' },
+    { value: 'dermatology', label: 'Dermatology' },
+    { value: 'gastroenterology', label: 'Gastroenterology' },
+    { value: 'infectious_diseases', label: 'Infectious Diseases' },
+    { value: 'rare_diseases', label: 'Rare Diseases' }
+  ];
 
   const { data: projectTemplates } = useQuery({
     queryKey: ['/api/emme/project-templates', formData.therapeuticArea, formData.projectType],
@@ -128,14 +137,9 @@ export function EMMECreateProject() {
               <SelectValue placeholder="Select therapeutic area" />
             </SelectTrigger>
             <SelectContent>
-              {therapeuticAreas?.map((area: any) => (
-                <SelectItem key={area.id} value={area.id}>
-                  <div className="flex items-center justify-between w-full">
-                    <span>{area.name}</span>
-                    <Badge variant="outline" className="ml-2 text-xs">
-                      {area.performanceMetrics.approvalRate}% approved
-                    </Badge>
-                  </div>
+              {therapeuticAreas.map((area) => (
+                <SelectItem key={area.value} value={area.value}>
+                  {area.label}
                 </SelectItem>
               ))}
             </SelectContent>
