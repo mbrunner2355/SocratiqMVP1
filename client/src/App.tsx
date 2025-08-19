@@ -39,6 +39,7 @@ import { EMMEEngageApp } from "@/components/EMMEEngageApp";
 import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
 import { ClientManager } from "@/components/emme/ClientManager";
+import { ProjectManager } from "@/components/emme/ProjectManager";
 import { AdvancedNLPDashboard } from "@/components/AdvancedNLPDashboard";
 import LLMManager from "@/components/LLMManager";
 import BayesianMonteCarloManager from "@/components/BayesianMonteCarloManager";
@@ -149,8 +150,16 @@ function Router() {
                 return <EMMEHome />;
               case "clients":
                 return <ClientManager />;
+              case "projects":
+                return <ProjectManager />;
+              case "project-overview":
+                return <ProjectManager />;
+              case "project-creation":
+                return <ProjectManager />;
+              case "project-tracking":
+                return <ProjectManager />;
               case "create-project":
-                return <div className="p-6"><h1 className="text-2xl font-bold">Create New Project</h1><p>Project creation wizard coming soon.</p></div>;
+                return <ProjectManager />;
               case "smart-wizard":
                 return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Smart project wizard coming soon.</p></div>;
               case "strategic-intelligence":
