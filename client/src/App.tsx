@@ -40,6 +40,53 @@ import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
 import { ClientManager } from "@/components/emme/ClientManager";
 import { ProjectManager } from "@/components/emme/ProjectManager";
+
+// Container component to handle EMME Engage app navigation state
+function EMMEEngageAppContainer() {
+  const [currentView, setCurrentView] = useState("home");
+  
+  const handleViewChange = (viewId: string) => {
+    console.log(`Navigation clicked: ${viewId}`);
+    setCurrentView(viewId);
+  };
+  
+  const renderCurrentView = () => {
+    switch(currentView) {
+      case "home":
+        return <EMMEHome />;
+      case "clients":
+        return <ClientManager />;
+      case "projects":
+        return <ProjectManager mode="list" />;
+      case "project-overview":
+        return <ProjectManager mode="list" />;
+      case "project-creation":
+        return <ProjectManager mode="create" />;
+      case "project-tracking":
+        return <ProjectManager mode="list" />;
+      case "create-project":
+        return <ProjectManager mode="create" />;
+      case "smart-wizard":
+        return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Smart project wizard coming soon.</p></div>;
+      case "strategic-intelligence":
+        return <div className="p-6"><h1 className="text-2xl font-bold">Strategic Intelligence</h1><p>Strategic intelligence dashboard coming soon.</p></div>;
+      case "stakeholder-engagement":
+        return <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1><p>Stakeholder engagement tools coming soon.</p></div>;
+      case "content-orchestration":
+        return <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1><p>Content orchestration platform coming soon.</p></div>;
+      case "equity-access":
+        return <div className="p-6"><h1 className="text-2xl font-bold">Equity & Access</h1><p>Equity and access tools coming soon.</p></div>;
+      default:
+        return <EMMEHome />;
+    }
+  };
+  
+  return (
+    <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
+      {renderCurrentView()}
+    </EMMELayout>
+  );
+}
 import { AdvancedNLPDashboard } from "@/components/AdvancedNLPDashboard";
 import LLMManager from "@/components/LLMManager";
 import BayesianMonteCarloManager from "@/components/BayesianMonteCarloManager";
@@ -136,51 +183,7 @@ function Router() {
   if (isEMMEEngageUser) {
     return (
       <Switch>
-        <Route path="/emme-engage/app" component={() => {
-          const [currentView, setCurrentView] = useState("home");
-          
-          const handleViewChange = (viewId: string) => {
-            console.log(`Navigation clicked: ${viewId}`);
-            setCurrentView(viewId);
-          };
-          
-          const renderCurrentView = () => {
-            switch(currentView) {
-              case "home":
-                return <EMMEHome />;
-              case "clients":
-                return <ClientManager />;
-              case "projects":
-                return <ProjectManager mode="list" />;
-              case "project-overview":
-                return <ProjectManager mode="list" />;
-              case "project-creation":
-                return <ProjectManager mode="create" />;
-              case "project-tracking":
-                return <ProjectManager mode="list" />;
-              case "create-project":
-                return <ProjectManager mode="create" />;
-              case "smart-wizard":
-                return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Smart project wizard coming soon.</p></div>;
-              case "strategic-intelligence":
-                return <div className="p-6"><h1 className="text-2xl font-bold">Strategic Intelligence</h1><p>Strategic intelligence dashboard coming soon.</p></div>;
-              case "stakeholder-engagement":
-                return <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1><p>Stakeholder engagement tools coming soon.</p></div>;
-              case "content-orchestration":
-                return <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1><p>Content orchestration platform coming soon.</p></div>;
-              case "equity-access":
-                return <div className="p-6"><h1 className="text-2xl font-bold">Equity & Access</h1><p>Equity and access tools coming soon.</p></div>;
-              default:
-                return <EMMEHome />;
-            }
-          };
-          
-          return (
-            <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
-              {renderCurrentView()}
-            </EMMELayout>
-          );
-        }} />
+        <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
         <Route path="/emme-engage/*" component={EMMEEngageApp} />
         <Route component={NotFound} />
       </Switch>
