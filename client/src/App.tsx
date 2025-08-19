@@ -36,6 +36,8 @@ import { EMMEManager } from "@/components/EMMEManager";
 import { EMMEConnectEnhanced } from "@/components/EMMEConnectEnhanced";
 import { PartnerAppsManager } from "@/components/PartnerAppsManager";
 import { EMMEEngageApp } from "@/components/EMMEEngageApp";
+import { EMMELayout } from "@/components/emme/EMMELayout";
+import { EMMEHome } from "@/components/emme/EMMEHome";
 import { AdvancedNLPDashboard } from "@/components/AdvancedNLPDashboard";
 import LLMManager from "@/components/LLMManager";
 import BayesianMonteCarloManager from "@/components/BayesianMonteCarloManager";
@@ -132,7 +134,11 @@ function Router() {
   if (isEMMEEngageUser) {
     return (
       <Switch>
-        <Route path="/emme-engage/app" component={EMMEEngageApp} />
+        <Route path="/emme-engage/app" component={() => (
+          <EMMELayout activeView="home">
+            <EMMEHome />
+          </EMMELayout>
+        )} />
         <Route path="/emme-engage/*" component={EMMEEngageApp} />
         <Route component={NotFound} />
       </Switch>
