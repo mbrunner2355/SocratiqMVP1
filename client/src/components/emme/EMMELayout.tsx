@@ -204,6 +204,11 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       icon: <Users className="w-5 h-5" />
     },
     {
+      id: "chat",
+      label: "Chat with EMME",
+      icon: <MessageCircle className="w-5 h-5" />
+    },
+    {
       id: "create-project",
       label: "Create new project",
       icon: <Plus className="w-5 h-5" />
@@ -290,11 +295,6 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       icon: <Shield className="w-5 h-5" />
     },
 
-    {
-      id: "chat",
-      label: "Chat with emme",
-      icon: <MessageCircle className="w-5 h-5" />
-    },
     {
       id: "alerts",
       label: "Alerts",
