@@ -38,6 +38,7 @@ import { PartnerAppsManager } from "@/components/PartnerAppsManager";
 import { EMMEEngageApp } from "@/components/EMMEEngageApp";
 import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
+import { ClientManager } from "@/components/emme/ClientManager";
 import { AdvancedNLPDashboard } from "@/components/AdvancedNLPDashboard";
 import LLMManager from "@/components/LLMManager";
 import BayesianMonteCarloManager from "@/components/BayesianMonteCarloManager";
@@ -135,43 +136,39 @@ function Router() {
     return (
       <Switch>
         <Route path="/emme-engage/app" component={() => {
+          const [currentView, setCurrentView] = useState("home");
+          
           const handleViewChange = (viewId: string) => {
             console.log(`Navigation clicked: ${viewId}`);
-            // For now, show alert to indicate navigation is working
-            // Later this can be enhanced to load different components
-            switch(viewId) {
+            setCurrentView(viewId);
+          };
+          
+          const renderCurrentView = () => {
+            switch(currentView) {
               case "home":
-                // Already on home
-                break;
+                return <EMMEHome />;
               case "clients":
-                alert("Client Management - Coming Soon");
-                break;
+                return <ClientManager />;
               case "create-project":
-                alert("Create New Project - Coming Soon");
-                break;
+                return <div className="p-6"><h1 className="text-2xl font-bold">Create New Project</h1><p>Project creation wizard coming soon.</p></div>;
               case "smart-wizard":
-                alert("Smart Wizard - Coming Soon");
-                break;
+                return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Smart project wizard coming soon.</p></div>;
               case "strategic-intelligence":
-                alert("Strategic Intelligence - Coming Soon");
-                break;
+                return <div className="p-6"><h1 className="text-2xl font-bold">Strategic Intelligence</h1><p>Strategic intelligence dashboard coming soon.</p></div>;
               case "stakeholder-engagement":
-                alert("Stakeholder Engagement - Coming Soon");
-                break;
+                return <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1><p>Stakeholder engagement tools coming soon.</p></div>;
               case "content-orchestration":
-                alert("Content Orchestration - Coming Soon");
-                break;
+                return <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1><p>Content orchestration platform coming soon.</p></div>;
               case "equity-access":
-                alert("Equity & Access - Coming Soon");
-                break;
+                return <div className="p-6"><h1 className="text-2xl font-bold">Equity & Access</h1><p>Equity and access tools coming soon.</p></div>;
               default:
-                alert(`${viewId} - Coming Soon`);
+                return <EMMEHome />;
             }
           };
           
           return (
-            <EMMELayout activeView="home" onViewChange={handleViewChange}>
-              <EMMEHome />
+            <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
+              {renderCurrentView()}
             </EMMELayout>
           );
         }} />
