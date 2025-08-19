@@ -151,15 +151,15 @@ function Router() {
               case "clients":
                 return <ClientManager />;
               case "projects":
-                return <ProjectManager />;
+                return <ProjectManager mode="list" />;
               case "project-overview":
-                return <ProjectManager />;
+                return <ProjectManager mode="list" />;
               case "project-creation":
-                return <ProjectManager />;
+                return <ProjectManager mode="create" />;
               case "project-tracking":
-                return <ProjectManager />;
+                return <ProjectManager mode="list" />;
               case "create-project":
-                return <ProjectManager />;
+                return <ProjectManager mode="create" />;
               case "smart-wizard":
                 return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Smart project wizard coming soon.</p></div>;
               case "strategic-intelligence":
