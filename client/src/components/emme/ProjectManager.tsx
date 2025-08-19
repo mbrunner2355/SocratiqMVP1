@@ -86,6 +86,19 @@ export function ProjectManager({ mode, projectId, showWizard: initialShowWizard 
       modules: ["Insight Engine", "Engagement Studio", "Learning Hub", "Equity Infrastructure"],
       budget: 950000,
       spent: 874000
+    },
+    {
+      id: "proj-004",
+      name: "VMS Global Vendor Management Platform",
+      client: "Bayer HealthCare",
+      status: "active",
+      progress: 65,
+      startDate: "2024-01-01",
+      endDate: "2024-12-31",
+      teamMembers: 18,
+      modules: ["Insight Engine", "Engagement Studio", "Learning Hub", "Equity Infrastructure"],
+      budget: 1500000,
+      spent: 975000
     }
   ];
 
