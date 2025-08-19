@@ -134,11 +134,42 @@ function Router() {
   if (isEMMEEngageUser) {
     return (
       <Switch>
-        <Route path="/emme-engage/app" component={() => (
-          <EMMELayout activeView="home">
-            <EMMEHome />
-          </EMMELayout>
-        )} />
+        <Route path="/emme-engage/app" component={() => {
+          const EMMEEngageMainApp = () => {
+            const [activeView, setActiveView] = useState("home");
+            
+            const renderView = () => {
+              switch (activeView) {
+                case "home":
+                  return <EMMEHome />;
+                case "clients":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Client Management</h1><p>Client management interface coming soon.</p></div>;
+                case "create-project":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Create New Project</h1><p>Project creation wizard coming soon.</p></div>;
+                case "smart-wizard":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Smart project wizard coming soon.</p></div>;
+                case "strategic-intelligence":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Strategic Intelligence</h1><p>Strategic intelligence dashboard coming soon.</p></div>;
+                case "stakeholder-engagement":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1><p>Stakeholder engagement tools coming soon.</p></div>;
+                case "content-orchestration":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1><p>Content orchestration platform coming soon.</p></div>;
+                case "equity-access":
+                  return <div className="p-6"><h1 className="text-2xl font-bold">Equity & Access</h1><p>Equity and access tools coming soon.</p></div>;
+                default:
+                  return <EMMEHome />;
+              }
+            };
+            
+            return (
+              <EMMELayout activeView={activeView} onViewChange={setActiveView}>
+                {renderView()}
+              </EMMELayout>
+            );
+          };
+          
+          return <EMMEEngageMainApp />;
+        }} />
         <Route path="/emme-engage/*" component={EMMEEngageApp} />
         <Route component={NotFound} />
       </Switch>
