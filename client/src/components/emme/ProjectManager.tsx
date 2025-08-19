@@ -46,46 +46,46 @@ export function ProjectManager({ mode, projectId, showWizard: initialShowWizard 
     modules: ["insight-engine", "engagement-studio"] // Default modules
   });
 
-  // Mock project data
+  // Bayer pharmaceutical project data
   const projects = [
     {
       id: "proj-001",
-      name: "Oncology Campaign Q3",
-      client: "PharmaCorp Global",
+      name: "Xarelto Market Access Strategy",
+      client: "Bayer HealthCare",
       status: "active",
       progress: 78,
       startDate: "2024-01-15",
       endDate: "2024-06-30",
-      teamMembers: 8,
+      teamMembers: 12,
       modules: ["Insight Engine", "Engagement Studio", "Learning Hub"],
-      budget: 450000,
-      spent: 312000
+      budget: 850000,
+      spent: 663000
     },
     {
       id: "proj-002", 
-      name: "Diabetes Education Series",
-      client: "MediHealth Solutions",
+      name: "Eylea Ophthalmology Launch",
+      client: "Bayer HealthCare",
       status: "planning",
-      progress: 25,
+      progress: 35,
       startDate: "2024-02-01",
-      endDate: "2024-08-31",
-      teamMembers: 5,
+      endDate: "2024-09-30",
+      teamMembers: 8,
       modules: ["Engagement Studio", "Learning Hub", "Equity Infrastructure"],
-      budget: 275000,
-      spent: 65000
+      budget: 1200000,
+      spent: 420000
     },
     {
       id: "proj-003",
-      name: "Rare Disease Awareness",
-      client: "BioTech Innovations",
-      status: "completed",
-      progress: 100,
-      startDate: "2023-09-01",
-      endDate: "2024-01-31",
-      teamMembers: 12,
+      name: "Nubeqa Prostate Cancer HCP Education",
+      client: "Bayer HealthCare",
+      status: "active",
+      progress: 92,
+      startDate: "2023-10-01",
+      endDate: "2024-03-31",
+      teamMembers: 15,
       modules: ["Insight Engine", "Engagement Studio", "Learning Hub", "Equity Infrastructure"],
-      budget: 680000,
-      spent: 652000
+      budget: 950000,
+      spent: 874000
     }
   ];
 
