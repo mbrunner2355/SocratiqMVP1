@@ -21,6 +21,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { EMMEProjectIntegration } from './emme/EMMEProjectIntegration';
 import { EMMECrossProjectAnalytics } from './emme/EMMECrossProjectAnalytics';
+import { EMMEProjectDetailView } from './emme/EMMEProjectDetailView';
 
 // Form validation schema
 const projectFormSchema = z.object({
@@ -128,7 +129,8 @@ export function EMMEProjectManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [view, setView] = useState<'list' | 'integration' | 'analytics'>('list');
+  const [view, setView] = useState<'list' | 'integration' | 'analytics' | 'project-detail'>('list');
+  const [selectedProjectForDetail, setSelectedProjectForDetail] = useState<Project | null>(null);
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -294,6 +296,18 @@ export function EMMEProjectManager() {
   const projects = projectsData?.projects || [];
 
   // Render different views
+  if (view === 'project-detail' && selectedProjectForDetail) {
+    return (
+      <EMMEProjectDetailView 
+        project={selectedProjectForDetail} 
+        onBackToProjects={() => {
+          setView('list');
+          setSelectedProjectForDetail(null);
+        }}
+      />
+    );
+  }
+
   if (view === 'analytics') {
     return <EMMECrossProjectAnalytics />;
   }
@@ -351,6 +365,15 @@ export function EMMEProjectManager() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
+          <div className="flex items-center gap-3 mb-2">
+            <Button 
+              variant="ghost" 
+              onClick={() => window.location.href = '/emme-engage'}
+              className="text-purple-600 hover:text-purple-700"
+            >
+              ← Back to EMME Engage
+            </Button>
+          </div>
           <h1 className="text-2xl font-bold text-gray-900">Project Information Completion</h1>
           <p className="text-gray-600">Manage and track your EMME projects</p>
         </div>
@@ -824,7 +847,15 @@ export function EMMEProjectManager() {
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">{project.projectTitle}</h3>
+                      <h3 
+                        className="text-lg font-semibold text-gray-900 cursor-pointer hover:text-purple-600 transition-colors"
+                        onClick={() => {
+                          setSelectedProjectForDetail(project);
+                          setView('project-detail');
+                        }}
+                      >
+                        {project.projectTitle}
+                      </h3>
                       <div className={`w-3 h-3 rounded-full ${getStatusColor(project.status)}`} />
                       <Badge variant="outline" className={getPriorityColor(project.priority)}>
                         {project.priority}
@@ -864,6 +895,17 @@ export function EMMEProjectManager() {
                   </div>
 
                   <div className="flex items-center space-x-2 ml-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        setSelectedProjectForDetail(project);
+                        setView('project-detail');
+                      }}
+                      title="View Project Details"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
