@@ -24,6 +24,7 @@ SocratIQ Transform™ is an AI-powered document intelligence platform that proce
 - **Admin Navigation Repositioned**: Moved admin functions (Corpus, Data Platform, Models, Trust) below business modules for demo clarity
 - **Home Page Demo Functionality**: Added functional navigation to all interactive elements - module cards, quick actions, and events now navigate to relevant pages instead of showing alerts
 - **EMME Chat Integration**: Added "Chat with EMME" conversational agent to left navigation menu with full Claude Sonnet API integration for pharmaceutical intelligence conversations
+- **Project Details Buttons Fixed**: Resolved non-functional Details buttons in project cards - now display comprehensive project information including client, status, progress, team size, budget, and due dates (August 19, 2025)
 
 ## Current Status: Production-Ready EMME Engage Enhanced
 - AWS S3 cloud storage fully integrated (`socratiqbeta1` bucket confirmed working)
