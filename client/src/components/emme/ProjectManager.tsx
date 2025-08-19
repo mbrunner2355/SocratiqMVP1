@@ -545,7 +545,15 @@ export function ProjectManager({ mode, projectId, showWizard: initialShowWizard 
               
               <div className="flex justify-between items-center pt-2">
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      console.log("Viewing project details:", project.name);
+                      alert(`Project Details: ${project.name}\n\nClient: ${project.client}\nStatus: ${project.status}\nProgress: ${project.progress}%\nTeam: ${project.teamMembers} members\nBudget: $${(project.budget / 1000).toFixed(0)}K\nDue: ${new Date(project.endDate).toLocaleDateString()}`);
+                    }}
+                    title="View project details"
+                  >
                     <FileText className="w-3 h-3 mr-1" />
                     Details
                   </Button>
