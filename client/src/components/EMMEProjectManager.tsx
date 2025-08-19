@@ -60,6 +60,7 @@ const CLIENTS = [
   { value: "medical_innovations", label: "Medical Innovations Inc." },
   { value: "global_pharma", label: "Global Pharma Corp" },
   { value: "clinical_research", label: "Clinical Research Partners" },
+  { value: "bayer", label: "Bayer" },
 ];
 
 const TEAMS = [

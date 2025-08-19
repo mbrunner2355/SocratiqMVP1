@@ -64,7 +64,7 @@ interface ContentSection {
 
 export function EMMEEngageApp() {
   const [activeSection, setActiveSection] = useState("exploration");
-  const [currentProject] = useState("VMS Global");
+  const [currentProject] = useState("VMS (Bayer)");
   const [activeTab, setActiveTab] = useState("market-analysis");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");

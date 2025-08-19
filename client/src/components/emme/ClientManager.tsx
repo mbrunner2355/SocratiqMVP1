@@ -108,6 +108,23 @@ export function ClientManager() {
       totalSpend: 180000,
       joinDate: "2022-08-20",
       lastActivity: "2024-05-15"
+    },
+    {
+      id: "client-005",
+      name: "Bayer",
+      logo: "/api/placeholder/40/40",
+      industry: "Pharmaceuticals",
+      size: "Large Enterprise",
+      contactName: "Dr. Alexandra Chen",
+      email: "alexandra.chen@bayer.com",
+      phone: "+1 (555) 678-9012",
+      website: "www.bayer.com",
+      location: "Whippany, NJ",
+      status: "active",
+      projects: 2,
+      totalSpend: 2850000,
+      joinDate: "2023-03-15",
+      lastActivity: "2024-08-19"
     }
   ];
 
