@@ -1249,13 +1249,13 @@ export function EMMEEngageApp() {
             </div>
           </div>
           
-          {/* Sophie Chat Panel */}
+          {/* EMME Chat Panel */}
           <div className="w-80 border-l bg-gray-50">
             <div className="h-full flex flex-col">
               <div className="p-4 border-b bg-white">
                 <h3 className="font-medium flex items-center">
                   <Brain className="w-5 h-5 mr-2 text-purple-600" />
-                  Sophie™ Research Assistant
+                  EMME™ Research Assistant
                 </h3>
                 <p className="text-xs text-gray-600 mt-1">AI-powered pharmaceutical intelligence</p>
               </div>
