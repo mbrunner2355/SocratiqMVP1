@@ -15,10 +15,11 @@ import {
 } from "lucide-react";
 
 export default function EMMEEngageLanding() {
-  const handleLogin = () => {
-    // Set partner app indicator for post-login routing
+  const handleEnterApp = () => {
+    // For development - go directly to the main app
+    // Set partner app indicator for routing
     localStorage.setItem('partner-app', 'emme-engage');
-    window.location.href = "/login";
+    window.location.href = "/emme-engage/app";
   };
 
   return (
@@ -54,11 +55,13 @@ export default function EMMEEngageLanding() {
       <div className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/95">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Target className="h-8 w-8 text-purple-600" />
-            <span className="text-xl font-bold text-purple-700">emme engage</span>
+            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">E</span>
+            </div>
+            <span className="text-xl font-bold">EMME Engage</span>
           </div>
-          <Button onClick={handleLogin} className="bg-purple-600 hover:bg-purple-700">
-            Partner Login
+          <Button onClick={handleEnterApp} className="bg-purple-600 hover:bg-purple-700">
+            Enter App
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -77,7 +80,7 @@ export default function EMMEEngageLanding() {
           <div className="text-4xl font-bold text-purple-600 mb-2">$300M-$900M/YR</div>
           <p className="text-lg text-muted-foreground">Average savings potential through intelligent market access optimization</p>
         </div>
-        <Button size="lg" onClick={handleLogin} className="text-lg px-8 py-4 bg-purple-600 hover:bg-purple-700">
+        <Button size="lg" onClick={handleEnterApp} className="text-lg px-8 py-4 bg-purple-600 hover:bg-purple-700">
           Access Platform
           <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
@@ -235,8 +238,8 @@ export default function EMMEEngageLanding() {
           <p className="text-lg mb-8 text-purple-100">
             Join industry leaders who are accelerating growth through intelligent partnership engagement.
           </p>
-          <Button size="lg" variant="secondary" onClick={handleLogin} className="text-lg px-8 py-4">
-            Start Engaging
+          <Button size="lg" variant="secondary" onClick={handleEnterApp} className="text-lg px-8 py-4">
+            Enter EMME Engage
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
