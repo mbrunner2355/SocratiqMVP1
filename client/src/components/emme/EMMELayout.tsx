@@ -192,34 +192,7 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       label: "Home",
       icon: <Home className="w-5 h-5" />
     },
-    {
-      id: "corpus",
-      label: "Corpus",
-      icon: <Database className="w-5 h-5" />
-    },
-    {
-      id: "data-platform",
-      label: "Data Platform", 
-      icon: <Database className="w-5 h-5" />,
-      hasSubmenu: true,
-      submenuItems: [
-        { id: "data-ingestion", label: "Data Ingestion Hub", icon: <Activity className="w-4 h-4" /> },
-        { id: "pipeline", label: "Data Pipeline", icon: <GitBranch className="w-4 h-4" /> },
-        { id: "api-management", label: "API Management", icon: <Zap className="w-4 h-4" /> },
-        { id: "tenant-management", label: "Tenant Management", icon: <Users className="w-4 h-4" /> },
-        { id: "trace-units", label: "TraceUnits™ Audit", icon: <Shield className="w-4 h-4" /> }
-      ]
-    },
-    {
-      id: "models",
-      label: "Models",
-      icon: <Bot className="w-5 h-5" />
-    },
-    {
-      id: "trust",
-      label: "Trust",
-      icon: <Shield className="w-5 h-5" />
-    },
+
     {
       id: "clients",
       label: "Clients", 
@@ -287,6 +260,34 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
         { id: "localized-strategies", label: "Localized Strategies", icon: <Target className="w-4 h-4" /> },
         { id: "equity-metrics", label: "Equity Performance Metrics", icon: <TrendingUp className="w-4 h-4" /> }
       ]
+    },
+    {
+      id: "corpus",
+      label: "Corpus",
+      icon: <Database className="w-5 h-5" />
+    },
+    {
+      id: "data-platform",
+      label: "Data Platform", 
+      icon: <Database className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "data-ingestion", label: "Data Ingestion Hub", icon: <Activity className="w-4 h-4" /> },
+        { id: "pipeline", label: "Data Pipeline", icon: <GitBranch className="w-4 h-4" /> },
+        { id: "api-management", label: "API Management", icon: <Zap className="w-4 h-4" /> },
+        { id: "tenant-management", label: "Tenant Management", icon: <Users className="w-4 h-4" /> },
+        { id: "trace-units", label: "TraceUnits™ Audit", icon: <Shield className="w-4 h-4" /> }
+      ]
+    },
+    {
+      id: "models",
+      label: "Models",
+      icon: <Bot className="w-5 h-5" />
+    },
+    {
+      id: "trust",
+      label: "Trust",
+      icon: <Shield className="w-5 h-5" />
     },
 
     {
