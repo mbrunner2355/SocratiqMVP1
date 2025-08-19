@@ -134,11 +134,47 @@ function Router() {
   if (isEMMEEngageUser) {
     return (
       <Switch>
-        <Route path="/emme-engage/app" component={() => (
-          <EMMELayout activeView="home">
-            <EMMEHome />
-          </EMMELayout>
-        )} />
+        <Route path="/emme-engage/app" component={() => {
+          const handleViewChange = (viewId: string) => {
+            console.log(`Navigation clicked: ${viewId}`);
+            // For now, show alert to indicate navigation is working
+            // Later this can be enhanced to load different components
+            switch(viewId) {
+              case "home":
+                // Already on home
+                break;
+              case "clients":
+                alert("Client Management - Coming Soon");
+                break;
+              case "create-project":
+                alert("Create New Project - Coming Soon");
+                break;
+              case "smart-wizard":
+                alert("Smart Wizard - Coming Soon");
+                break;
+              case "strategic-intelligence":
+                alert("Strategic Intelligence - Coming Soon");
+                break;
+              case "stakeholder-engagement":
+                alert("Stakeholder Engagement - Coming Soon");
+                break;
+              case "content-orchestration":
+                alert("Content Orchestration - Coming Soon");
+                break;
+              case "equity-access":
+                alert("Equity & Access - Coming Soon");
+                break;
+              default:
+                alert(`${viewId} - Coming Soon`);
+            }
+          };
+          
+          return (
+            <EMMELayout activeView="home" onViewChange={handleViewChange}>
+              <EMMEHome />
+            </EMMELayout>
+          );
+        }} />
         <Route path="/emme-engage/*" component={EMMEEngageApp} />
         <Route component={NotFound} />
       </Switch>
