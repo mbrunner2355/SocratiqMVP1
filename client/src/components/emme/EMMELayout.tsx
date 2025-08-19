@@ -198,9 +198,17 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       icon: <Database className="w-5 h-5" />
     },
     {
-      id: "pipeline",
-      label: "Pipeline",
-      icon: <GitBranch className="w-5 h-5" />
+      id: "data-platform",
+      label: "Data Platform", 
+      icon: <Database className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "data-ingestion", label: "Data Ingestion Hub", icon: <Activity className="w-4 h-4" /> },
+        { id: "pipeline", label: "Data Pipeline", icon: <GitBranch className="w-4 h-4" /> },
+        { id: "api-management", label: "API Management", icon: <Zap className="w-4 h-4" /> },
+        { id: "tenant-management", label: "Tenant Management", icon: <Users className="w-4 h-4" /> },
+        { id: "trace-units", label: "TraceUnits™ Audit", icon: <Shield className="w-4 h-4" /> }
+      ]
     },
     {
       id: "models",
@@ -280,18 +288,6 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
         { id: "equity-metrics", label: "Equity Performance Metrics", icon: <TrendingUp className="w-4 h-4" /> }
       ]
     },
-    {
-      id: "data-platform",
-      label: "Data Platform", 
-      icon: <Database className="w-5 h-5" />,
-      hasSubmenu: true,
-      submenuItems: [
-        { id: "data-ingestion", label: "Data Ingestion Hub", icon: <Activity className="w-4 h-4" /> },
-        { id: "api-management", label: "API Management", icon: <Zap className="w-4 h-4" /> },
-        { id: "tenant-management", label: "Tenant Management", icon: <Users className="w-4 h-4" /> },
-        { id: "trace-units", label: "TraceUnits™ Audit", icon: <Shield className="w-4 h-4" /> }
-      ]
-    },
 
     {
       id: "chat",
@@ -308,7 +304,7 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
   // Filter navigation items based on user role
   const navigationItems = allNavigationItems.filter(item => {
     // Hide admin-only items from non-admin users
-    const adminOnlyItems = ['corpus', 'pipeline', 'models', 'trust'];
+    const adminOnlyItems = ['corpus', 'data-platform', 'models', 'trust'];
     if (adminOnlyItems.includes(item.id) && !isAdmin) {
       return false;
     }
