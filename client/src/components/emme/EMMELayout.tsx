@@ -192,6 +192,17 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       label: "Home",
       icon: <Home className="w-5 h-5" />
     },
+    {
+      id: "projects",
+      label: "Projects",
+      icon: <FolderOpen className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "project-overview", label: "Project Overview", icon: <BarChart3 className="w-4 h-4" /> },
+        { id: "project-creation", label: "Project Creation", icon: <Plus className="w-4 h-4" /> },
+        { id: "project-tracking", label: "Project Tracking", icon: <Activity className="w-4 h-4" /> }
+      ]
+    },
 
     {
       id: "clients",

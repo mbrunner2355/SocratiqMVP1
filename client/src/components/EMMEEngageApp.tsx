@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { EMMEProjectManager } from "./EMMEProjectManager";
 import { 
   Target,
   Search,
@@ -1138,6 +1139,12 @@ export function EMMEEngageApp() {
             </div>
           </div>
         );
+        
+      case "projects":
+      case "project-overview":
+      case "project-creation":
+      case "project-tracking":
+        return <EMMEProjectManager />;
         
       default:
         return (

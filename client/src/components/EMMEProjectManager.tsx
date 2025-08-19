@@ -365,15 +365,6 @@ export function EMMEProjectManager() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <Button 
-              variant="ghost" 
-              onClick={() => window.location.href = '/emme-engage'}
-              className="text-purple-600 hover:text-purple-700"
-            >
-              ← Back to EMME Engage
-            </Button>
-          </div>
           <h1 className="text-2xl font-bold text-gray-900">Project Information Completion</h1>
           <p className="text-gray-600">Manage and track your EMME projects</p>
         </div>
@@ -409,6 +400,18 @@ export function EMMEProjectManager() {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Create New Project Button - moved from top right */}
+      <div className="flex justify-between items-center">
+        <Button 
+          variant="ghost" 
+          onClick={() => window.location.href = '/emme-engage'}
+          className="text-purple-600 hover:text-purple-700"
+        >
+          ← Back to EMME Engage
+        </Button>
+        
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button>

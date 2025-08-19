@@ -83,10 +83,10 @@ function Router() {
     return <EMMEEngageWhiteLabel />;
   }
   
-  // Check if user is accessing via partner app
-  const isEMMEEngageUser = window.location.pathname.startsWith('/emme-engage') || 
+  // Check if user is accessing via partner app  
+  const isEMMEEngageUser = window.location.pathname.startsWith('/emme-engage/') || 
                           localStorage.getItem('partner-app') === 'emme-engage';
-  const isEMMEHealthUser = window.location.pathname.startsWith('/emme-health') || 
+  const isEMMEHealthUser = window.location.pathname.startsWith('/emme-health/') || 
                           localStorage.getItem('partner-app') === 'emme-health';
 
   if (isLoading) {
@@ -118,6 +118,14 @@ function Router() {
         <Route component={NotFound} />
       </Switch>
     );
+  }
+
+  // Direct route to landing pages for main partner paths
+  if (location === '/emme-engage') {
+    return <EMMEEngageLanding />;
+  }
+  if (location === '/emme-health') {
+    return <EMMEHealthLanding />;
   }
 
   // Partner app routing for authenticated users
