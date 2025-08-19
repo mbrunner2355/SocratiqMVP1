@@ -272,7 +272,14 @@ export function EMMEHome() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {moduleStats.map((module, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card 
+                  key={index} 
+                  className="hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => {
+                    console.log(`Module clicked: ${module.name}`);
+                    alert(`${module.name} dashboard coming soon!`);
+                  }}
+                >
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
@@ -324,6 +331,11 @@ export function EMMEHome() {
                           size="sm" 
                           variant="outline"
                           className="w-full"
+                          onClick={() => {
+                            console.log(`Quick action clicked: ${action.title}`);
+                            // In a real app, this would navigate to the relevant page
+                            alert(`${action.title} functionality coming soon!`);
+                          }}
                         >
                           {action.action}
                         </Button>
@@ -367,7 +379,15 @@ export function EMMEHome() {
                 ))}
               </div>
               
-              <Button variant="outline" className="w-full mt-4" size="sm">
+              <Button 
+                variant="outline" 
+                className="w-full mt-4" 
+                size="sm"
+                onClick={() => {
+                  console.log('View All Activity clicked');
+                  alert('Activity dashboard coming soon!');
+                }}
+              >
                 View All Activity
               </Button>
             </CardContent>
