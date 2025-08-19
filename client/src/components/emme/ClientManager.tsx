@@ -182,7 +182,7 @@ export function ClientManager() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="company-size">Company Size</Label>
-            <Select>
+            <Select value={formData.size} onValueChange={(value) => setFormData(prev => ({ ...prev, size: value }))}>
               <SelectTrigger>
                 <SelectValue placeholder="Select company size" />
               </SelectTrigger>
@@ -197,7 +197,12 @@ export function ClientManager() {
           
           <div className="space-y-2">
             <Label htmlFor="location">Location</Label>
-            <Input id="location" placeholder="City, State/Country" />
+            <Input 
+              id="location" 
+              placeholder="City, State/Country"
+              value={formData.location}
+              onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+            />
           </div>
         </div>
 
@@ -207,30 +212,56 @@ export function ClientManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="contact-name">Contact Name *</Label>
-              <Input id="contact-name" placeholder="Dr. Sarah Johnson" />
+              <Input 
+                id="contact-name" 
+                placeholder="Dr. Sarah Johnson"
+                value={formData.contactName}
+                onChange={(e) => setFormData(prev => ({ ...prev, contactName: e.target.value }))}
+              />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="contact-title">Title</Label>
-              <Input id="contact-title" placeholder="VP of Marketing" />
+              <Input 
+                id="contact-title" 
+                placeholder="VP of Marketing"
+                value={formData.contactTitle}
+                onChange={(e) => setFormData(prev => ({ ...prev, contactTitle: e.target.value }))}
+              />
             </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email *</Label>
-              <Input id="email" type="email" placeholder="sarah.johnson@company.com" />
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="sarah.johnson@company.com"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" placeholder="+1 (555) 123-4567" />
+              <Input 
+                id="phone" 
+                placeholder="+1 (555) 123-4567"
+                value={formData.phone}
+                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+              />
             </div>
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="website">Website</Label>
-            <Input id="website" placeholder="www.company.com" />
+            <Input 
+              id="website" 
+              placeholder="www.company.com"
+              value={formData.website}
+              onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
+            />
           </div>
         </div>
 
@@ -240,6 +271,8 @@ export function ClientManager() {
             id="notes" 
             placeholder="Additional information about the client..."
             rows={3}
+            value={formData.notes}
+            onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
           />
         </div>
 
