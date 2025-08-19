@@ -58,12 +58,6 @@ function EMMEEngageAppContainer() {
         return <ClientManager />;
       case "projects":
         return <ProjectManager mode="list" />;
-      case "project-overview":
-        return <ProjectManager mode="list" />;
-      case "project-creation":
-        return <ProjectManager mode="create" />;
-      case "project-tracking":
-        return <ProjectManager mode="list" />;
       case "create-project":
         return <ProjectManager mode="create" />;
       case "smart-wizard":
