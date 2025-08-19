@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProjectWizard } from "./ProjectWizard";
+import { ProjectDetails } from "./ProjectDetails";
 import { 
   FolderOpen,
   Plus, 
@@ -34,6 +35,7 @@ interface ProjectManagerProps {
 export function ProjectManager({ mode, projectId, showWizard: initialShowWizard }: ProjectManagerProps) {
   const [showCreateForm, setShowCreateForm] = useState(mode === "create" || mode === "edit");
   const [showWizard, setShowWizard] = useState(initialShowWizard || false);
+  const [showProjectDetails, setShowProjectDetails] = useState<string | null>(null);
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
@@ -563,7 +565,7 @@ export function ProjectManager({ mode, projectId, showWizard: initialShowWizard 
                     size="sm"
                     onClick={() => {
                       console.log("Viewing project details:", project.name);
-                      alert(`Project Details: ${project.name}\n\nClient: ${project.client}\nStatus: ${project.status}\nProgress: ${project.progress}%\nTeam: ${project.teamMembers} members\nBudget: $${(project.budget / 1000).toFixed(0)}K\nDue: ${new Date(project.endDate).toLocaleDateString()}`);
+                      setShowProjectDetails(project.id);
                     }}
                     title="View project details"
                   >
@@ -589,6 +591,15 @@ export function ProjectManager({ mode, projectId, showWizard: initialShowWizard 
       </div>
     </div>
   );
+
+  if (showProjectDetails) {
+    return (
+      <ProjectDetails 
+        projectId={showProjectDetails}
+        onBack={() => setShowProjectDetails(null)}
+      />
+    );
+  }
 
   if (showWizard) {
     return (
