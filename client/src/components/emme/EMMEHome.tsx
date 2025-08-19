@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,8 @@ import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding"
 import { EMMEHomeChat } from "./EMMEHomeChat";
 
 export function EMMEHome() {
+  const [, setLocation] = useLocation();
+  
   // Get EMME Connect branding configuration
   const partnerId = detectPartnerContext();
   const brand = getPartnerBrand(partnerId);
@@ -277,7 +280,23 @@ export function EMMEHome() {
                   className="hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => {
                     console.log(`Module clicked: ${module.name}`);
-                    alert(`${module.name} dashboard coming soon!`);
+                    // Navigate to relevant pages based on module
+                    switch(module.name) {
+                      case "Insight Engine":
+                        setLocation("/emme-engage/strategic-intelligence");
+                        break;
+                      case "Engagement Studio":
+                        setLocation("/emme-engage/stakeholder-engagement");
+                        break;
+                      case "Learning Hub":
+                        setLocation("/emme-engage/content-orchestration");
+                        break;
+                      case "Equity Infrastructure":
+                        setLocation("/emme-engage/equity-access");
+                        break;
+                      default:
+                        alert(`${module.name} dashboard coming soon!`);
+                    }
                   }}
                 >
                   <CardContent className="p-6">
@@ -333,8 +352,23 @@ export function EMMEHome() {
                           className="w-full"
                           onClick={() => {
                             console.log(`Quick action clicked: ${action.title}`);
-                            // In a real app, this would navigate to the relevant page
-                            alert(`${action.title} functionality coming soon!`);
+                            // Navigate to relevant functionality
+                            switch(action.title) {
+                              case "Plan New Launch":
+                                setLocation("/emme-engage/projects/create");
+                                break;
+                              case "Monitor Market Dynamics":
+                                setLocation("/emme-engage/strategic-intelligence");
+                                break;
+                              case "Track Campaign Impact":
+                                setLocation("/emme-engage/stakeholder-engagement");
+                                break;
+                              case "Generate RWE Insights":
+                                setLocation("/emme-engage/data-platform");
+                                break;
+                              default:
+                                alert(`${action.title} functionality coming soon!`);
+                            }
                           }}
                         >
                           {action.action}
@@ -385,7 +419,7 @@ export function EMMEHome() {
                 size="sm"
                 onClick={() => {
                   console.log('View All Activity clicked');
-                  alert('Activity dashboard coming soon!');
+                  setLocation("/emme-engage/projects");
                 }}
               >
                 View All Activity
@@ -401,14 +435,26 @@ export function EMMEHome() {
                 Upcoming Events
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                <div 
+                  className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => {
+                    console.log('HCP Training event clicked');
+                    setLocation("/emme-engage/content-orchestration");
+                  }}
+                >
                   <Clock className="w-4 h-4 text-blue-600" />
                   <div className="flex-1">
                     <p className="text-sm font-medium">HCP Training Webinar</p>
                     <p className="text-xs text-gray-600">Tomorrow, 2:00 PM</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
+                <div 
+                  className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
+                  onClick={() => {
+                    console.log('Campaign Review event clicked');
+                    setLocation("/emme-engage/stakeholder-engagement");
+                  }}
+                >
                   <Clock className="w-4 h-4 text-green-600" />
                   <div className="flex-1">
                     <p className="text-sm font-medium">Campaign Review Meeting</p>
