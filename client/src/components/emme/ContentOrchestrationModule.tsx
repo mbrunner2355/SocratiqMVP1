@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 
 export function ContentOrchestrationModule() {
-  console.log("ContentOrchestrationModule component loaded");
   const orchestrationMetrics = {
     totalAssets: 15429,
     activeWorkflows: 89,

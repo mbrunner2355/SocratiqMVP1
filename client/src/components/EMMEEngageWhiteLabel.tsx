@@ -180,7 +180,6 @@ function EMMEEngageWhiteLabel() {
       
       // Content Orchestration  
       case "content-orchestration":
-        console.log("Rendering ContentOrchestrationModule");
         return <ContentOrchestrationModule />;
       case "mlr-workflow":
         return <MLRVisualization />;
