@@ -17,7 +17,8 @@ import {
   CheckCircle2,
   Clock,
   AlertTriangle,
-  Brain
+  Brain,
+  Shield
 } from "lucide-react";
 
 interface ProjectDetailsProps {
@@ -353,115 +354,116 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    VMS Global Project Structure
+                    VMS Project - EMME Connect Intelligence
                     <Button 
-                      onClick={() => window.open('/emme-vms-app', '_blank')}
+                      onClick={() => window.open('/emme', '_blank')}
                       className="bg-purple-600 hover:bg-purple-700 text-white"
                     >
-                      Open Full VMS Platform
+                      Open in EMME Connect
                     </Button>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">VMS Platform Access</h4>
+                    <h4 className="font-semibold text-blue-900 mb-2">EMME Connect Integration</h4>
                     <p className="text-sm text-blue-700">
-                      The complete VMS Global platform contains all 8 operational modules with comprehensive 
-                      pharmaceutical intelligence, market analysis, clinical trial data, and strategic frameworks. 
-                      Click above to access the full interactive platform.
+                      VMS Global is an active project within EMME Connect™ for customer <strong>Bayer</strong>. 
+                      This project leverages the full pharmaceutical intelligence platform including market analysis, 
+                      competitive intelligence, and regulatory strategy modules. Click above to access the complete 
+                      EMME Connect interface with all VMS project data.
                     </p>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-red-50 cursor-pointer hover:bg-red-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-red-50">
                         <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                          <FileText className="w-5 h-5 text-red-600" />
+                          <Brain className="w-5 h-5 text-red-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Framework</h4>
-                          <p className="text-sm text-gray-600">Go-to-market strategy & competitive differentiation</p>
+                          <h4 className="font-medium text-gray-900">Research Hub</h4>
+                          <p className="text-sm text-gray-600">Central pharmaceutical research & analysis</p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                       
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-blue-50">
                         <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <BarChart3 className="w-5 h-5 text-blue-600" />
+                          <Target className="w-5 h-5 text-blue-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Background</h4>
-                          <p className="text-sm text-gray-600">Clinical evidence & neurokinin mechanism</p>
+                          <h4 className="font-medium text-gray-900">Competitive Intelligence</h4>
+                          <p className="text-sm text-gray-600">Market positioning & competitor analysis</p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                       
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-purple-50">
                         <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                          <Target className="w-5 h-5 text-purple-600" />
+                          <Shield className="w-5 h-5 text-purple-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Exploration</h4>
-                          <p className="text-sm text-gray-600">Market analysis, competitive positioning, TAM</p>
+                          <h4 className="font-medium text-gray-900">Regulatory Strategy</h4>
+                          <p className="text-sm text-gray-600">Compliance & regulatory pathway analysis</p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                       
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-green-50">
                         <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                          <Users className="w-5 h-5 text-green-600" />
+                          <BarChart3 className="w-5 h-5 text-green-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Human Insights</h4>
-                          <p className="text-sm text-gray-600">Patient journey & provider perspectives</p>
+                          <h4 className="font-medium text-gray-900">Market Access</h4>
+                          <p className="text-sm text-gray-600">Payer strategy & access optimization</p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                     </div>
                     
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-orange-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-orange-50">
                         <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                          <MessageSquare className="w-5 h-5 text-orange-600" />
+                          <FileText className="w-5 h-5 text-orange-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Client Content</h4>
-                          <p className="text-sm text-gray-600">Document management & collaboration</p>
+                          <h4 className="font-medium text-gray-900">Content Library</h4>
+                          <p className="text-sm text-gray-600">Document management & MLR workflows</p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                       
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-cyan-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-cyan-50">
                         <div className="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center">
-                          <Brain className="w-5 h-5 text-cyan-600" />
+                          <Users className="w-5 h-5 text-cyan-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Playground</h4>
-                          <p className="text-sm text-gray-600">AI experimentation & testing environment</p>
+                          <h4 className="font-medium text-gray-900">Client Management</h4>
+                          <p className="text-sm text-gray-600">Bayer partnership & collaboration tools</p>
                         </div>
-                        <Badge className="bg-yellow-100 text-yellow-800">Beta</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                       
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-indigo-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-indigo-50">
                         <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                          <TrendingUp className="w-5 h-5 text-indigo-600" />
+                          <BarChart3 className="w-5 h-5 text-indigo-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Strategy Map</h4>
-                          <p className="text-sm text-gray-600">Strategic planning & roadmap visualization</p>
+                          <h4 className="font-medium text-gray-900">Analytics Dashboard</h4>
+                          <p className="text-sm text-gray-600">Performance metrics & ROI tracking</p>
                         </div>
-                        <Badge className="bg-yellow-100 text-yellow-800">Beta</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                       
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-pink-100 transition-colors">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-pink-50">
                         <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
-                          <BarChart3 className="w-5 h-5 text-pink-600" />
+                          <MessageSquare className="w-5 h-5 text-pink-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">Dashboard</h4>
-                          <p className="text-sm text-gray-600">Real-time analytics & performance metrics</p>
+                          <h4 className="font-medium text-gray-900">EMME Q&A</h4>
+                          <p className="text-sm text-gray-600">AI-powered pharmaceutical intelligence</p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
                       </div>
                     </div>
                   </div>
@@ -470,25 +472,25 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
               
               <Card>
                 <CardHeader>
-                  <CardTitle>VMS Platform Performance Metrics</CardTitle>
+                  <CardTitle>VMS Project Performance - Bayer Customer</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="text-center p-4 border rounded-lg">
-                      <p className="text-2xl font-bold text-blue-600">2,847</p>
-                      <p className="text-sm text-gray-600">Total Engagements</p>
+                      <p className="text-2xl font-bold text-blue-600">340%</p>
+                      <p className="text-sm text-gray-600">ROI Achievement</p>
                     </div>
                     <div className="text-center p-4 border rounded-lg">
-                      <p className="text-2xl font-bold text-green-600">12.4%</p>
-                      <p className="text-sm text-gray-600">Conversion Rate</p>
+                      <p className="text-2xl font-bold text-green-600">89%</p>
+                      <p className="text-sm text-gray-600">Project Success Rate</p>
                     </div>
                     <div className="text-center p-4 border rounded-lg">
-                      <p className="text-2xl font-bold text-purple-600">$24.50</p>
-                      <p className="text-sm text-gray-600">Cost per Lead</p>
+                      <p className="text-2xl font-bold text-purple-600">15</p>
+                      <p className="text-sm text-gray-600">Team Members</p>
                     </div>
                     <div className="text-center p-4 border rounded-lg">
-                      <p className="text-2xl font-bold text-orange-600">340%</p>
-                      <p className="text-sm text-gray-600">Campaign ROI</p>
+                      <p className="text-2xl font-bold text-orange-600">78%</p>
+                      <p className="text-sm text-gray-600">Progress Complete</p>
                     </div>
                   </div>
                 </CardContent>
