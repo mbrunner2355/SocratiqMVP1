@@ -260,8 +260,9 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
 
       {/* Detailed Information Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="intelligence">Intelligence</TabsTrigger>
           <TabsTrigger value="milestones">Milestones</TabsTrigger>
           <TabsTrigger value="modules">Modules</TabsTrigger>
           <TabsTrigger value="budget">Budget</TabsTrigger>
@@ -347,11 +348,94 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
             </CardContent>
           </Card>
         </TabsContent>
-        
-        <TabsContent value="modules" className="space-y-6">
+
+        <TabsContent value="intelligence" className="space-y-6">
           {/* VMS-Specific Pharmaceutical Intelligence Hub */}
           {project.id === 'proj-004' ? (
             <VMSIntelligenceHub onBack={() => {}} />
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Intelligence Hub</CardTitle>
+                <CardDescription>Project-specific intelligence and analytics</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Intelligence features are available for pharmaceutical projects.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="modules" className="space-y-6">
+          {/* Standard Modules Content */}
+          {project.id === 'proj-004' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>VMS Project Modules</CardTitle>
+                <CardDescription>Active pharmaceutical development modules</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center space-x-3 p-4 border rounded-lg bg-purple-50">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <BarChart3 className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">Market Analysis</h4>
+                      <p className="text-sm text-gray-600">TAM analysis & competitive intelligence</p>
+                    </div>
+                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 p-4 border rounded-lg bg-blue-50">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">Regulatory Strategy</h4>
+                      <p className="text-sm text-gray-600">FDA pathway & compliance</p>
+                    </div>
+                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 p-4 border rounded-lg bg-green-50">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">Clinical Evidence</h4>
+                      <p className="text-sm text-gray-600">Phase 2b results & trials</p>
+                    </div>
+                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 p-4 border rounded-lg bg-orange-50">
+                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">Commercial Strategy</h4>
+                      <p className="text-sm text-gray-600">Launch planning & market access</p>
+                    </div>
+                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                  <h4 className="font-semibold text-purple-900 mb-2">Access Full Intelligence Platform</h4>
+                  <p className="text-sm text-purple-700 mb-3">
+                    Complete pharmaceutical intelligence with TAM analysis, competitive positioning, 
+                    and regulatory strategy available in the Intelligence tab.
+                  </p>
+                  <Button 
+                    onClick={() => document.querySelector('[value="intelligence"]')?.click()}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    Open Intelligence Hub
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           ) : (
             <Card>
               <CardHeader>
