@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import FileUpload from "@/components/FileUpload";
 import { 
   FileText,
   Globe,
@@ -15,7 +16,8 @@ import {
   Languages,
   Target,
   BarChart3,
-  Shield
+  Shield,
+  Upload
 } from "lucide-react";
 
 export function ContentOrchestrationModule() {
@@ -283,12 +285,101 @@ export function ContentOrchestrationModule() {
         </Card>
       </div>
 
-      <Tabs defaultValue="workflows" className="space-y-6">
+      <Tabs defaultValue="upload" className="space-y-6">
         <TabsList>
+          <TabsTrigger value="upload">Upload Content</TabsTrigger>
           <TabsTrigger value="workflows">Content Workflows</TabsTrigger>
           <TabsTrigger value="campaigns">Global Campaigns</TabsTrigger>
           <TabsTrigger value="compliance">Compliance Monitor</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="upload" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Upload className="w-5 h-5" />
+                  <span>Upload Content Assets</span>
+                </CardTitle>
+                <p className="text-gray-600">
+                  Upload pharmaceutical content for MLR review and global distribution
+                </p>
+              </CardHeader>
+              <CardContent>
+                <FileUpload />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Content Processing Pipeline</CardTitle>
+                <p className="text-gray-600">
+                  Track content through automated workflows
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                        <FileText className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Content Extraction</p>
+                        <p className="text-sm text-gray-600">AI-powered text and metadata extraction</p>
+                      </div>
+                    </div>
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                        <Shield className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Compliance Check</p>
+                        <p className="text-sm text-gray-600">Automated regulatory compliance scanning</p>
+                      </div>
+                    </div>
+                    <Clock className="w-5 h-5 text-blue-600" />
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                        <Globe className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Global Distribution</p>
+                        <p className="text-sm text-gray-600">Multi-region content orchestration</p>
+                      </div>
+                    </div>
+                    <AlertTriangle className="w-5 h-5 text-gray-400" />
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h4 className="font-semibold mb-3">Recent Uploads</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm">Clinical_Study_Report_VMS.pdf</span>
+                      <Badge className="bg-green-100 text-green-800">Processed</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm">Patient_Education_Materials.docx</span>
+                      <Badge className="bg-blue-100 text-blue-800">Processing</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm">Regulatory_Submission_Draft.pdf</span>
+                      <Badge className="bg-yellow-100 text-yellow-800">MLR Review</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
         <TabsContent value="workflows" className="space-y-4">
           {workflowStages.map((stage, index) => (
