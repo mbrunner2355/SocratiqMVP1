@@ -2,58 +2,336 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 262.1 83.3% 57.8%;
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 262.1 83.3% 57.8%;
-  }
+/* Ensure proper scrolling for the entire page */
+html, body, #root {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+:root {
+  /* SocratIQ™ Brand Colors */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(215, 16%, 26%); /* Charcoal #374151 */
+  --muted: hsl(220, 14%, 97%); /* Warm Gray #F9FAFB */
+  --muted-foreground: hsl(215, 13%, 47%); /* Slate Gray #6B7280 */
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(215, 16%, 26%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(215, 16%, 26%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  
+  /* SocratIQ Transform™ Primary Colors */
+  --primary: hsl(217, 91%, 60%); /* Primary Blue #2563EB */
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(196, 89%, 48%); /* Secondary Blue-Cyan #0EA5E9 */
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(204, 94%, 94%); /* Light Blue #DBEAFE */
+  --accent-foreground: hsl(217, 91%, 60%);
+  
+  /* Status Colors */
+  --success: hsl(158, 64%, 52%); /* Success Green #059669 */
+  --success-foreground: hsl(0, 0%, 100%);
+  --warning: hsl(32, 95%, 44%); /* Warning Amber #D97706 */
+  --warning-foreground: hsl(0, 0%, 100%);
+  --error: hsl(0, 84%, 60%); /* Error Red #DC2626 */
+  --error-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  
+  --ring: hsl(217, 91%, 60%);
+  --radius: 0.5rem;
+  
+  /* SocratIQ™ Extended Colors */
+  --teal-primary: hsl(217, 91%, 60%); /* #2563EB - Blue Primary */
+  --teal-secondary: hsl(196, 89%, 48%); /* #0EA5E9 - Blue-Cyan Secondary */
+  --teal-light: hsl(204, 94%, 94%); /* #DBEAFE - Light Blue */
+  --charcoal: hsl(215, 16%, 26%); /* #374151 */
+  --slate: hsl(215, 13%, 47%); /* #6B7280 */
+  --warm-gray: hsl(220, 14%, 97%); /* #F9FAFB */
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(188, 100%, 38%);
+  --accent-foreground: hsl(188, 100%, 98%);
+  --success: hsl(122, 39%, 49%);
+  --success-foreground: hsl(122, 39%, 95%);
+  --warning: hsl(35, 91%, 48%);
+  --warning-foreground: hsl(35, 91%, 95%);
+  --error: hsl(0, 68%, 56%);
+  --error-foreground: hsl(0, 68%, 95%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+/* App-wide scrolling fixes */
+html, body, #root {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Roboto', 'Open Sans', 'Helvetica', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   }
+}
+
+/* SocratIQ™ Custom Styles */
+@layer utilities {
+  .text-teal-primary {
+    color: var(--teal-primary);
+  }
+  
+  .text-teal-secondary {
+    color: var(--teal-secondary);
+  }
+  
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+  
+  .text-slate {
+    color: var(--slate);
+  }
+  
+  /* EMME Connect Gradient Styles - Light Brown to Very Dark Purple */
+  .bg-gradient-blue-purple {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%);
+  }
+  
+  .bg-gradient-purple-blue {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%);
+  }
+  
+  .bg-gradient-blue-purple-soft {
+    background: linear-gradient(90deg, #E5DDB8 0%, #6B2F7A 100%);
+  }
+  
+  .bg-gradient-purple-blue-soft {
+    background: linear-gradient(90deg, #6B2F7A 0%, #E5DDB8 100%);
+  }
+  
+  /* Progress bar gradient overrides - Force brown to dark purple gradients */
+  .progress-gradient-blue-purple [data-state="complete"],
+  .progress-gradient-blue-purple > div,
+  .progress-gradient-blue-purple div[data-state="complete"],
+  .progress-gradient-blue-purple [role="progressbar"] > div {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%) !important;
+  }
+  
+  .progress-gradient-purple-blue [data-state="complete"],
+  .progress-gradient-purple-blue > div,
+  .progress-gradient-purple-blue div[data-state="complete"],
+  .progress-gradient-purple-blue [role="progressbar"] > div {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%) !important;
+  }
+  
+  /* Force override any blue gradients */
+  [class*="bg-gradient-blue-purple"] {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%) !important;
+  }
+  
+  [class*="bg-gradient-purple-blue"] {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%) !important;
+  }
+  
+  /* Progress component specific overrides - Target all variations */
+  .progress-gradient-blue-purple *,
+  .progress-gradient-purple-blue * {
+    background: inherit !important;
+  }
+  
+  /* Complete override for all progress bars - Remove any blue */
+  [class*="progress-gradient"] [data-state="complete"] {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%) !important;
+  }
+  
+  [class*="progress-gradient"]:nth-child(even) [data-state="complete"] {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%) !important;
+  }
+  
+  /* Force override the shadcn Progress component */
+  .progress-gradient-blue-purple [data-radix-progress-indicator],
+  .progress-gradient-blue-purple [role="progressbar"] > div {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%) !important;
+  }
+  
+  .progress-gradient-purple-blue [data-radix-progress-indicator],
+  .progress-gradient-purple-blue [role="progressbar"] > div {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%) !important;
+  }
+  
+  /* Nuclear option - Override ALL primary colors in progress bars */
+  .progress-gradient-blue-purple *,
+  .progress-gradient-purple-blue * {
+    background-color: transparent !important;
+  }
+  
+  .progress-gradient-blue-purple .bg-primary,
+  .progress-gradient-blue-purple [class*="bg-primary"] {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%) !important;
+  }
+  
+  .progress-gradient-purple-blue .bg-primary,
+  .progress-gradient-purple-blue [class*="bg-primary"] {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%) !important;
+  }
+  
+  /* Target the specific Radix Progress Indicator */
+  .progress-gradient-blue-purple [data-radix-collection-item],
+  .progress-gradient-blue-purple .bg-primary {
+    background: linear-gradient(90deg, #D6CC99 0%, #4C1D5E 100%) !important;
+    background-color: transparent !important;
+  }
+  
+  .progress-gradient-purple-blue [data-radix-collection-item],
+  .progress-gradient-purple-blue .bg-primary {
+    background: linear-gradient(90deg, #4C1D5E 0%, #D6CC99 100%) !important;
+    background-color: transparent !important;
+  }
+  
+  .bg-teal-primary {
+    background-color: var(--teal-primary);
+  }
+  
+  .bg-teal-secondary {
+    background-color: var(--teal-secondary);
+  }
+  
+  .bg-teal-light {
+    background-color: var(--teal-light);
+  }
+  
+  .bg-warm-gray {
+    background-color: var(--warm-gray);
+  }
+  
+  .border-teal-primary {
+    border-color: var(--teal-primary);
+  }
+  
+  .border-teal-secondary {
+    border-color: var(--teal-secondary);
+  }
+
+  /* SocratIQ™ Button Styles */
+  .btn-primary {
+    background: linear-gradient(135deg, hsl(220, 87%, 36%) 0%, hsl(217, 91%, 60%) 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, hsl(220, 90%, 40%) 0%, hsl(196, 89%, 48%) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px hsla(217, 91%, 60%, 0.3);
+  }
+
+  .btn-secondary {
+    background-color: var(--teal-secondary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    background-color: hsl(196, 95%, 52%);
+    transform: translateY(-1px);
+  }
+
+  /* SocratIQ™ Card Styles */
+  .card-socratiq {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid var(--teal-primary);
+    padding: 32px;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .card-socratiq:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-transform {
+    background: linear-gradient(135deg, white 0%, var(--teal-light) 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid var(--teal-primary);
+    padding: 24px;
+  }
+}
+
+/* Custom animations for processing indicators */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* SocratIQ™ File upload hover effects */
+.upload-zone:hover {
+  border-color: var(--teal-secondary);
+  background-color: var(--teal-light);
+}
+
+/* SocratIQ™ Processing progress styles */
+.processing-bar {
+  background: linear-gradient(90deg, var(--teal-primary) 0%, var(--teal-secondary) 100%);
+}
+
+/* Entity badge styles */
+.entity-badge {
+  transition: all 0.2s ease-in-out;
+}
+
+.entity-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -1,295 +1,577 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '../ui/button'
-import { Badge } from '../ui/badge'
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { 
-  Home,
-  FolderOpen,
-  Users,
-  Plus,
-  Zap,
-  TrendingUp,
-  MessageSquare,
-  FileText,
-  Heart,
-  BarChart3,
+  Home, 
+  Users, 
+  Plus, 
+  FolderOpen, 
+  MessageCircle, 
+  Bell, 
+  Search,
   Settings,
   HelpCircle,
   ChevronDown,
   ChevronRight,
-  Menu,
-  X
-} from 'lucide-react'
+  Brain,
+  Target,
+  BookOpen,
+  Shield,
+  BarChart3,
+  User,
+  Calendar,
+  FileText,
+  Lightbulb,
+  TrendingUp,
+  Heart,
+  Zap,
+  Activity,
+  Database,
+  Network,
+  Cpu,
+  GitBranch,
+  Bot,
+  Send,
+  Loader2
+} from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useTenantStyling } from "@/components/TenantProvider";
+import { useAuth } from "@/hooks/useAuth";
+import emmeEngageLogo from "@/assets/emme-engage-logo.png";
+import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
 
 interface EMMELayoutProps {
-  children: React.ReactNode
-  activeView: string
-  onViewChange: (view: string) => void
+  children: React.ReactNode;
+  activeView?: string;
+  onViewChange?: (view: string) => void;
 }
 
-export function EMMELayout({ children, activeView, onViewChange }: EMMELayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [strategicIntelligenceOpen, setStrategicIntelligenceOpen] = useState(false)
-  const [stakeholderEngagementOpen, setStakeholderEngagementOpen] = useState(false)
-  const [contentOrchestrationOpen, setContentOrchestrationOpen] = useState(false)
+interface NavItem {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  hasSubmenu?: boolean;
+  submenuItems?: NavItem[];
+}
 
-  const navigationItems = [
-    { id: 'home', label: 'Home', icon: Home },
-    { id: 'projects', label: 'Projects', icon: FolderOpen },
-    { id: 'clients', label: 'Clients', icon: Users },
-    { id: 'create-project', label: 'Create new project', icon: Plus },
-    { id: 'smart-wizard', label: 'Smart Wizard', icon: Zap },
-  ]
+interface ChatMessage {
+  id: string;
+  content: string;
+  sender: 'user' | 'emme';
+  timestamp: Date;
+  isTyping?: boolean;
+}
 
-  const moduleItems = [
+export function EMMELayout({ children, activeView = "home", onViewChange }: EMMELayoutProps) {
+  const [activeNav, setActiveNav] = useState(activeView);
+  const [expandedMenus, setExpandedMenus] = useState<string[]>(["projects"]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
-      id: 'strategic-intelligence',
-      label: 'Strategic Intelligence',
-      icon: TrendingUp,
-      isOpen: strategicIntelligenceOpen,
-      setOpen: setStrategicIntelligenceOpen,
-      children: [
-        { id: 'market-intelligence', label: 'Market Intelligence' },
-        { id: 'payer-landscape', label: 'Payer Landscape' },
-        { id: 'competitive-analysis', label: 'Competitive Analysis' },
-        { id: 'scenario-modeling', label: 'Strategic Scenario Modeling' },
+      id: '1',
+      content: "Hi! I'm EMME, your pharmaceutical marketing intelligence assistant. How can I help you optimize your campaigns today?",
+      sender: 'emme',
+      timestamp: new Date(),
+    }
+  ]);
+  const [currentMessage, setCurrentMessage] = useState('');
+  const { primaryColor, brandName } = useTenantStyling();
+  const { user } = useAuth();
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Get EMME Connect branding configuration
+  const partnerId = detectPartnerContext();
+  const brand = getPartnerBrand(partnerId);
+  const isEMMEEngage = partnerId === 'emme-engage';
+
+  // Check if user is admin - only admins should see Corpus, Pipeline, Models, Trust
+  const isAdmin = user?.email === 'vinnyc2306@gmail.com' || user?.role === 'admin';
+
+  // Chat functionality
+  const chatMutation = useMutation({
+    mutationFn: async (message: string) => {
+      return apiRequest('/api/public/emme-question', {
+        method: 'POST',
+        body: {
+          question: message,
+          context: `EMME Engage pharmaceutical marketing platform - Current view: ${activeView}`,
+          agentId: 'emme-engage'
+        }
+      });
+    },
+    onSuccess: (response) => {
+      // Remove typing indicator
+      setChatMessages(prev => prev.filter(msg => !msg.isTyping));
+      
+      // Add EMME's response
+      const emmeResponse: ChatMessage = {
+        id: Date.now().toString(),
+        content: response.result || response.message || "I'm here to help with your pharmaceutical marketing needs.",
+        sender: 'emme',
+        timestamp: new Date(),
+      };
+      setChatMessages(prev => [...prev, emmeResponse]);
+    },
+    onError: (error) => {
+      // Remove typing indicator
+      setChatMessages(prev => prev.filter(msg => !msg.isTyping));
+      
+      // Add error message
+      const errorResponse: ChatMessage = {
+        id: Date.now().toString(),
+        content: "I'm experiencing some technical difficulties. Please try again or contact support if the issue persists.",
+        sender: 'emme',
+        timestamp: new Date(),
+      };
+      setChatMessages(prev => [...prev, errorResponse]);
+    }
+  });
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  // Focus input when chat opens
+  useEffect(() => {
+    if (isChatOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isChatOpen]);
+
+  const handleSendMessage = () => {
+    if (!currentMessage.trim() || chatMutation.isPending) return;
+
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      content: currentMessage.trim(),
+      sender: 'user',
+      timestamp: new Date(),
+    };
+    setChatMessages(prev => [...prev, userMessage]);
+
+    // Add typing indicator
+    const typingIndicator: ChatMessage = {
+      id: 'typing',
+      content: 'EMME is thinking...',
+      sender: 'emme',
+      timestamp: new Date(),
+      isTyping: true,
+    };
+    setChatMessages(prev => [...prev, typingIndicator]);
+
+    // Send to API
+    chatMutation.mutate(currentMessage.trim());
+    setCurrentMessage('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleSuggestedAction = (action: string) => {
+    setCurrentMessage(action);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const allNavigationItems: NavItem[] = [
+    {
+      id: "home",
+      label: "Home",
+      icon: <Home className="w-5 h-5" />
+    },
+    {
+      id: "projects",
+      label: "Projects",
+      icon: <FolderOpen className="w-5 h-5" />
+    },
+    {
+      id: "clients",
+      label: "Clients", 
+      icon: <Users className="w-5 h-5" />
+    },
+    {
+      id: "chat",
+      label: "Chat with EMME",
+      icon: <MessageCircle className="w-5 h-5" />
+    },
+    {
+      id: "create-project",
+      label: "Create new project",
+      icon: <Plus className="w-5 h-5" />
+    },
+    {
+      id: "smart-wizard",
+      label: "Smart Wizard",
+      icon: <Zap className="w-5 h-5" />
+    },
+    {
+      id: "strategic-intelligence",
+      label: "Strategic Intelligence",
+      icon: <Brain className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "market-intelligence", label: "Market Intelligence", icon: <TrendingUp className="w-4 h-4" /> },
+        { id: "payer-landscape", label: "Payer & Regulatory Monitor", icon: <Shield className="w-4 h-4" /> },
+        { id: "competitive-analysis", label: "Competitive Intelligence", icon: <Target className="w-4 h-4" /> },
+        { id: "scenario-modeling", label: "Strategic Scenario Modeling", icon: <BarChart3 className="w-4 h-4" /> }
       ]
     },
     {
-      id: 'stakeholder-engagement',
-      label: 'Stakeholder Engagement',
-      icon: MessageSquare,
-      isOpen: stakeholderEngagementOpen,
-      setOpen: setStakeholderEngagementOpen,
-      children: [
-        { id: 'hcp-engagement', label: 'HCP Engagement' },
-        { id: 'patient-programs', label: 'Patient Programs' },
-        { id: 'payer-relations', label: 'Payer Relations' },
-        { id: 'kol-management', label: 'KOL Management' },
+      id: "stakeholder-engagement",
+      label: "Stakeholder Engagement",
+      icon: <Users className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "hcp-engagement", label: "HCP Engagement", icon: <User className="w-4 h-4" /> },
+        { id: "patient-programs", label: "Patient Programs", icon: <Heart className="w-4 h-4" /> },
+        { id: "payer-relations", label: "Payer Relations", icon: <Shield className="w-4 h-4" /> },
+        { id: "kol-management", label: "KOL Management", icon: <Users className="w-4 h-4" /> }
       ]
     },
     {
-      id: 'content-orchestration',
-      label: 'Content Orchestration',
-      icon: FileText,
-      isOpen: contentOrchestrationOpen,
-      setOpen: setContentOrchestrationOpen,
-      children: [
-        { id: 'mlr-workflow', label: 'MLR Workflow' },
-        { id: 'content-optimization', label: 'Content Optimization' },
-        { id: 'multilingual-campaigns', label: 'Multilingual Campaigns' },
-        { id: 'compliance-monitoring', label: 'Compliance Monitoring' },
+      id: "content-orchestration",
+      label: "Content Orchestration",
+      icon: <FileText className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "mlr-workflow", label: "MLR Workflow", icon: <Activity className="w-4 h-4" /> },
+        { id: "content-optimization", label: "Content Optimization", icon: <Zap className="w-4 h-4" /> },
+        { id: "multilingual-campaigns", label: "Multilingual Campaigns", icon: <Target className="w-4 h-4" /> },
+        { id: "compliance-monitoring", label: "Compliance Monitoring", icon: <FileText className="w-4 h-4" /> }
       ]
     },
-    { id: 'equity-access', label: 'Equity & Access', icon: Heart },
-  ]
+    {
+      id: "equity-access",
+      label: "Equity & Access",
+      icon: <Shield className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "disparity-mapping", label: "Health Disparity Mapping", icon: <BarChart3 className="w-4 h-4" /> },
+        { id: "access-barriers", label: "Access Barrier Analysis", icon: <Shield className="w-4 h-4" /> },
+        { id: "localized-strategies", label: "Localized Strategies", icon: <Target className="w-4 h-4" /> },
+        { id: "equity-metrics", label: "Equity Performance Metrics", icon: <TrendingUp className="w-4 h-4" /> }
+      ]
+    },
+    {
+      id: "corpus",
+      label: "Corpus",
+      icon: <Database className="w-5 h-5" />
+    },
+    {
+      id: "data-platform",
+      label: "Data Platform", 
+      icon: <Database className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "data-ingestion", label: "Data Ingestion Hub", icon: <Activity className="w-4 h-4" /> },
+        { id: "pipeline", label: "Data Pipeline", icon: <GitBranch className="w-4 h-4" /> },
+        { id: "api-management", label: "API Management", icon: <Zap className="w-4 h-4" /> },
+        { id: "tenant-management", label: "Tenant Management", icon: <Users className="w-4 h-4" /> },
+        { id: "trace-units", label: "TraceUnits™ Audit", icon: <Shield className="w-4 h-4" /> }
+      ]
+    },
+    {
+      id: "models",
+      label: "Models",
+      icon: <Bot className="w-5 h-5" />
+    },
+    {
+      id: "trust",
+      label: "Trust",
+      icon: <Shield className="w-5 h-5" />
+    },
 
-  const adminItems = [
-    { id: 'data-platform', label: 'Data Platform', icon: BarChart3 },
-    { id: 'settings', label: 'Settings', icon: Settings },
-    { id: 'support', label: 'Support', icon: HelpCircle },
-  ]
+    {
+      id: "alerts",
+      label: "Alerts",
+      icon: <Bell className="w-5 h-5" />
+    }
+  ];
 
-  const handleItemClick = (itemId: string) => {
-    onViewChange(itemId)
-    setSidebarOpen(false)
-  }
+  // Filter navigation items based on user role
+  const navigationItems = allNavigationItems.filter(item => {
+    // Hide admin-only items from non-admin users
+    const adminOnlyItems = ['corpus', 'data-platform', 'models', 'trust'];
+    if (adminOnlyItems.includes(item.id) && !isAdmin) {
+      return false;
+    }
+    return true;
+  });
 
-  const renderNavItem = (item: any, isChild = false) => {
-    const isActive = activeView === item.id
-    const Icon = item.icon
-    
+  const bottomNavItems: NavItem[] = [
+    {
+      id: "support",
+      label: "Support",
+      icon: <HelpCircle className="w-5 h-5" />
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: <Settings className="w-5 h-5" />
+    }
+  ];
+
+  const toggleSubmenu = (menuId: string) => {
+    setExpandedMenus(prev => 
+      prev.includes(menuId) 
+        ? prev.filter(id => id !== menuId)
+        : [...prev, menuId]
+    );
+  };
+
+  const renderNavItem = (item: NavItem, isSubmenu = false) => {
+    const isActive = activeNav === item.id;
+    const isExpanded = expandedMenus.includes(item.id);
+
     return (
-      <button
-        key={item.id}
-        onClick={() => handleItemClick(item.id)}
-        className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-          isActive
-            ? 'bg-purple-100 text-purple-700'
-            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-        } ${isChild ? 'ml-4 pl-6' : ''}`}
-      >
-        {Icon && <Icon className="mr-3 h-4 w-4" />}
-        {item.label}
-      </button>
-    )
-  }
-
-  const renderModuleItem = (module: any) => {
-    const isActive = activeView === module.id
-    const Icon = module.icon
-    
-    return (
-      <div key={module.id}>
-        <div className="flex items-center">
-          <button
-            onClick={() => handleItemClick(module.id)}
-            className={`flex-1 flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-              isActive
-                ? 'bg-purple-100 text-purple-700'
-                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-            }`}
-          >
-            <Icon className="mr-3 h-4 w-4" />
-            {module.label}
-          </button>
-          {module.children && (
-            <button
-              onClick={() => module.setOpen(!module.isOpen)}
-              className="p-1 text-gray-400 hover:text-gray-600"
-            >
-              {module.isOpen ? (
-                <ChevronDown className="h-4 w-4" />
-              ) : (
-                <ChevronRight className="h-4 w-4" />
-              )}
-            </button>
+      <div key={item.id} className={`${isSubmenu ? "ml-4" : ""}`}>
+        <button
+          onClick={() => {
+            if (item.id === "chat") {
+              setIsChatOpen(!isChatOpen);
+              return;
+            }
+            
+            setActiveNav(item.id);
+            onViewChange?.(item.id);
+            
+            if (item.hasSubmenu) {
+              toggleSubmenu(item.id);
+            } else if (item.id === "chat") {
+              setIsChatOpen(true);
+            } else if (onViewChange) {
+              onViewChange(item.id);
+            }
+          }}
+          className={`w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg transition-colors ${
+            isActive 
+              ? "bg-gray-100 text-gray-900 font-medium" 
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+          }`}
+        >
+          <div className="flex items-center space-x-3">
+            {item.icon}
+            <span>{item.label}</span>
+          </div>
+          {item.hasSubmenu && (
+            isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />
           )}
-        </div>
-        {module.children && module.isOpen && (
+        </button>
+        
+        {item.hasSubmenu && isExpanded && item.submenuItems && (
           <div className="mt-1 space-y-1">
-            {module.children.map((child: any) => renderNavItem(child, true))}
+            {item.submenuItems.map(subItem => renderNavItem(subItem, true))}
           </div>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 flex z-40 md:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
-          <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
-            <div className="absolute top-0 right-0 -mr-12 pt-2">
-              <button
-                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <X className="h-6 w-6 text-white" />
-              </button>
+      {/* Left Sidebar */}
+      <div className={`w-64 ${isEMMEEngage ? 'bg-stone-200' : 'bg-white'} border-r ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} flex flex-col`}>
+        {/* Logo */}
+        <div className={`p-6 border-b ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'}`}>
+          <div className="flex items-center justify-center mb-2">
+            <img 
+              src={emmeEngageLogo} 
+              alt="EMME Engage - Pharmaceutical Marketing Intelligence"
+              className="h-10 w-auto object-contain"
+            />
+          </div>
+          <p className={`text-xs ${isEMMEEngage ? 'text-purple-500' : 'text-gray-500'} text-center`}>powered by SocratIQ</p>
+        </div>
+
+        {/* Navigation */}
+        <ScrollArea className="flex-1 px-3 py-4">
+          <nav className="space-y-1">
+            {navigationItems.map(item => renderNavItem(item))}
+          </nav>
+        </ScrollArea>
+
+        {/* Bottom Navigation */}
+        <div className={`border-t ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} p-3`}>
+          <nav className="space-y-1">
+            {bottomNavItems.map(item => renderNavItem(item))}
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Header */}
+        <header className={`${isEMMEEngage ? 'bg-stone-100' : 'bg-white'} border-b ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} px-6 py-4`}>
+          <div className="flex items-center justify-between">
+            {/* Search Bar */}
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input
+                  placeholder="Search"
+                  className="pl-10 bg-gray-50 border-gray-200"
+                />
+              </div>
             </div>
-            {/* Mobile sidebar content */}
-            <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-              <div className="flex-shrink-0 flex items-center px-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">E</span>
-                  </div>
-                  <div>
-                    <h1 className="text-lg font-bold text-gray-900">EMME Engage</h1>
-                    <p className="text-xs text-gray-600">powered by SocratIQ</p>
-                  </div>
+
+            {/* Right Actions */}
+            <div className="flex items-center space-x-3">
+              <Button 
+                className={isEMMEEngage ? "bg-purple-600 hover:bg-purple-700 text-white" : ""}
+                style={!isEMMEEngage ? { backgroundColor: '#9B7FB8' } : {}}
+                size="sm"
+                onClick={() => {
+                  setActiveNav("create-project");
+                  onViewChange?.("create-project");
+                }}
+              >
+                New Project
+              </Button>
+              <Button variant="outline" size="sm">
+                <HelpCircle className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <main className="flex-1 overflow-auto">
+          {children}
+        </main>
+      </div>
+
+      {/* Right Chat Panel */}
+      {isChatOpen && (
+        <div className="w-80 bg-white border-l border-gray-200 flex flex-col">
+          {/* Chat Header */}
+          <div className="px-4 py-3 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className={`w-8 h-8 ${isEMMEEngage ? 'bg-gradient-to-br from-purple-400 to-amber-500' : 'bg-gradient-to-br from-blue-500 to-purple-600'} rounded-full flex items-center justify-center`}>
+                  <MessageCircle className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900">EMME Assistant</h3>
+                  <p className="text-xs text-gray-500">Pharmaceutical Intelligence Agent</p>
                 </div>
               </div>
-              <nav className="mt-5 px-2 space-y-1">
-                {navigationItems.map(item => renderNavItem(item))}
-                <div className="pt-4">
-                  <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Modules
-                  </h3>
-                  <div className="mt-2 space-y-1">
-                    {moduleItems.map(module => renderModuleItem(module))}
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setIsChatOpen(false)}
+              >
+                ×
+              </Button>
+            </div>
+          </div>
+
+          {/* Chat Messages */}
+          <ScrollArea className="flex-1 p-4">
+            <div className="space-y-4">
+              {chatMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] rounded-lg p-3 ${
+                    message.sender === 'user' 
+                      ? `${isEMMEEngage ? 'bg-purple-600' : 'bg-blue-600'} text-white` 
+                      : 'bg-gray-100 text-gray-700'
+                  }`}>
+                    {message.isTyping ? (
+                      <div className="flex items-center space-x-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-sm">{message.content}</span>
+                      </div>
+                    ) : (
+                      <p className="text-sm">{message.content}</p>
+                    )}
+                    <div className={`text-xs mt-1 opacity-70 ${
+                      message.sender === 'user' ? 'text-white' : 'text-gray-500'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
                   </div>
                 </div>
-                <div className="pt-4">
-                  <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Admin
-                  </h3>
-                  <div className="mt-2 space-y-1">
-                    {adminItems.map(item => renderNavItem(item))}
+              ))}
+              
+              {chatMessages.length === 1 && (
+                <div className="space-y-2">
+                  <p className="text-xs text-gray-500">Suggested actions:</p>
+                  <div className="space-y-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full justify-start text-xs"
+                      onClick={() => handleSuggestedAction("Analyze our current HCP engagement metrics and provide insights")}
+                    >
+                      <Brain className="w-3 h-3 mr-2" />
+                      Analyze lived experience data
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full justify-start text-xs"
+                      onClick={() => handleSuggestedAction("How can we optimize our HCP engagement strategy?")}
+                    >
+                      <Target className="w-3 h-3 mr-2" />
+                      Optimize HCP engagement
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full justify-start text-xs"
+                      onClick={() => handleSuggestedAction("Show me the latest equity and access metrics for our campaigns")}
+                    >
+                      <Heart className="w-3 h-3 mr-2" />
+                      Review equity metrics
+                    </Button>
                   </div>
                 </div>
-              </nav>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+          </ScrollArea>
+
+          {/* Chat Input */}
+          <div className="border-t border-gray-200 p-4">
+            <div className="flex space-x-2">
+              <Input
+                ref={inputRef}
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder="Ask EMME anything..."
+                className="text-sm"
+                disabled={chatMutation.isPending}
+              />
+              <Button 
+                size="sm" 
+                onClick={handleSendMessage}
+                disabled={!currentMessage.trim() || chatMutation.isPending}
+                className={isEMMEEngage ? "bg-purple-600 hover:bg-purple-700 text-white" : ""}
+                style={!isEMMEEngage ? { backgroundColor: '#9B7FB8' } : {}}
+              >
+                {chatMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+              </Button>
             </div>
           </div>
         </div>
       )}
-
-      {/* Desktop sidebar */}
-      <div className="hidden md:flex md:flex-shrink-0">
-        <div className="flex flex-col w-64">
-          <div className="flex flex-col h-0 flex-1 bg-white border-r border-gray-200">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">E</span>
-                  </div>
-                  <div>
-                    <h1 className="text-lg font-bold text-gray-900">EMME Engage</h1>
-                    <p className="text-xs text-gray-600">powered by SocratIQ</p>
-                  </div>
-                </div>
-              </div>
-              <nav className="mt-5 flex-1 px-2 space-y-1">
-                {navigationItems.map(item => renderNavItem(item))}
-                <div className="pt-4">
-                  <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Modules
-                  </h3>
-                  <div className="mt-2 space-y-1">
-                    {moduleItems.map(module => renderModuleItem(module))}
-                  </div>
-                </div>
-                <div className="pt-4">
-                  <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Admin
-                  </h3>
-                  <div className="mt-2 space-y-1">
-                    {adminItems.map(item => renderNavItem(item))}
-                  </div>
-                </div>
-              </nav>
-            </div>
-            <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-              <Link to="/" className="flex-shrink-0 w-full group block">
-                <Button variant="outline" className="w-full justify-start">
-                  ← Back to SocratIQ
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        {/* Mobile header */}
-        <div className="md:hidden">
-          <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
-            <button
-              className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 md:hidden"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <Menu className="h-6 w-6" />
-            </button>
-            <div className="flex-1 px-4 flex justify-between">
-              <div className="flex-1 flex">
-                <div className="w-full flex md:ml-0">
-                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                    <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                      <span className="text-lg font-bold text-gray-900">EMME Engage</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="ml-4 flex items-center md:ml-6">
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                  Active
-                </Badge>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main content area */}
-        <main className="flex-1 relative overflow-y-auto focus:outline-none">
-          {children}
-        </main>
-      </div>
     </div>
-  )
+  );
 }
