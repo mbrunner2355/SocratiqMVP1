@@ -178,6 +178,7 @@ function Router() {
     return (
       <Switch>
         <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
+        <Route path="/emme-vms-app" component={EMMEEngageApp} />
         <Route path="/emme-engage/*" component={EMMEEngageApp} />
         <Route component={NotFound} />
       </Switch>
