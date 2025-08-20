@@ -20,7 +20,7 @@ import {
   Brain,
   Shield
 } from "lucide-react";
-
+import { VMSIntelligenceHub } from "./VMSIntelligenceHub";
 
 interface ProjectDetailsProps {
   projectId: string;
@@ -28,6 +28,10 @@ interface ProjectDetailsProps {
 }
 
 export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
+  // For VMS project, show the full EMME Connect intelligence interface
+  if (projectId === 'proj-004') {
+    return <VMSIntelligenceHub onBack={onBack} />;
+  }
 
   // Mock project data - in real app this would come from API
   const projects: Record<string, any> = {
@@ -351,33 +355,20 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
         </TabsContent>
 
         <TabsContent value="intelligence" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Project Intelligence</CardTitle>
-              <CardDescription>AI-powered insights and analytics for {project.name}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 border rounded-lg bg-purple-50">
-                  <Brain className="w-8 h-8 text-purple-600" />
-                  <div>
-                    <h4 className="font-medium text-gray-900">AI Analysis Available</h4>
-                    <p className="text-sm text-gray-600">Access advanced pharmaceutical intelligence through the main EMME platform in the left navigation menu.</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <div className="p-3 border rounded">
-                    <h5 className="font-medium text-gray-900">Market Intelligence</h5>
-                    <p className="text-sm text-gray-600">TAM analysis, competitive landscape</p>
-                  </div>
-                  <div className="p-3 border rounded">
-                    <h5 className="font-medium text-gray-900">Regulatory Insights</h5>
-                    <p className="text-sm text-gray-600">FDA pathway planning, compliance monitoring</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* VMS-Specific Pharmaceutical Intelligence Hub */}
+          {project.id === 'proj-004' ? (
+            <VMSIntelligenceHub onBack={() => {}} />
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Intelligence Hub</CardTitle>
+                <CardDescription>Project-specific intelligence and analytics</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Intelligence features are available for pharmaceutical projects.</p>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
         
         <TabsContent value="modules" className="space-y-6">
@@ -442,12 +433,7 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
                     and regulatory strategy available in the Intelligence tab.
                   </p>
                   <Button 
-                    onClick={() => {
-                      const intelligenceTab = document.querySelector('[value="intelligence"]') as HTMLButtonElement;
-                      if (intelligenceTab) {
-                        intelligenceTab.click();
-                      }
-                    }}
+                    onClick={() => document.querySelector('[value="intelligence"]')?.click()}
                     className="bg-purple-600 hover:bg-purple-700 text-white"
                   >
                     Open Intelligence Hub
