@@ -18,7 +18,8 @@ import {
   Clock,
   AlertTriangle,
   Brain,
-  Shield
+  Shield,
+  CloudUpload
 } from "lucide-react";
 import { VMSIntelligenceHub } from "./VMSIntelligenceHub";
 
@@ -265,8 +266,9 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
 
       {/* Detailed Information Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="intelligence">Intelligence</TabsTrigger>
           <TabsTrigger value="milestones">Milestones</TabsTrigger>
           <TabsTrigger value="modules">Modules</TabsTrigger>
@@ -318,6 +320,79 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
                       </li>
                     ))}
                   </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="documents" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Project Documents</CardTitle>
+              <CardDescription>Upload and manage project-related documents</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Upload Section */}
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                  <div className="text-center">
+                    <CloudUpload className="mx-auto h-12 w-12 text-gray-400" />
+                    <div className="mt-4">
+                      <p className="text-lg font-medium text-gray-900">Upload Documents</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Drag and drop files or click to browse
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Supports PDF, DOCX, TXT files up to 50MB
+                      </p>
+                    </div>
+                    <Button className="mt-4">
+                      Choose Files
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Existing Documents */}
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-4">Uploaded Documents</h4>
+                  <div className="space-y-3">
+                    {/* Mock document entries for this project */}
+                    {(project.id === 'proj-004' ? [
+                      { name: "VMS_Clinical_Protocol_v2.1.pdf", size: "2.4 MB", uploadDate: "2024-08-15", status: "processed" },
+                      { name: "Market_Research_Women_Menopause.docx", size: "1.8 MB", uploadDate: "2024-08-14", status: "processed" },
+                      { name: "Regulatory_Strategy_Phase3.pdf", size: "3.2 MB", uploadDate: "2024-08-13", status: "processing" },
+                      { name: "Competitive_Landscape_Analysis.docx", size: "2.1 MB", uploadDate: "2024-08-12", status: "processed" }
+                    ] : [
+                      { name: "Project_Overview.pdf", size: "1.2 MB", uploadDate: "2024-08-10", status: "processed" },
+                      { name: "Client_Requirements.docx", size: "890 KB", uploadDate: "2024-08-09", status: "processed" }
+                    ]).map((doc, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <FileText className="w-5 h-5 text-blue-600" />
+                          <div>
+                            <p className="font-medium text-gray-900">{doc.name}</p>
+                            <p className="text-sm text-gray-600">{doc.size} • Uploaded {new Date(doc.uploadDate).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Badge className={
+                            doc.status === 'processed' ? 'bg-green-100 text-green-800' :
+                            doc.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {doc.status}
+                          </Badge>
+                          <Button variant="outline" size="sm">
+                            View
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            Download
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </CardContent>
