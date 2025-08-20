@@ -23,8 +23,11 @@ export default function FileUpload() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await apiRequest('POST', '/api/documents/upload', formData);
-      const result = await response.json();
+      const response = await apiRequest('/api/documents/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response;
 
       toast({
         title: "Upload Successful",
