@@ -40,6 +40,7 @@ import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
 import { ClientManager } from "@/components/emme/ClientManager";
 import { ProjectManager } from "@/components/emme/ProjectManager";
+import { VMSProjectPlatform } from "@/components/emme/VMSProjectPlatform";
 
 // Container component to handle EMME Engage app navigation state
 function EMMEEngageAppContainer() {
@@ -178,6 +179,7 @@ function Router() {
     return (
       <Switch>
         <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
+        <Route path="/vms-platform" component={VMSProjectPlatform} />
         <Route path="/emme-engage/*" component={EMMEEngageApp} />
         <Route component={NotFound} />
       </Switch>

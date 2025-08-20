@@ -356,10 +356,10 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
                   <CardTitle className="flex items-center justify-between">
                     VMS Project - EMME Connect Intelligence
                     <Button 
-                      onClick={() => window.open('/emme', '_blank')}
+                      onClick={() => window.open('/vms-platform', '_blank')}
                       className="bg-purple-600 hover:bg-purple-700 text-white"
                     >
-                      Open in EMME Connect
+                      Open VMS Platform
                     </Button>
                   </CardTitle>
                 </CardHeader>
