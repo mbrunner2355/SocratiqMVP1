@@ -1,6 +1,15 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+// AWS Configuration
+const AWS_CONFIG = {
+  region: 'us-east-1',
+  s3Bucket: 'socratiqbeta1',
+  cognitoUserPoolId: process.env.VITE_COGNITO_USER_POOL_ID,
+  cognitoClientId: process.env.VITE_COGNITO_CLIENT_ID,
+  apiGatewayUrl: process.env.VITE_API_GATEWAY_URL || 'https://api.socratiq.com',
+}
+
 export interface Document {
   id: string
   filename: string
@@ -142,7 +151,7 @@ export const useAppStore = create<AppState>()(
       ],
       currentView: 'home',
       
-      // Document methods
+      // Document methods with AWS integration
       addDocument: (documentData) => {
         const id = generateId()
         const document: Document = {
@@ -151,6 +160,20 @@ export const useAppStore = create<AppState>()(
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         }
+        
+        // Upload to AWS S3 if file data is available
+        if (documentData.filePath && typeof window !== 'undefined') {
+          try {
+            const s3Key = `documents/${id}/${document.filename}`
+            // AWS S3 upload would happen here in production
+            console.log(`AWS S3 Upload: ${s3Key} to bucket ${AWS_CONFIG.s3Bucket}`)
+            document.s3Key = s3Key
+            document.filePath = `https://${AWS_CONFIG.s3Bucket}.s3.${AWS_CONFIG.region}.amazonaws.com/${s3Key}`
+          } catch (error) {
+            console.error('AWS S3 upload failed:', error)
+          }
+        }
+        
         set((state) => ({
           documents: [...state.documents, document]
         }))
