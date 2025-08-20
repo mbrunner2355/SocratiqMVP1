@@ -49,7 +49,6 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
     { id: "content-library", label: "Content Library", icon: FileText },
     { id: "client-management", label: "Client Management", icon: Users },
     { id: "analytics-dashboard", label: "Analytics Dashboard", icon: BarChart3 },
-    { id: "projects", label: "Projects", icon: Target },
     { id: "questions", label: "Questions", icon: MessageSquare }
   ];
 
