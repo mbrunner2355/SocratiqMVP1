@@ -38,7 +38,7 @@ interface ChatMessage {
 }
 
 export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
-  const [activeSection, setActiveSection] = useState("market-analysis");
+  const [activeSection, setActiveSection] = useState("research-hub");
   const [activeTab, setActiveTab] = useState("market-analysis");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
@@ -52,11 +52,15 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
   });
 
   const navigationItems = [
-    { id: "market-analysis", label: "Market Analysis", icon: BarChart3 },
-    { id: "competitive-landscape", label: "Competitive Landscape", icon: Target },
-    { id: "regulatory-pathway", label: "Regulatory Pathway", icon: Shield },
-    { id: "clinical-evidence", label: "Clinical Evidence", icon: FileText },
-    { id: "commercial-strategy", label: "Commercial Strategy", icon: TrendingUp }
+    { id: "research-hub", label: "Research Hub", icon: Brain },
+    { id: "competitive-intelligence", label: "Competitive Intelligence", icon: Target },
+    { id: "regulatory-strategy", label: "Regulatory Strategy", icon: Shield },
+    { id: "market-access", label: "Market Access", icon: TrendingUp },
+    { id: "content-library", label: "Content Library", icon: FileText },
+    { id: "client-management", label: "Client Management", icon: Users },
+    { id: "analytics-dashboard", label: "Analytics Dashboard", icon: BarChart3 },
+    { id: "projects", label: "Projects", icon: Target },
+    { id: "questions", label: "Questions", icon: MessageSquare }
   ];
 
   const toggleSection = (sectionId: string) => {
@@ -94,7 +98,7 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
   };
 
   const renderMainContent = () => {
-    if (activeSection === "market-analysis") {
+    if (activeSection === "research-hub") {
       return (
         <div className="space-y-6">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -340,14 +344,238 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
       );
     }
 
-    return (
-      <div className="text-center py-12">
-        <div className="text-lg font-medium text-gray-900 mb-2">
-          {navigationItems.find(item => item.id === activeSection)?.label}
-        </div>
-        <p className="text-gray-600">Content for this section coming soon</p>
-      </div>
-    );
+    // Handle other navigation sections
+    switch (activeSection) {
+      case "competitive-intelligence":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Competitive Intelligence</CardTitle>
+                <CardDescription>Comprehensive competitor analysis and market positioning</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Advanced competitive intelligence for pharmaceutical market positioning.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-medium mb-2">Competitor Analysis</h4>
+                    <p className="text-sm text-gray-600">Real-time monitoring of competitor activities</p>
+                  </div>
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-medium mb-2">Market Positioning</h4>
+                    <p className="text-sm text-gray-600">Strategic positioning recommendations</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "regulatory-strategy":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Regulatory Strategy</CardTitle>
+                <CardDescription>FDA pathway planning and regulatory compliance</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Strategic regulatory planning for pharmaceutical development.</p>
+                <div className="space-y-3">
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                    <h4 className="font-medium text-blue-800">FDA Pathway Analysis</h4>
+                    <p className="text-sm text-blue-600">Optimal regulatory submission strategy</p>
+                  </div>
+                  <div className="p-3 bg-green-50 border border-green-200 rounded">
+                    <h4 className="font-medium text-green-800">Compliance Monitoring</h4>
+                    <p className="text-sm text-green-600">Real-time regulatory updates and requirements</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "market-access":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Market Access</CardTitle>
+                <CardDescription>Payer strategy and reimbursement planning</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Strategic market access planning for pharmaceutical products.</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-lg font-bold text-purple-600">85%</div>
+                    <div className="text-sm text-gray-600">Payer Coverage</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-lg font-bold text-green-600">$240</div>
+                    <div className="text-sm text-gray-600">Avg. Patient Cost</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-lg font-bold text-blue-600">92%</div>
+                    <div className="text-sm text-gray-600">Access Rate</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "content-library":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Content Library</CardTitle>
+                <CardDescription>Document management and MLR workflows</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Centralized content management for pharmaceutical materials.</p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 border rounded">
+                    <div className="flex items-center space-x-3">
+                      <FileText className="w-5 h-5 text-blue-600" />
+                      <span className="font-medium">Market Analysis Report Q4 2024</span>
+                    </div>
+                    <Badge className="bg-green-100 text-green-800">Approved</Badge>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border rounded">
+                    <div className="flex items-center space-x-3">
+                      <FileText className="w-5 h-5 text-orange-600" />
+                      <span className="font-medium">Clinical Trial Summary</span>
+                    </div>
+                    <Badge className="bg-yellow-100 text-yellow-800">Under Review</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "client-management":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Client Management</CardTitle>
+                <CardDescription>Bayer partnership and collaboration tools</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Strategic client relationship management for Bayer pharmaceutical projects.</p>
+                <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                  <h4 className="font-semibold text-purple-900 mb-2">Active Client: Bayer HealthCare</h4>
+                  <p className="text-sm text-purple-700">VMS Global pharmaceutical development project</p>
+                  <div className="mt-3 grid grid-cols-2 gap-4">
+                    <div className="text-sm">
+                      <span className="text-gray-600">Project Status:</span>
+                      <span className="ml-2 font-medium text-green-600">Active</span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-600">Team Size:</span>
+                      <span className="ml-2 font-medium">15 members</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "analytics-dashboard":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Analytics Dashboard</CardTitle>
+                <CardDescription>Performance metrics and ROI tracking</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">2,847</div>
+                    <div className="text-sm text-gray-600">Total Engagement</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">12.4%</div>
+                    <div className="text-sm text-gray-600">Conversion Rate</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-purple-600">$24.50</div>
+                    <div className="text-sm text-gray-600">Cost per Lead</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-orange-600">340%</div>
+                    <div className="text-sm text-gray-600">ROI</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "projects":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Projects</CardTitle>
+                <CardDescription>Active pharmaceutical development projects</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="p-4 border rounded-lg bg-purple-50">
+                    <h4 className="font-medium text-purple-900">VMS Global - Bayer</h4>
+                    <p className="text-sm text-purple-700">Pharmaceutical development for menopause treatment</p>
+                    <div className="mt-2 flex items-center space-x-4">
+                      <Badge className="bg-green-100 text-green-800">Phase 3</Badge>
+                      <span className="text-sm text-gray-600">78% Complete</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      case "questions":
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Questions</CardTitle>
+                <CardDescription>Frequently asked questions and support</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Common questions about pharmaceutical intelligence and analysis.</p>
+                <div className="space-y-3">
+                  <div className="p-3 border rounded">
+                    <h4 className="font-medium mb-1">How do I access market analysis data?</h4>
+                    <p className="text-sm text-gray-600">Navigate to Research Hub → Market Analysis for comprehensive market data.</p>
+                  </div>
+                  <div className="p-3 border rounded">
+                    <h4 className="font-medium mb-1">What is the TAM analysis methodology?</h4>
+                    <p className="text-sm text-gray-600">Our TAM analysis uses proprietary algorithms combining market data, demographics, and clinical evidence.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+        
+      default:
+        return (
+          <div className="text-center py-12">
+            <div className="text-lg font-medium text-gray-900 mb-2">
+              {navigationItems.find(item => item.id === activeSection)?.label}
+            </div>
+            <p className="text-gray-600">Content for this section coming soon</p>
+          </div>
+        );
+    }
   };
 
   return (
