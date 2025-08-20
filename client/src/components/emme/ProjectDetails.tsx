@@ -20,7 +20,7 @@ import {
   Brain,
   Shield
 } from "lucide-react";
-import { VMSIntelligenceHub } from "./VMSIntelligenceHub";
+
 
 interface ProjectDetailsProps {
   projectId: string;
@@ -28,10 +28,6 @@ interface ProjectDetailsProps {
 }
 
 export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
-  // For VMS project, show the full EMME Connect intelligence interface
-  if (projectId === 'proj-004') {
-    return <VMSIntelligenceHub onBack={onBack} />;
-  }
 
   // Mock project data - in real app this would come from API
   const projects: Record<string, any> = {
