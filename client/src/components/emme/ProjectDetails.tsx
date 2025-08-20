@@ -433,7 +433,10 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
                     and regulatory strategy available in the Intelligence tab.
                   </p>
                   <Button 
-                    onClick={() => document.querySelector('[value="intelligence"]')?.click()}
+                    onClick={() => {
+                      const element = document.querySelector('[value="intelligence"]') as HTMLElement;
+                      element?.click();
+                    }}
                     className="bg-purple-600 hover:bg-purple-700 text-white"
                   >
                     Open Intelligence Hub
