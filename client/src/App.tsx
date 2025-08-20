@@ -9,6 +9,7 @@ import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
 import { ClientManager } from "@/components/emme/ClientManager";
 import { ProjectManager } from "@/components/emme/ProjectManager";
+import { ContentOrchestrationModule } from "@/components/emme/ContentOrchestrationModule";
 import NotFound from "@/pages/not-found";
 import { TenantProvider } from "@/components/TenantProvider";
 import { useState } from "react";
@@ -39,7 +40,7 @@ function EMMEEngageAppContainer() {
       case "stakeholder-engagement":
         return <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1><p>Stakeholder engagement tools coming soon.</p></div>;
       case "content-orchestration":
-        return <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1><p>Content orchestration platform coming soon.</p></div>;
+        return <ContentOrchestrationModule />;
       case "equity-access":
         return <div className="p-6"><h1 className="text-2xl font-bold">Equity & Access</h1><p>Equity and access tools coming soon.</p></div>;
       default:
