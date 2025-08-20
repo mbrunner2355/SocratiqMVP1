@@ -16,7 +16,8 @@ import {
   BarChart3,
   CheckCircle2,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  Brain
 } from "lucide-react";
 
 interface ProjectDetailsProps {
