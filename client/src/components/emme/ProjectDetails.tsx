@@ -29,10 +29,8 @@ interface ProjectDetailsProps {
 }
 
 export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
-  // For VMS project, show the full EMME Connect intelligence interface
-  if (projectId === 'proj-004') {
-    return <VMSIntelligenceHub onBack={onBack} />;
-  }
+  // VMS project uses standard project details with Intelligence tab for VMS hub
+  // Removed the special case redirect to show all tabs including Documents
 
   // Mock project data - in real app this would come from API
   const projects: Record<string, any> = {
