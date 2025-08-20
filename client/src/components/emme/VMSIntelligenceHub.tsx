@@ -610,8 +610,8 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <Brain className="w-6 h-6" />
-            <span className="text-lg font-bold">EMME Connect™ v2.0</span>
-            <span className="text-xs bg-purple-600 px-2 py-1 rounded">EMME Connect™ Intelligence Hub</span>
+            <span className="text-lg font-bold">EMME Engage™ v2.0</span>
+            <span className="text-xs bg-purple-600 px-2 py-1 rounded">EMME Engage™ Intelligence Hub</span>
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -691,7 +691,7 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
                   </h3>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">Pharmaceutical Intelligence Assistant</p>
-                <p className="text-xs text-gray-500 mt-1">Hello! I'm EMME, your EMME Connect™ intelligence assistant.</p>
+                <p className="text-xs text-gray-500 mt-1">Hello! I'm EMME, your EMME Engage™ intelligence assistant.</p>
                 <p className="text-xs text-gray-500 mt-2">I can help with:</p>
                 <ul className="text-xs text-gray-500 mt-1 space-y-1">
                   <li>• Competitive analysis</li>
