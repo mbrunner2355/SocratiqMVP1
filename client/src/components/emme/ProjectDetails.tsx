@@ -346,26 +346,180 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
         </TabsContent>
         
         <TabsContent value="modules" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Modules</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {project.modules.map((module: string, index: number) => (
-                  <div key={index} className="flex items-center space-x-3 p-4 border rounded-lg">
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <BarChart3 className="w-5 h-5 text-purple-600" />
+          {/* VMS-Specific Sections */}
+          {project.id === 'proj-004' ? (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>VMS Global Project Structure</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-red-50">
+                        <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-red-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Framework</h4>
+                          <p className="text-sm text-gray-600">Project structure and methodology</p>
+                        </div>
+                        <Badge className="bg-green-100 text-green-800">Complete</Badge>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-blue-50">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <BarChart3 className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Background</h4>
+                          <p className="text-sm text-gray-600">Organization & Initiative Overview</p>
+                        </div>
+                        <Badge className="bg-green-100 text-green-800">Complete</Badge>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <Target className="w-5 h-5 text-purple-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Exploration</h4>
+                          <p className="text-sm text-gray-600">Research and discovery phase</p>
+                        </div>
+                        <Badge className="bg-blue-100 text-blue-800">In Progress</Badge>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <Users className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Human Insights</h4>
+                          <p className="text-sm text-gray-600">Stakeholder research and analysis</p>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900">{module}</h4>
-                      <p className="text-sm text-gray-600">Active & Processing</p>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                          <MessageSquare className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Client Content</h4>
+                          <p className="text-sm text-gray-600">Content strategy and materials</p>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <div className="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center">
+                          <Brain className="w-5 h-5 text-cyan-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Playground</h4>
+                          <p className="text-sm text-gray-600">Testing and experimentation</p>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                          <TrendingUp className="w-5 h-5 text-indigo-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Strategy Map</h4>
+                          <p className="text-sm text-gray-600">Strategic planning and roadmap</p>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                          <BarChart3 className="w-5 h-5 text-pink-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">Dashboard</h4>
+                          <p className="text-sm text-gray-600">Analytics and reporting</p>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Initiative Overview - Product Background</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-gray-900 mb-2">Mechanism & Clinical Evidence</h4>
+                      <p className="text-sm text-gray-700 mb-3">
+                        PRODUCT A is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, 
+                        a novel, non-hormonal mechanism of action targeting KNDy neurons in the hypothalamus.
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h5 className="font-medium text-gray-800 mb-2">Phase 1 & 2 Trials:</h5>
+                          <p className="text-sm text-gray-600">
+                            Established safety, pharmacokinetics, and pharmacodynamics, confirming oral 
+                            bioavailability and tolerability in healthy women.
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-gray-800 mb-2">Phase 2b Results:</h5>
+                          <p className="text-sm text-gray-600">
+                            SWITCH-1 trial identified optimal 120 mg dose, showing statistically significant 
+                            reduction in hot flash frequency and severity by week 4.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center p-4 border rounded-lg">
+                        <p className="text-2xl font-bold text-blue-600">2</p>
+                        <p className="text-sm text-gray-600">Clinical Trials</p>
+                      </div>
+                      <div className="text-center p-4 border rounded-lg">
+                        <p className="text-2xl font-bold text-green-600">120mg</p>
+                        <p className="text-sm text-gray-600">Optimal Dose</p>
+                      </div>
+                      <div className="text-center p-4 border rounded-lg">
+                        <p className="text-2xl font-bold text-purple-600">Week 4</p>
+                        <p className="text-sm text-gray-600">Efficacy Timeline</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Active Modules</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {project.modules.map((module: string, index: number) => (
+                    <div key={index} className="flex items-center space-x-3 p-4 border rounded-lg">
+                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <BarChart3 className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900">{module}</h4>
+                        <p className="text-sm text-gray-600">Active & Processing</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
         
         <TabsContent value="budget" className="space-y-6">
