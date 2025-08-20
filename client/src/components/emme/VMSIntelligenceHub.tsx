@@ -661,96 +661,19 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex">
-          <div className="flex-1 p-8">
-            <div className="max-w-6xl">
-              <div className="mb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Research Intelligence Hub</h1>
-                    <p className="text-gray-600">Advanced market analysis and competitive intelligence</p>
-                  </div>
-                  <Badge variant="outline">Document was last saved: Just now</Badge>
+        <div className="flex-1 p-8">
+          <div className="max-w-6xl">
+            <div className="mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">Research Intelligence Hub</h1>
+                  <p className="text-gray-600">Advanced market analysis and competitive intelligence</p>
                 </div>
+                <Badge variant="outline">Document was last saved: Just now</Badge>
               </div>
+            </div>
 
-              {renderMainContent()}
-            </div>
-          </div>
-          
-          {/* EMME AI Chat Panel */}
-          <div className="w-80 border-l bg-gray-50">
-            <div className="h-full flex flex-col">
-              <div className="p-4 border-b bg-white">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-medium flex items-center">
-                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mr-2">
-                      <span className="text-white text-xs font-bold">0</span>
-                    </div>
-                    EMME AI
-                  </h3>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">Pharmaceutical Intelligence Assistant</p>
-                <p className="text-xs text-gray-500 mt-1">Hello! I'm EMME, your VMS menopause intelligence specialist.</p>
-                <p className="text-xs text-gray-500 mt-2">I can help with:</p>
-                <ul className="text-xs text-gray-500 mt-1 space-y-1">
-                  <li>• VMS vs Veozah competitive analysis</li>
-                  <li>• Menopause market segmentation</li>
-                  <li>• TAM analysis by region</li>
-                  <li>• Patient journey insights</li>
-                </ul>
-                <p className="text-xs text-gray-500 mt-2">Ask me about women entering menopause demographics, market size, or competitive positioning...</p>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {chatMessages.length === 0 && (
-                  <div className="text-center text-gray-500 mt-8">
-                    <MessageSquare className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm">Ask me about VMS menopause market data, Veozah competition, or patient demographics</p>
-                  </div>
-                )}
-                
-                {chatMessages.map((message) => (
-                  <div key={message.id} className={`${message.type === 'user' ? 'ml-4' : 'mr-4'}`}>
-                    <div className={`p-3 rounded-lg ${
-                      message.type === 'user' 
-                        ? 'bg-purple-600 text-white ml-auto' 
-                        : 'bg-white border'
-                    }`}>
-                      <p className="text-sm">{message.content}</p>
-                      {message.sources && (
-                        <div className="mt-2 pt-2 border-t border-gray-200">
-                          <p className="text-xs text-gray-500 mb-1">Sources:</p>
-                          {message.sources.map((source, index) => (
-                            <p key={index} className="text-xs text-blue-600">{source}</p>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="p-4 bg-white border-t">
-                <div className="flex space-x-2">
-                  <Input
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask about VMS menopause market, Veozah competition, or patient demographics"
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    className="text-sm"
-                  />
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={!chatInput.trim()}
-                    size="icon"
-                    className="bg-purple-600 hover:bg-purple-700"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
+            {renderMainContent()}
           </div>
         </div>
       </div>
