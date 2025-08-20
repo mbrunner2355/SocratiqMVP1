@@ -154,11 +154,17 @@ function Router() {
       return <ProductionLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
     }
     
-    // For development (Replit), use the original landing pages
+    // For development (Replit), redirect directly to EMME Engage app
     return (
       <Switch>
-        <Route path="/" component={Landing} />
+        <Route path="/" component={() => {
+          window.location.href = '/emme-engage/app';
+          return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+          </div>;
+        }} />
         <Route path="/emme-engage" component={EMMEEngageLanding} />
+        <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
         <Route path="/emme-health" component={EMMEHealthLanding} />
         <Route path="/login" component={Login} />
         <Route component={NotFound} />
