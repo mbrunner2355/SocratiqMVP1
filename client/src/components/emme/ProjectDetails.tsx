@@ -430,7 +430,13 @@ export function ProjectDetails({ projectId, onBack }: ProjectDetailsProps) {
                 
                 {/* Existing Documents */}
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-4">Uploaded Documents</h4>
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-medium text-gray-900">Project Documents</h4>
+                    <Button variant="outline" size="sm">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Link Platform Documents
+                    </Button>
+                  </div>
                   <div className="space-y-3">
                     {/* Mock document entries for this project */}
                     {(project.id === 'proj-004' ? [
