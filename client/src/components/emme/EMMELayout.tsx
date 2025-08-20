@@ -198,11 +198,6 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       icon: <FolderOpen className="w-5 h-5" />
     },
     {
-      id: "vms-intelligence",
-      label: "VMS Intelligence Hub",
-      icon: <Brain className="w-5 h-5" />
-    },
-    {
       id: "clients",
       label: "Clients", 
       icon: <Users className="w-5 h-5" />

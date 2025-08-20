@@ -32,7 +32,7 @@ import { EMMECreateProject } from "@/components/emme/EMMECreateProject";
 import { EMMEDataSourcesDashboard } from "@/components/emme/EMMEDataSourcesDashboard";
 import { EMMEProductionDashboard } from "@/components/emme/EMMEProductionDashboard";
 import { EMMEProjectManager } from "@/components/EMMEProjectManager";
-import { VMSIntelligenceHub } from "@/components/emme/VMSIntelligenceHub";
+
 
 interface TenantUsage {
   users: { current: number; limit: number; percentage: number };
@@ -154,8 +154,6 @@ function EMMEEngageWhiteLabel() {
         return <EMMECreateProject />;
       case "projects":
         return <EMMEProjectManager />;
-      case "vms-intelligence":
-        return <VMSIntelligenceHub onBack={() => setActiveView("projects")} />;
       // Strategic Intelligence
       case "strategic-intelligence":
         return <StrategicIntelligenceModule />;
