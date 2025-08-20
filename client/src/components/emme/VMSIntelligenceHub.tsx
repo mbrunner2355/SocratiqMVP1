@@ -611,70 +611,65 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
             </Button>
             <Brain className="w-6 h-6" />
             <span className="text-lg font-bold">EMME Engage™ v2.0</span>
-            <span className="text-xs bg-purple-600 px-2 py-1 rounded">EMME Engage™ Intelligence Hub</span>
+            <span className="text-xs bg-purple-600 px-2 py-1 rounded">VMS Intelligence Hub</span>
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative">
               <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <Input 
-                placeholder="Search intelligence..."
+                placeholder="Search VMS intelligence..."
                 className="pl-10 bg-white/10 border-white/20 text-white placeholder-white/60 w-64"
               />
             </div>
             <div className="bg-orange-500 px-3 py-1 rounded text-sm">
-              <span>EMME AI</span>
+              <span>VMS Data</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
-          <div className="p-4">
-            <div className="mb-6 text-sm text-purple-600">
-              EMME v2.0 - Navigation 9 items loaded
-            </div>
-
-            {/* Navigation Menu */}
-            <nav className="space-y-1">
-              {navigationItems.map((item) => {
-                const IconComponent = item.icon;
-                const isActive = activeSection === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
-                      isActive 
-                        ? 'bg-purple-100 text-purple-700' 
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    <IconComponent className="w-4 h-4" />
-                    <span className="text-sm font-medium">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+      {/* Section Navigation Tabs */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="px-6">
+          <nav className="flex space-x-8">
+            {navigationItems.map((item) => {
+              const IconComponent = item.icon;
+              const isActive = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`flex items-center space-x-2 py-4 border-b-2 transition-colors ${
+                    isActive 
+                      ? 'border-purple-600 text-purple-600' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <IconComponent className="w-4 h-4" />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-8">
-          <div className="max-w-6xl">
-            <div className="mb-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Research Intelligence Hub</h1>
-                  <p className="text-gray-600">Advanced market analysis and competitive intelligence</p>
-                </div>
-                <Badge variant="outline">Document was last saved: Just now</Badge>
+      {/* Main Content */}
+      <div className="p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {navigationItems.find(item => item.id === activeSection)?.label || 'Research Intelligence Hub'}
+                </h1>
+                <p className="text-gray-600">VMS women entering menopause market analysis</p>
               </div>
+              <Badge variant="outline">Last updated: Just now</Badge>
             </div>
-
-            {renderMainContent()}
           </div>
+
+          {renderMainContent()}
         </div>
       </div>
     </div>
