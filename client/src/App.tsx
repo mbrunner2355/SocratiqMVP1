@@ -144,18 +144,8 @@ function Router() {
     );
   }
 
-  if (!isAuthenticated && !justLoggedIn) {
-    // For Cognito authentication, show the Cognito login
-    if (isCognitoEnabled) {
-      return <CognitoLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
-    }
-    
-    // For production deployments, show the production login
-    if (isProductionDeploy) {
-      return <ProductionLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
-    }
-    
-    // For development (Replit), show landing pages
+  // For development, skip authentication entirely
+  if (!isAuthenticated && !justLoggedIn && !isCognitoEnabled && !isProductionDeploy) {
     return (
       <Switch>
         <Route path="/" component={EMMEEngageAppContainer} />
@@ -166,6 +156,18 @@ function Router() {
         <Route component={NotFound} />
       </Switch>
     );
+  }
+  
+  if (!isAuthenticated && !justLoggedIn) {
+    // For Cognito authentication, show the Cognito login
+    if (isCognitoEnabled) {
+      return <CognitoLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
+    }
+    
+    // For production deployments, show the production login
+    if (isProductionDeploy) {
+      return <ProductionLogin onLoginSuccess={() => setJustLoggedIn(true)} />;
+    }
   }
 
   // Direct route to landing pages for main partner paths
@@ -204,7 +206,7 @@ function Router() {
     return (
       <Layout>
         <Switch>
-          <Route path="/" component={PostLoginLanding} />
+          <Route path="/" component={EMMEEngageAppContainer} />
           <Route path="/platform" component={PlatformDashboard} />
           <Route path="/home" component={Home} />
           <Route path="/transform" component={Transform} />
@@ -218,6 +220,7 @@ function Router() {
           <Route path="/sophie/brief" component={SophieBrief} />
           <Route path="/emme" component={EMMEConnectEnhanced} />
           <Route path="/emme/:section" component={EMMEConnectEnhanced} />
+          <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
           <Route path="/emme-legacy" component={() => <div className="p-6"><EMMEManager /></div>} />
           <Route path="/trials" component={Trials} />
           <Route path="/profile" component={() => <div className="p-6"><ProfileManager /></div>} />
