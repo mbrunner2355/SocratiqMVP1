@@ -2,7 +2,7 @@
 
 SocratIQ Transform™ is an AI-powered document intelligence platform that processes diverse document formats (PDF, DOCX, TXT) to create rich semantic knowledge networks. It comprises Transform™ (document processing), Mesh™ (knowledge graph), Trace™ (audit system), and Sophie™ (AI agent layer). The platform provides advanced conversational AI, semantic search, risk assessment, and intelligent analytics, facilitating efficient knowledge extraction and utilization across various domains, including predictive intelligence for architecture, engineering, and construction (AEC) programs and pharmaceutical intelligence. Its business vision is to reduce marketing spend waste for pharmaceutical companies and accelerate go-to-market strategies by providing strategic intelligence.
 
-## Recent Changes (August 19, 2025)
+## Recent Changes (August 20, 2025)
 - **Replit Environment Migration Complete**: Successfully migrated project from Replit Agent to standard Replit environment
 - **Package Dependencies Fixed**: Installed all required npm packages including tsx for TypeScript execution
 - **PostgreSQL Database Setup**: Created and configured serverless PostgreSQL database with proper environment variables
@@ -23,9 +23,9 @@ SocratIQ Transform™ is an AI-powered document intelligence platform that proce
 - **Client Input Forms Fixed**: Resolved controlled component issues in ClientManager - all input fields now properly connected to formData state for smooth typing
 - **Admin Navigation Repositioned**: Moved admin functions (Corpus, Data Platform, Models, Trust) below business modules for demo clarity
 - **Home Page Demo Functionality**: Added functional navigation to all interactive elements - module cards, quick actions, and events now navigate to relevant pages instead of showing alerts
-- **EMME Chat Integration**: Added "Chat with EMME" conversational agent to left navigation menu with full Claude Sonnet API integration for pharmaceutical intelligence conversations
 - **Project Details Buttons Fixed**: Resolved non-functional Details buttons in project cards - now display comprehensive project information including client, status, progress, team size, budget, and due dates (August 19, 2025)
 - **Comprehensive Project Details Page**: Created dedicated project details view with tabbed interface for Overview, Milestones, Modules, and Budget tracking - includes full project descriptions, therapeutic areas, key objectives, and milestone tracking with visual status indicators
+- **VMS Intelligence Hub Chat Removal**: Removed EMME AI chat panel from VMS Intelligence Hub interface to create cleaner, focused pharmaceutical intelligence dashboard without distractions (August 20, 2025)
 
 ## Current Status: Production-Ready EMME Engage Enhanced
 - AWS S3 cloud storage fully integrated (`socratiqbeta1` bucket confirmed working)
