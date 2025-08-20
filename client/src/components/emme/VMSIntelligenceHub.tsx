@@ -691,22 +691,22 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
                   </h3>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">Pharmaceutical Intelligence Assistant</p>
-                <p className="text-xs text-gray-500 mt-1">Hello! I'm EMME, your EMME Engage™ intelligence assistant.</p>
+                <p className="text-xs text-gray-500 mt-1">Hello! I'm EMME, your VMS menopause intelligence specialist.</p>
                 <p className="text-xs text-gray-500 mt-2">I can help with:</p>
                 <ul className="text-xs text-gray-500 mt-1 space-y-1">
-                  <li>• Competitive analysis</li>
-                  <li>• Regulatory strategy</li>
-                  <li>• Market access planning</li>
-                  <li>• Partnership structuring</li>
+                  <li>• VMS vs Veozah competitive analysis</li>
+                  <li>• Menopause market segmentation</li>
+                  <li>• TAM analysis by region</li>
+                  <li>• Patient journey insights</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">Ask EMME about biomarkers, drug interactions, clinical trials...</p>
+                <p className="text-xs text-gray-500 mt-2">Ask me about women entering menopause demographics, market size, or competitive positioning...</p>
               </div>
               
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {chatMessages.length === 0 && (
                   <div className="text-center text-gray-500 mt-8">
                     <MessageSquare className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm">Ask me about VMS market data, competitive analysis, or clinical insights</p>
+                    <p className="text-sm">Ask me about VMS menopause market data, Veozah competition, or patient demographics</p>
                   </div>
                 )}
                 
@@ -736,7 +736,7 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
                   <Input
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask me about VMS market data, competitive analysis, or clinical insights"
+                    placeholder="Ask about VMS menopause market, Veozah competition, or patient demographics"
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     className="text-sm"
                   />
