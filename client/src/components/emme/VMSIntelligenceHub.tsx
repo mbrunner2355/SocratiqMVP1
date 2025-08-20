@@ -1,33 +1,23 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { 
   ArrowLeft,
   Brain,
-  MessageSquare,
-  ChevronDown,
-  ChevronRight,
-  ExternalLink,
-  FileText,
-  Search,
   Target,
+  Shield,
+  TrendingUp,
+  FileText,
   Users,
   BarChart3,
-  TrendingUp,
-  Shield,
-  Activity,
-  Calendar,
-  Clock,
-  DollarSign,
-  Upload,
-  Download,
-  MoreHorizontal,
-  Send
-} from 'lucide-react';
+  MessageSquare,
+  Search,
+  Send,
+  ChevronDown,
+  ChevronRight
+} from "lucide-react";
 
 interface ChatMessage {
   id: string;
@@ -101,245 +91,272 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
     if (activeSection === "research-hub") {
       return (
         <div className="space-y-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="market-analysis">Market Analysis</TabsTrigger>
-              <TabsTrigger value="competitive-landscape">Competitive Landscape</TabsTrigger>
-              <TabsTrigger value="regulatory-pathway">Regulatory Pathway</TabsTrigger>
-              <TabsTrigger value="clinical-evidence">Clinical Evidence</TabsTrigger>
-              <TabsTrigger value="commercial-strategy">Commercial Strategy</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="market-analysis">
-              <div className="space-y-6">
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                  <div className="flex items-center justify-between cursor-pointer" onClick={() => toggleSection('tam')}>
-                    <h3 className="text-lg font-semibold text-blue-900 flex items-center">
-                      {expandedSections['tam'] ? <ChevronDown className="w-4 h-4 mr-2" /> : <ChevronRight className="w-4 h-4 mr-2" />}
-                      Total Addressable Market (TAM): Pharmaceutical Intelligence
-                    </h3>
-                  </div>
-                  {expandedSections['tam'] && (
-                    <div className="mt-4 space-y-4">
-                      <div className="bg-white p-4 rounded border">
-                        <h4 className="font-medium text-gray-900 mb-3">Total Addressable Market (TAM): Women Entering Menopause</h4>
-                        
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border border-gray-200 text-sm">
-                            <thead>
-                              <tr className="bg-gray-50">
-                                <th className="border border-gray-200 p-3 text-left font-medium">REGION</th>
-                                <th className="border border-gray-200 p-3 text-left font-medium">WOMEN AGED 45-60</th>
-                                <th className="border border-gray-200 p-3 text-left font-medium">ANNUAL ENTRY INTO MENOPAUSE</th>
-                                <th className="border border-gray-200 p-3 text-left font-medium">NOTES</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td className="border border-gray-200 p-3 font-medium">U.S.</td>
-                                <td className="border border-gray-200 p-3">~50M (total)</td>
-                                <td className="border border-gray-200 p-3">~2M/year</td>
-                                <td className="border border-gray-200 p-3">6,000 women/day enter menopause in U.S.</td>
-                              </tr>
-                              <tr className="bg-gray-25">
-                                <td className="border border-gray-200 p-3 font-medium">UK</td>
-                                <td className="border border-gray-200 p-3">~7.4M</td>
-                                <td className="border border-gray-200 p-3">~400K/year</td>
-                                <td className="border border-gray-200 p-3">Average onset age: 51</td>
-                              </tr>
-                              <tr>
-                                <td className="border border-gray-200 p-3 font-medium">EU5 (France, Germany, Italy, Spain, UK)</td>
-                                <td className="border border-gray-200 p-3">~40M</td>
-                                <td className="border border-gray-200 p-3">~3.4M/year</td>
-                                <td className="border border-gray-200 p-3">High awareness in FR/DE, lower access in IT/ES</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+          {/* Research Progress Tabs */}
+          <div className="flex space-x-8 border-b overflow-x-auto">
+            <button
+              onClick={() => setActiveTab("market-analysis")}
+              className={`pb-3 px-1 border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "market-analysis"
+                  ? 'border-purple-600 text-purple-600 font-medium' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Market Analysis ✓
+            </button>
+            <button
+              onClick={() => setActiveTab("competitive-landscape")}
+              className={`pb-3 px-1 border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "competitive-landscape"
+                  ? 'border-purple-600 text-purple-600 font-medium' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Competitive Landscape ✓
+            </button>
+            <button
+              onClick={() => setActiveTab("regulatory-pathway")}
+              className={`pb-3 px-1 border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "regulatory-pathway"
+                  ? 'border-purple-600 text-purple-600 font-medium' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Regulatory Pathway
+            </button>
+            <button
+              onClick={() => setActiveTab("clinical-evidence")}
+              className={`pb-3 px-1 border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "clinical-evidence"
+                  ? 'border-purple-600 text-purple-600 font-medium' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Clinical Evidence
+            </button>
+            <button
+              onClick={() => setActiveTab("commercial-strategy")}
+              className={`pb-3 px-1 border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "commercial-strategy"
+                  ? 'border-purple-600 text-purple-600 font-medium' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Commercial Strategy
+            </button>
+          </div>
 
-                        <div className="mt-4 bg-blue-50 p-4 rounded-lg">
-                          <p className="text-sm text-blue-800">
-                            About <strong className="text-purple-600">75% of women</strong> experience vasomotor symptoms (VMS), and <strong className="text-purple-600">25-30%</strong> have moderate-to-severe symptoms
-                          </p>
-                        </div>
-
-                        <div className="mt-6">
-                          <h4 className="font-semibold text-gray-900 mb-3">Serviceable Available Market (SAM)</h4>
-                          <p className="text-sm text-gray-600 mb-3">Conservative filters: moderate-to-severe VMS, awareness, access, diagnosed.</p>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="text-center p-4 bg-red-50 border border-red-200 rounded">
-                              <div className="text-2xl font-bold text-red-600">~10M-15M</div>
-                              <div className="text-sm text-red-700">U.S. Est. candidates for RX Product A</div>
-                            </div>
-                            <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded">
-                              <div className="text-2xl font-bold text-blue-600">~1.5M</div>
-                              <div className="text-sm text-blue-700">UK Est. candidates for RX Product A</div>
-                            </div>
-                            <div className="text-center p-4 bg-green-50 border border-green-200 rounded">
-                              <div className="text-2xl font-bold text-green-600">~6M-8M</div>
-                              <div className="text-sm text-green-700">EU5 (w/o UK) Est. candidates for RX Product A</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-6">
-                          <h4 className="font-semibold text-gray-900 mb-3">Patient Demographics & Segmentation</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                              <h5 className="font-medium text-gray-800 mb-2">Core Age Ranges</h5>
-                              <div className="space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Natural menopause onset:</span>
-                                  <span className="text-sm font-medium">~51 years old (U.S.)</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Perimenopause:</span>
-                                  <span className="text-sm font-medium">~45-55</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Postmenopause:</span>
-                                  <span className="text-sm font-medium">55+ onwards</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Treatment-eligible:</span>
-                                  <span className="text-sm font-medium">40-65 years old</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Primary age range:</span>
-                                  <span className="text-sm font-medium text-blue-600">45-60 (seeking relief)</span>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <div>
-                              <h5 className="font-medium text-gray-800 mb-2">Key Patient Segments</h5>
-                              <div className="space-y-3">
-                                <div className="p-3 bg-red-50 border border-red-200 rounded">
-                                  <div className="font-medium text-red-800">Risk-Averse, Non-Hormone Seekers</div>
-                                  <div className="text-sm text-red-600">Avoiding estrogen due to medical history (breast cancer, clotting, stroke risk)</div>
-                                </div>
-                                <div className="p-3 bg-blue-50 border border-blue-200 rounded">
-                                  <div className="font-medium text-blue-800">Lifestyle-Oriented, Quality-of-Life Seekers</div>
-                                  <div className="text-sm text-blue-600">Disrupted sleep, work stress, relationship strain due to symptoms</div>
-                                </div>
-                                <div className="p-3 bg-green-50 border border-green-200 rounded">
-                                  <div className="font-medium text-green-800">Silent Strugglers</div>
-                                  <div className="text-sm text-green-600">Undiagnosed or undertreated, seeking alternatives</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+          {/* Tab Content */}
+          {activeTab === "market-analysis" && (
+            <div className="space-y-6">
+              <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg">
+                <div className="flex items-center justify-between cursor-pointer" onClick={() => toggleSection('tam')}>
+                  <h3 className="text-lg font-semibold text-purple-900 flex items-center">
+                    {expandedSections.tam ? <ChevronDown className="w-4 h-4 mr-2" /> : <ChevronRight className="w-4 h-4 mr-2" />}
+                    Total Addressable Market (TAM): Pharmaceutical Intelligence
+                  </h3>
                 </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="competitive-landscape">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Competitive Positioning vs. Veozah</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm border-collapse border border-gray-200">
-                        <thead>
-                          <tr className="bg-gray-50">
-                            <th className="border border-gray-200 p-3 text-left font-medium">Aspect</th>
-                            <th className="border border-gray-200 p-3 text-left font-medium">Veozah (Current Leader)</th>
-                            <th className="border border-gray-200 p-3 text-left font-medium">Product A (Opportunity)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="border border-gray-200 p-3 font-medium text-purple-700">Mechanism</td>
-                            <td className="border border-gray-200 p-3">NK3 receptor antagonist only</td>
-                            <td className="border border-gray-200 p-3 text-green-600">Dual NK1/NK3 receptor antagonism</td>
-                          </tr>
-                          <tr className="bg-gray-25">
-                            <td className="border border-gray-200 p-3 font-medium text-purple-700">Safety Profile</td>
-                            <td className="border border-gray-200 p-3 text-red-600">Boxed Warning for liver injury, requires monitoring</td>
-                            <td className="border border-gray-200 p-3 text-green-600">No boxed warning, improved safety profile</td>
-                          </tr>
-                          <tr>
-                            <td className="border border-gray-200 p-3 font-medium text-purple-700">Efficacy Scope</td>
-                            <td className="border border-gray-200 p-3">Primarily VMS (hot flashes)</td>
-                            <td className="border border-gray-200 p-3 text-green-600">VMS + sleep + mood symptoms</td>
-                          </tr>
-                          <tr className="bg-gray-25">
-                            <td className="border border-gray-200 p-3 font-medium text-purple-700">Market Performance</td>
-                            <td className="border border-gray-200 p-3 text-red-600">Below expectations, revised down 52%</td>
-                            <td className="border border-gray-200 p-3 text-blue-600">Opportunity for better market penetration</td>
-                          </tr>
-                          <tr>
-                            <td className="border border-gray-200 p-3 font-medium text-purple-700">Pricing</td>
-                            <td className="border border-gray-200 p-3">~$550/month list price</td>
-                            <td className="border border-gray-200 p-3 text-blue-600">Competitive pricing opportunity</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="clinical-evidence">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Clinical Development & Evidence</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <h4 className="font-semibold text-gray-900 mb-2">Mechanism & Clinical Evidence</h4>
-                        <p className="text-sm text-gray-700 mb-3">
-                          PRODUCT A is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, 
-                          a novel, non-hormonal mechanism of action targeting KNDy neurons in the hypothalamus.
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <h5 className="font-medium text-gray-800 mb-2">Phase 1 & 2 Trials:</h5>
-                            <p className="text-sm text-gray-600">
-                              Established safety, pharmacokinetics, and pharmacodynamics, confirming oral 
-                              bioavailability and tolerability in healthy women.
-                            </p>
-                          </div>
-                          <div>
-                            <h5 className="font-medium text-gray-800 mb-2">Phase 2b Results:</h5>
-                            <p className="text-sm text-gray-600">
-                              SWITCH-1 trial identified optimal 120 mg dose, showing statistically significant 
-                              reduction in hot flash frequency and severity by week 4.
-                            </p>
-                          </div>
-                        </div>
+                {expandedSections.tam && (
+                  <div className="mt-4 space-y-4">
+                    <div className="bg-white p-4 rounded border">
+                      <h4 className="font-medium text-gray-900 mb-3">Total Addressable Market (TAM): Women Entering Menopause</h4>
+                      
+                      <div className="overflow-x-auto mb-4">
+                        <table className="w-full text-sm border-collapse border border-gray-200">
+                          <thead>
+                            <tr className="bg-gray-50">
+                              <th className="border border-gray-200 p-2 text-left">REGION</th>
+                              <th className="border border-gray-200 p-2 text-left">WOMEN AGED 45-60</th>
+                              <th className="border border-gray-200 p-2 text-left">ANNUAL ENTRY INTO MENOPAUSE</th>
+                              <th className="border border-gray-200 p-2 text-left">NOTES</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td className="border border-gray-200 p-2 font-medium">U.S.</td>
+                              <td className="border border-gray-200 p-2">~50M (total)</td>
+                              <td className="border border-gray-200 p-2">~2M/year</td>
+                              <td className="border border-gray-200 p-2">6,000 women/day enter menopause in U.S.</td>
+                            </tr>
+                            <tr>
+                              <td className="border border-gray-200 p-2 font-medium">UK</td>
+                              <td className="border border-gray-200 p-2">~7.4M</td>
+                              <td className="border border-gray-200 p-2">~400K/year</td>
+                              <td className="border border-gray-200 p-2">Average onset age: 51</td>
+                            </tr>
+                            <tr>
+                              <td className="border border-gray-200 p-2 font-medium">EU5 (France, Germany, Italy, Spain, UK)</td>
+                              <td className="border border-gray-200 p-2">~40M</td>
+                              <td className="border border-gray-200 p-2">~3-4M/year</td>
+                              <td className="border border-gray-200 p-2">High awareness in FR/DE, lower access in IT/ES</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="text-center p-4 border rounded-lg">
-                          <p className="text-2xl font-bold text-blue-600">2</p>
-                          <p className="text-sm text-gray-600">Completed Clinical Trials</p>
-                        </div>
-                        <div className="text-center p-4 border rounded-lg">
-                          <p className="text-2xl font-bold text-green-600">120mg</p>
-                          <p className="text-sm text-gray-600">Optimal Dose Identified</p>
-                        </div>
-                        <div className="text-center p-4 border rounded-lg">
-                          <p className="text-2xl font-bold text-purple-600">Week 4</p>
-                          <p className="text-sm text-gray-600">Efficacy Timeline</p>
+                      <div className="p-3 bg-blue-50 border border-blue-200 rounded mb-4">
+                        <p className="text-sm text-blue-800">
+                          About <strong>75% of women</strong> experience vasomotor symptoms (VMS), and <strong>25-30%</strong> have moderate-to-severe symptoms
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium text-purple-700 mb-2">Serviceable Available Market (SAM)</h5>
+                        <p className="text-sm text-gray-600 mb-2">Conservative filters: moderate-to-severe VMS, awareness, access, diagnosed:</p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="p-3 bg-gray-50 rounded border">
+                            <div className="font-medium">U.S.</div>
+                            <div className="text-lg font-bold text-purple-600">~10M-15M</div>
+                            <div className="text-xs text-gray-600">Est. candidates for RX Product A</div>
+                          </div>
+                          <div className="p-3 bg-gray-50 rounded border">
+                            <div className="font-medium">UK</div>
+                            <div className="text-lg font-bold text-purple-600">~1.5M</div>
+                            <div className="text-xs text-gray-600">Est. candidates for RX Product A</div>
+                          </div>
+                          <div className="p-3 bg-gray-50 rounded border">
+                            <div className="font-medium">EU5 (w/o UK)</div>
+                            <div className="text-lg font-bold text-purple-600">~6M-8M</div>
+                            <div className="text-xs text-gray-600">Est. candidates for RX Product A</div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                    
+                    {/* Patient Demographics Section */}
+                    <div className="bg-white p-4 rounded border">
+                      <h4 className="font-medium text-gray-900 mb-3">Patient Demographics & Segmentation</h4>
+                      
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                          <h5 className="font-medium text-purple-700 mb-2">Core Age Ranges</h5>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span>Natural menopause onset:</span>
+                              <span className="font-medium">~51 years old (U.S.)</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Perimenopause:</span>
+                              <span className="font-medium">~45-55</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Postmenopause:</span>
+                              <span className="font-medium">55+ onwards</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Treatment-eligible:</span>
+                              <span className="font-medium">40-65 years old</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Primary age range:</span>
+                              <span className="font-medium text-blue-600">45-60 (seeking relief)</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h5 className="font-medium text-purple-700 mb-2">Key Patient Segments</h5>
+                          <div className="space-y-2 text-xs">
+                            <div className="p-2 bg-red-50 border-l-4 border-red-400 rounded">
+                              <strong>Risk-Averse, Non-Hormone Seekers</strong>
+                              <p>Avoiding estrogen due to medical history (breast cancer, clotting, stroke risk)</p>
+                            </div>
+                            <div className="p-2 bg-blue-50 border-l-4 border-blue-400 rounded">
+                              <strong>Lifestyle-Oriented, Quality-of-Life Seekers</strong>
+                              <p>Disrupted sleep, work stress, relationship strain due to symptoms</p>
+                            </div>
+                            <div className="p-2 bg-green-50 border-l-4 border-green-400 rounded">
+                              <strong>Silent Strugglers</strong>
+                              <p>Underdiagnosed, don't talk to HCPs, think symptoms are "just aging"</p>
+                            </div>
+                            <div className="p-2 bg-purple-50 border-l-4 border-purple-400 rounded">
+                              <strong>Highly Proactive Health Managers</strong>
+                              <p>Health-literate, digitally engaged, exploring new treatments</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
+
+          {activeTab === "competitive-landscape" && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Competitive Intelligence</CardTitle>
+                  <CardDescription>Comprehensive competitor analysis and market positioning</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Advanced competitive intelligence for pharmaceutical market positioning.</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 border rounded-lg">
+                      <h4 className="font-medium mb-2">Competitor Analysis</h4>
+                      <p className="text-sm text-gray-600">Real-time monitoring of competitor activities</p>
+                    </div>
+                    <div className="p-4 border rounded-lg">
+                      <h4 className="font-medium mb-2">Market Positioning</h4>
+                      <p className="text-sm text-gray-600">Strategic positioning recommendations</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === "regulatory-pathway" && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Regulatory Strategy</CardTitle>
+                  <CardDescription>FDA pathway planning and regulatory compliance</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Strategic regulatory planning for pharmaceutical development.</p>
+                  <div className="space-y-3">
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                      <h4 className="font-medium text-blue-800">FDA Pathway Analysis</h4>
+                      <p className="text-sm text-blue-600">Optimal regulatory submission strategy</p>
+                    </div>
+                    <div className="p-3 bg-green-50 border border-green-200 rounded">
+                      <h4 className="font-medium text-green-800">Compliance Monitoring</h4>
+                      <p className="text-sm text-green-600">Real-time regulatory updates and requirements</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === "clinical-evidence" && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Clinical Evidence</CardTitle>
+                  <CardDescription>Trial data and clinical efficacy results</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Comprehensive analysis of clinical trial data and therapeutic efficacy.</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === "commercial-strategy" && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Commercial Strategy</CardTitle>
+                  <CardDescription>Go-to-market strategy and commercial planning</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Strategic commercial approach and market positioning analysis.</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
       );
     }
@@ -673,9 +690,9 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
                     EMME AI
                   </h3>
                 </div>
-                <p className="text-xs text-gray-600 mt-1">Pharmaceutical Intelligence Assistant</p>
-                <p className="text-xs text-gray-500">Hello! I'm EMME, your EMME Connect™ intelligence assistant.</p>
-                <p className="text-xs text-gray-500 mt-1">I can help with:</p>
+                <p className="text-sm text-gray-600 mt-1">Pharmaceutical Intelligence Assistant</p>
+                <p className="text-xs text-gray-500 mt-1">Hello! I'm EMME, your EMME Connect™ intelligence assistant.</p>
+                <p className="text-xs text-gray-500 mt-2">I can help with:</p>
                 <ul className="text-xs text-gray-500 mt-1 space-y-1">
                   <li>• Competitive analysis</li>
                   <li>• Regulatory strategy</li>
@@ -705,9 +722,7 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
                         <div className="mt-2 pt-2 border-t border-gray-200">
                           <p className="text-xs text-gray-500 mb-1">Sources:</p>
                           {message.sources.map((source, index) => (
-                            <div key={index} className="text-xs text-blue-600 mb-1">
-                              {source}
-                            </div>
+                            <p key={index} className="text-xs text-blue-600">{source}</p>
                           ))}
                         </div>
                       )}
@@ -716,21 +731,16 @@ export function VMSIntelligenceHub({ onBack }: { onBack: () => void }) {
                 ))}
               </div>
               
-              <div className="p-4 border-t bg-white">
+              <div className="p-4 bg-white border-t">
                 <div className="flex space-x-2">
-                  <Textarea
+                  <Input
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask about VMS market data, clinical trials, competitive analysis..."
-                    className="flex-1 min-h-[40px] max-h-[120px]"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
+                    placeholder="Ask me about VMS market data, competitive analysis, or clinical insights"
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    className="text-sm"
                   />
-                  <Button 
+                  <Button
                     onClick={handleSendMessage}
                     disabled={!chatInput.trim()}
                     size="icon"
