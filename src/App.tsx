@@ -74,13 +74,13 @@ function App() {
           <Route path="/trust/monitoring" component={() => <Layout><SophieTrustManager /></Layout>} />
           <Route path="/agents" component={() => <Layout><AgentsManager /></Layout>} />
           <Route path="/graphs" component={() => <Layout><GraphVisualization /></Layout>} />
-          <Route path="/transform" component={Transform} />
-          <Route path="/mesh" component={Mesh} />
+          <Route path="/transform" component={() => <Layout><Transform /></Layout>} />
+          <Route path="/mesh" component={() => <Layout><Mesh /></Layout>} />
           
           {/* Intelligence Routes */}
-          <Route path="/ip" component={IP} />
-          <Route path="/trials" component={Trials} />
-          <Route path="/labs" component={Labs} />
+          <Route path="/ip" component={() => <Layout><IP /></Layout>} />
+          <Route path="/trials" component={() => <Layout><Trials /></Layout>} />
+          <Route path="/labs" component={() => <Layout><Labs /></Layout>} />
           
           {/* 404 Route */}
           <Route component={NotFound} />
