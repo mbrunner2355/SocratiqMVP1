@@ -737,7 +737,7 @@ What specific pharmaceutical intelligence challenge can I help you address today
 
               {/* Chat Messages */}
               <ScrollArea 
-                className={`${isExpanded ? 'h-96' : 'h-64'} w-full pr-4`}
+                className={`${isExpanded ? 'h-96' : 'h-64'} w-full pr-2`}
                 ref={scrollAreaRef}
               >
                 <div className="space-y-4">
@@ -752,7 +752,7 @@ What specific pharmaceutical intelligence challenge can I help you address today
                         </div>
                       )}
                       <div
-                        className={`max-w-[85%] p-3 rounded-lg ${
+                        className={`max-w-[95%] p-4 rounded-lg ${
                           message.sender === 'user'
                             ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
                             : message.isTyping
@@ -770,7 +770,7 @@ What specific pharmaceutical intelligence challenge can I help you address today
                         ) : (
                           <>
                             <div className="prose prose-sm max-w-none">
-                              <p className="whitespace-pre-line text-sm">{message.content}</p>
+                              <p className="whitespace-pre-line text-sm leading-relaxed">{message.content}</p>
                             </div>
                             {message.metadata && (
                               <div className="mt-2 pt-2 border-t border-gray-200">
