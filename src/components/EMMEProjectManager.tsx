@@ -15,7 +15,7 @@ import {
   FolderOpen, Plus, Edit, Trash2, Eye, Calendar, 
   User, Building, FileText, Target, Activity,
   Clock, CheckCircle, AlertTriangle, Search,
-  Filter, MoreHorizontal, BarChart3, Users, Globe
+  Filter, MoreHorizontal, BarChart3, Users, Globe, Loader2
 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -148,11 +148,12 @@ export function EMMEProjectManager() {
   });
 
   // Fetch project analytics
-  const { data: analytics } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery({
     queryKey: ['/api/emme/projects/analytics/overview'],
     queryFn: async () => {
       return await apiRequest('/api/emme/projects/analytics/overview');
-    }
+    },
+    retry: false, // Don't retry failed requests
   });
 
   // Create project mutation
@@ -294,6 +295,28 @@ export function EMMEProjectManager() {
   };
 
   const projects = projectsData?.projects || [];
+
+  // Create fallback analytics data if none is available
+  const safeAnalytics = analytics || {
+    summary: {
+      totalProjects: projects.length,
+      activeProjects: projects.filter(p => p.status === 'active').length,
+      completedProjects: projects.filter(p => p.status === 'completed').length,
+      draftProjects: projects.filter(p => p.status === 'draft').length,
+    }
+  };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading EMME projects...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Render different views
   if (view === 'project-detail' && selectedProjectForDetail) {
@@ -734,57 +757,55 @@ export function EMMEProjectManager() {
       </div>
 
       {/* Analytics Cards */}
-      {analytics && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Total Projects</p>
-                  <p className="text-2xl font-bold">{analytics.summary.totalProjects}</p>
-                </div>
-                <FolderOpen className="w-8 h-8 text-blue-500" />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total Projects</p>
+                <p className="text-2xl font-bold">{safeAnalytics.summary.totalProjects}</p>
               </div>
-            </CardContent>
-          </Card>
+              <FolderOpen className="w-8 h-8 text-blue-500" />
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Active Projects</p>
-                  <p className="text-2xl font-bold">{analytics.summary.activeProjects}</p>
-                </div>
-                <Activity className="w-8 h-8 text-green-500" />
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Active Projects</p>
+                <p className="text-2xl font-bold">{safeAnalytics.summary.activeProjects}</p>
               </div>
-            </CardContent>
-          </Card>
+              <Activity className="w-8 h-8 text-green-500" />
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold">{analytics.summary.completedProjects}</p>
-                </div>
-                <CheckCircle className="w-8 h-8 text-blue-500" />
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Completed</p>
+                <p className="text-2xl font-bold">{safeAnalytics.summary.completedProjects}</p>
               </div>
-            </CardContent>
-          </Card>
+              <CheckCircle className="w-8 h-8 text-blue-500" />
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Draft Projects</p>
-                  <p className="text-2xl font-bold">{analytics.summary.draftProjects}</p>
-                </div>
-                <FileText className="w-8 h-8 text-yellow-500" />
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Draft Projects</p>
+                <p className="text-2xl font-bold">{safeAnalytics.summary.draftProjects}</p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+              <FileText className="w-8 h-8 text-yellow-500" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Filters */}
       <div className="flex space-x-4">

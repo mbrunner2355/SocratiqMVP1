@@ -31,7 +31,7 @@ import { EMMEIntelligenceBrief } from "@/components/emme/EMMEIntelligenceBrief";
 import { EMMECreateProject } from "@/components/emme/EMMECreateProject";
 import { EMMEDataSourcesDashboard } from "@/components/emme/EMMEDataSourcesDashboard";
 import { EMMEProductionDashboard } from "@/components/emme/EMMEProductionDashboard";
-import { EMMEProjectManager } from "@/components/EMMEProjectManager";
+import { SimpleProjectManager } from "@/components/emme/SimpleProjectManager";
 
 
 interface TenantUsage {
@@ -150,11 +150,11 @@ function EMMEEngageWhiteLabel() {
       case "clients":
         return <ClientManager />;
       case "create-project":
-        return <EMMEProjectManager />;
+        return <SimpleProjectManager />;
       case "smart-wizard":
         return <EMMECreateProject />;
       case "projects":
-        return <EMMEProjectManager />;
+        return <SimpleProjectManager />;
       // Strategic Intelligence
       case "strategic-intelligence":
         return <StrategicIntelligenceModule />;
