@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +34,26 @@ export function EMMEComprehensiveProjectCreator() {
   const [isProjectSetup, setIsProjectSetup] = useState(true);
   const [activeProjectNav, setActiveProjectNav] = useState('project-insights');
   const [insightsTab, setInsightsTab] = useState('overview');
+
+  // Check if we're opening an existing project from session storage
+  useEffect(() => {
+    const currentProject = sessionStorage.getItem('current-project');
+    if (currentProject) {
+      try {
+        const project = JSON.parse(currentProject);
+        setProjectName(project.name);
+        setIsProjectSetup(false); // Skip setup, go directly to project workspace
+        
+        // Set the active navigation based on URL or default to project-insights
+        const currentView = window.location.hash.replace('#', '') || 'project-insights';
+        if (['project-insights', 'framework', 'client-content', 'playground', 'strategy-map', 'dashboard'].includes(currentView)) {
+          setActiveProjectNav(currentView);
+        }
+      } catch (error) {
+        console.error('Failed to parse current project:', error);
+      }
+    }
+  }, []);
   
   // Form data state
   const [formData, setFormData] = useState({
