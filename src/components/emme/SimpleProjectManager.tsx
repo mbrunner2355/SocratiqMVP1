@@ -165,7 +165,7 @@ export function SimpleProjectManager() {
                 <p className="text-sm text-gray-600">Total Projects</p>
                 <p className="text-2xl font-bold">{projects.length}</p>
               </div>
-              <FolderOpen className="w-8 h-8 text-blue-500" />
+              <FolderOpen className="w-8 h-8 text-purple-500" />
             </div>
           </CardContent>
         </Card>
@@ -177,7 +177,7 @@ export function SimpleProjectManager() {
                 <p className="text-sm text-gray-600">Active Projects</p>
                 <p className="text-2xl font-bold">{projects.filter(p => p.status === 'active').length}</p>
               </div>
-              <Activity className="w-8 h-8 text-green-500" />
+              <Activity className="w-8 h-8 text-red-500" />
             </div>
           </CardContent>
         </Card>
@@ -189,7 +189,7 @@ export function SimpleProjectManager() {
                 <p className="text-sm text-gray-600">Completed</p>
                 <p className="text-2xl font-bold">{projects.filter(p => p.status === 'completed').length}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-blue-500" />
+              <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
@@ -201,7 +201,7 @@ export function SimpleProjectManager() {
                 <p className="text-sm text-gray-600">Draft Projects</p>
                 <p className="text-2xl font-bold">{projects.filter(p => p.status === 'draft').length}</p>
               </div>
-              <FileText className="w-8 h-8 text-yellow-500" />
+              <FileText className="w-8 h-8 text-purple-400" />
             </div>
           </CardContent>
         </Card>
