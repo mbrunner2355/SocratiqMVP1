@@ -532,39 +532,99 @@ export function EMMEComprehensiveProjectCreator() {
           
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Background</h3>
-            <p className="text-gray-700 mb-4">
-              Global pharmaceutical company is preparing to launch new non-hormonal treatment for moderate to severe vasomotor 
-              symptoms (VMS) associated with menopause. Product will launch simultaneously across US, UK, and EU markets.
-            </p>
-            <p className="text-gray-700 mb-6">
-              Current landscape includes one direct non-hormonal competitor already in the market, alongside several hormonal 
-              therapies and a variety of over-the-counter and natural remedies. As patient and provider expectations evolve, there is 
-              an opportunity to position the new treatment strategically to address unmet needs, differentiate from existing options, 
-              and maximize market penetration at launch.
-            </p>
+            <Textarea 
+              value={`Global pharmaceutical company is preparing to launch new non-hormonal treatment for moderate to severe vasomotor symptoms (VMS) associated with menopause. Product will launch simultaneously across US, UK, and EU markets.
+
+Current landscape includes one direct non-hormonal competitor already in the market, alongside several hormonal therapies and a variety of over-the-counter and natural remedies. As patient and provider expectations evolve, there is an opportunity to position the new treatment strategically to address unmet needs, differentiate from existing options, and maximize market penetration at launch.`}
+              onChange={(e) => setFormData(prev => ({ ...prev, summary: e.target.value }))}
+              className="min-h-[120px] text-gray-700 mb-4"
+              placeholder="Project background..."
+            />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Development Stage</h4>
+                <Select 
+                  value={formData.developmentStage}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, developmentStage: value }))}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select development stage" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pre-clinical">Pre-Clinical</SelectItem>
+                    <SelectItem value="phase-1">Phase I</SelectItem>
+                    <SelectItem value="phase-2">Phase II</SelectItem>
+                    <SelectItem value="phase-3">Phase III</SelectItem>
+                    <SelectItem value="regulatory-submission">Regulatory Submission</SelectItem>
+                    <SelectItem value="market-ready">Market Ready</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Target Patient Population</h4>
+                <Textarea 
+                  value={formData.patientPopulation}
+                  onChange={(e) => setFormData(prev => ({ ...prev, patientPopulation: e.target.value }))}
+                  className="min-h-[60px]"
+                  placeholder="Describe the target patient population..."
+                />
+              </div>
+            </div>
           </div>
           
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Objectives</h3>
-            <p className="text-gray-700 mb-4">To support successful launch, we will conduct a comprehensive launch readiness initiative designed to:</p>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-start gap-2">
-                <span className="text-gray-400 mt-1">•</span>
-                <span>Understand the competitive landscape across all target markets</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-gray-400 mt-1">•</span>
-                <span>Clarify the value proposition for patients, providers, and payers</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-gray-400 mt-1">•</span>
-                <span>Build compelling messaging that resonates across segments</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-gray-400 mt-1">•</span>
-                <span>Ensure optimal market access and uptake strategies are in place</span>
-              </li>
-            </ul>
+            <Textarea 
+              defaultValue="To support successful launch, we will conduct a comprehensive launch readiness initiative designed to:
+• Understand the competitive landscape across all target markets
+• Clarify the value proposition for patients, providers, and payers
+• Build compelling messaging that resonates across segments
+• Ensure optimal market access and uptake strategies are in place"
+              className="min-h-[100px] text-gray-700 mb-6"
+              placeholder="Project objectives..."
+            />
+            
+            <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Project Status</p>
+                  <p className="text-sm text-gray-600">
+                    {formData.status === 'draft' ? 'Complete required fields to activate' : 'Ready for detailed planning'}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => {
+                      // Save current changes
+                      const existingProjects = JSON.parse(localStorage.getItem('emme-projects') || '[]');
+                      const updatedProjects = existingProjects.map((p: any) => 
+                        p.id === formData.id ? formData : p
+                      );
+                      localStorage.setItem('emme-projects', JSON.stringify(updatedProjects));
+                      sessionStorage.setItem('current-project', JSON.stringify(formData));
+                      toast({
+                        title: "Changes Saved",
+                        description: "Project updates have been saved.",
+                      });
+                    }}
+                    variant="outline"
+                  >
+                    Save Changes
+                  </Button>
+                  {formData.status === 'draft' && (
+                    <Button 
+                      onClick={handleActivateProject}
+                      disabled={!isProjectComplete()}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      Activate Project
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );
