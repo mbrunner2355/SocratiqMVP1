@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Bell } from 'lucide-react';
+import { Search, MessageCircle } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useToast } from '@/hooks/use-toast';
@@ -1020,7 +1020,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                   <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                   <Input placeholder="Search..." className="pl-10 w-64" />
                 </div>
-                <Bell className="w-5 h-5 text-gray-400" />
+                <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" title="Chat with EMME" />
               </div>
             </div>
           </div>
@@ -1113,7 +1113,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
-              <Bell className="w-5 h-5 text-gray-400" />
+              <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" title="Chat with EMME" />
             </div>
           </div>
         </div>
