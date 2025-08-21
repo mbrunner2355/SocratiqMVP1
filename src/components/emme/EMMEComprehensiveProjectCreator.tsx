@@ -591,7 +591,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                       // Save current changes
                       const existingProjects = JSON.parse(localStorage.getItem('emme-projects') || '[]');
                       const updatedProjects = existingProjects.map((p: any) => 
-                        p.id === formData.id ? formData : p
+                        p.id === (formData as any).id ? formData : p
                       );
                       localStorage.setItem('emme-projects', JSON.stringify(updatedProjects));
                       sessionStorage.setItem('current-project', JSON.stringify(formData));
@@ -1020,7 +1020,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                   <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                   <Input placeholder="Search..." className="pl-10 w-64" />
                 </div>
-                <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" title="Chat with EMME" />
+                <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" />
               </div>
             </div>
           </div>
@@ -1113,7 +1113,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
-              <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" title="Chat with EMME" />
+              <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" />
             </div>
           </div>
         </div>

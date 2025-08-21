@@ -42,8 +42,8 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useTenantStyling } from "@/components/TenantProvider";
 import { useAuth } from "@/hooks/useAuth";
-import emmeEngageLogo from "@/assets/emme-engage-logo.png";
-import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
+// import emmeEngageLogo from "@/assets/emme-engage-logo.png";
+// import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
 
 interface EMMELayoutProps {
   children: React.ReactNode;
@@ -86,8 +86,9 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Get EMME Connect branding configuration
-  const partnerId = detectPartnerContext();
-  const brand = getPartnerBrand(partnerId);
+  // const partnerId = detectPartnerContext();
+  // const brand = getPartnerBrand(partnerId);
+  const partnerId = 'emme-engage';
   const isEMMEEngage = partnerId === 'emme-engage';
 
   // Check if user is admin - only admins should see Corpus, Pipeline, Models, Trust
