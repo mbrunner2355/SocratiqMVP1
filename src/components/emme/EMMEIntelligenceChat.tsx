@@ -853,27 +853,27 @@ What specific pharmaceutical intelligence challenge can I help you address today
 
               {/* Chat Messages */}
               <ScrollArea 
-                className={`${isExpanded ? 'h-80' : 'h-64'} w-full pr-2`}
+                className={`${isExpanded ? 'h-80' : 'h-64'} w-full pr-1`}
                 ref={scrollAreaRef}
               >
-                <div className="space-y-4">
+                <div className="space-y-4 w-full">
                   {chatMessages.map((message) => (
                     <div
                       key={message.id}
-                      className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`flex gap-2 w-full ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                       {message.sender === 'emme' && (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-900 to-indigo-950 flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white font-bold text-sm">e</span>
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-900 to-indigo-950 flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-white font-bold text-xs">e</span>
                         </div>
                       )}
                       <div
-                        className={`max-w-full p-4 rounded-lg ${
+                        className={`p-4 rounded-lg ${
                           message.sender === 'user'
-                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white max-w-[85%]'
+                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white max-w-[80%]'
                             : message.isTyping
-                              ? 'bg-gray-100 text-gray-600 max-w-[90%]'
-                              : 'bg-white border shadow-sm max-w-full'
+                              ? 'bg-gray-100 text-gray-600 max-w-[85%]'
+                              : 'bg-white border shadow-sm w-full'
                         }`}
                       >
                         {message.isTyping ? (
@@ -920,8 +920,8 @@ What specific pharmaceutical intelligence challenge can I help you address today
                         )}
                       </div>
                       {message.sender === 'user' && (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center flex-shrink-0 mt-1">
-                          <User className="w-4 h-4 text-white" />
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center flex-shrink-0 mt-1">
+                          <User className="w-3 h-3 text-white" />
                         </div>
                       )}
                     </div>
