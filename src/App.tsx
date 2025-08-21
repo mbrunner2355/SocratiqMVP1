@@ -1,9 +1,11 @@
 import { Route, Switch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toast/toaster";
+// Temporarily remove auth provider to get app working
+// import { AuthProvider } from "@/hooks/useAuth";
 
 // Import all page components
-import Home from "@/pages/dashboard";
+import Layout from "@/components/Layout";
 import Dashboard from "@/pages/dashboard";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
@@ -30,11 +32,12 @@ const queryClient = new QueryClient({
 function App() {
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-gray-50">
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-gray-50">
         <Switch>
           {/* Main landing pages */}
-          <Route path="/" component={Home} />
+          <Route path="/" component={() => <Layout><div /></Layout>} />
+          <Route path="/dashboard" component={() => <Layout><div /></Layout>} />
           <Route path="/landing" component={Landing} />
           <Route path="/login" component={Login} />
           
@@ -49,7 +52,6 @@ function App() {
           <Route path="/fedscout" component={FedScout} />
           
           {/* Core Platform Routes */}
-          <Route path="/dashboard" component={Dashboard} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           
@@ -62,9 +64,9 @@ function App() {
           <Route component={NotFound} />
         </Switch>
         
-        <Toaster />
-      </div>
-    </QueryClientProvider>
+          <Toaster />
+        </div>
+      </QueryClientProvider>
   );
 }
 

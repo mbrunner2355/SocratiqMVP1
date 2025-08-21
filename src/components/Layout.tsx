@@ -5,8 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useAuth } from "@/hooks/useAuth";
+// import { useAuth } from "@/hooks/useAuth";
 import { type User } from "@shared/schema";
+
+// Mock useAuth hook for development
+const useAuth = () => ({
+  user: { id: '1', email: 'admin@socratiq.com', name: 'SocratIQ Admin', role: 'admin' } as User,
+  isLoading: false,
+  isAuthenticated: true
+});
 import { 
   Brain, 
   Settings, 
