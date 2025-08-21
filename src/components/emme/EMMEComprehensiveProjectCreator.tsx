@@ -72,6 +72,22 @@ export function EMMEComprehensiveProjectCreator() {
           // Clear edit mode flag
           sessionStorage.removeItem('edit-mode');
         } else {
+          // Regular project workspace - update project status if incomplete and set formData
+          const updatedProject = {
+            ...project,
+            status: (!project.developmentStage || !project.patientPopulation) ? 'draft' : (project.status || 'active')
+          };
+          
+          setFormData(updatedProject);
+          
+          // Update localStorage and sessionStorage with correct status
+          const existingProjects = JSON.parse(localStorage.getItem('emme-projects') || '[]');
+          const updatedProjects = existingProjects.map((p: any) => 
+            p.id === updatedProject.id ? updatedProject : p
+          );
+          localStorage.setItem('emme-projects', JSON.stringify(updatedProjects));
+          sessionStorage.setItem('current-project', JSON.stringify(updatedProject));
+          
           // Regular project workspace - skip setup
           setIsProjectSetup(false);
           

@@ -56,6 +56,10 @@ export function SimpleProjectManager() {
           if (projects.length !== originalLength || uniqueProjects.length !== projects.length) {
             localStorage.setItem('emme-projects', JSON.stringify(uniqueProjects));
             console.log(`Cleaned up projects: ${originalLength} → ${uniqueProjects.length}`);
+            
+            // Clear session storage to force fresh load with updated project data
+            sessionStorage.removeItem('current-project');
+            sessionStorage.removeItem('edit-mode');
           }
         } catch (error) {
           console.error('Failed to cleanup projects:', error);
