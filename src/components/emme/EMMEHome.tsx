@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { useTenantStyling } from "@/components/TenantProvider";
 // Partner branding functionality will be implemented later
-import { EMMEHomeChat } from "./EMMEHomeChat";
+import { EMMEIntelligenceChat } from "./EMMEIntelligenceChat";
 
 export function EMMEHome() {
   const [, setLocation] = useLocation();
@@ -207,7 +207,7 @@ export function EMMEHome() {
       </div>
 
       {/* EMME Chat Interface */}
-      <EMMEHomeChat />
+      <EMMEIntelligenceChat />
 
       {/* EMME Engage Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
