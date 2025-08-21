@@ -659,7 +659,15 @@ export function EMMEComprehensiveProjectCreator() {
             {PROJECT_NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveProjectNav(item.id)}
+                onClick={() => {
+                  setActiveProjectNav(item.id);
+                  // Save last visited section for this project
+                  const currentProject = sessionStorage.getItem('current-project');
+                  if (currentProject) {
+                    const project = JSON.parse(currentProject);
+                    sessionStorage.setItem(`project-${project.id}-last-section`, item.id);
+                  }
+                }}
                 className={`w-full text-left px-3 py-2 text-sm rounded transition-colors ${
                   item.id === activeProjectNav
                     ? 'bg-purple-50 text-purple-700 font-medium'
