@@ -249,11 +249,11 @@ export function SimpleProjectManager() {
                 <div className="ml-4 text-right">
                   <Button
                     onClick={() => {
-                      // Navigate to project workspace (Framework sections)
+                      // Navigate to project workspace starting with Project Insights
                       setSelectedProject(project);
-                      // Store project context and navigate to where user left off
+                      // Store project context and navigate to Project Insights by default
                       sessionStorage.setItem('current-project', JSON.stringify(project));
-                      const lastSection = sessionStorage.getItem(`project-${project.id}-last-section`) || 'background';
+                      const lastSection = sessionStorage.getItem(`project-${project.id}-last-section`) || 'project-insights';
                       window.dispatchEvent(new CustomEvent('navigateToModule', { 
                         detail: { moduleId: lastSection, projectData: project }
                       }));

@@ -161,6 +161,87 @@ function EMMEEngageWhiteLabel() {
       case "view-projects":
         return <SimpleProjectManager />;
       
+      // Project Insights - new main section
+      case "project-insights":
+        return <div className="p-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold text-gray-900">Project Insights</h1>
+              <Button className="bg-red-500 hover:bg-red-600 text-white px-6">
+                Activate
+              </Button>
+            </div>
+            
+            {/* Tab Navigation */}
+            <div className="border-b border-gray-200 mb-8">
+              <div className="flex space-x-8">
+                <button className="py-2 px-1 border-b-2 border-red-500 text-red-600 font-medium text-sm">
+                  Overview
+                </button>
+                <button className="py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-sm">
+                  Scope
+                </button>
+                <button className="py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-sm">
+                  Timeline
+                </button>
+              </div>
+            </div>
+            
+            {projectContext && (
+              <div className="bg-white rounded-lg shadow-sm border p-8">
+                {/* Main Project Title */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                      <span className="text-gray-600 text-sm">U</span>
+                    </div>
+                    <h2 className="text-xl font-semibold text-red-500">Non-Hormonal Treatment Launch Preparation</h2>
+                  </div>
+                </div>
+                
+                {/* Background Section */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Background</h3>
+                  <p className="text-gray-700 mb-4">
+                    Global pharmaceutical company is preparing to launch new non-hormonal treatment for moderate to severe vasomotor 
+                    symptoms (VMS) associated with menopause. Product will launch simultaneously across US, UK, and EU markets.
+                  </p>
+                  <p className="text-gray-700 mb-6">
+                    Current landscape includes one direct non-hormonal competitor already in the market, alongside several hormonal 
+                    therapies and a variety of over-the-counter and natural remedies. As patient and provider expectations evolve, there is 
+                    an opportunity to position the new treatment strategically to address unmet needs, differentiate from existing options, 
+                    and maximize market penetration at launch.
+                  </p>
+                </div>
+                
+                {/* Project Objectives */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Objectives</h3>
+                  <p className="text-gray-700 mb-4">To support successful launch, we will conduct a comprehensive launch readiness initiative designed to:</p>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-gray-400 mt-1">•</span>
+                      <span>Understand the competitive landscape across all target markets</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gray-400 mt-1">•</span>
+                      <span>Clarify the value proposition for patients, providers, and payers</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gray-400 mt-1">•</span>
+                      <span>Build compelling messaging that resonates across segments</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gray-400 mt-1">•</span>
+                      <span>Ensure optimal market access and uptake strategies are in place</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>;
+
       // Project Framework sections
       case "background":
         return <div className="p-6">
