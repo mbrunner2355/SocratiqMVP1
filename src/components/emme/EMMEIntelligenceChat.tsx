@@ -134,12 +134,14 @@ export function EMMEIntelligenceChat() {
       setChatMessages(prev => prev.filter(msg => !msg.isTyping));
       
       const message = currentMessage.toLowerCase();
+      console.log('EMME Debug - Full message:', message);
       let emmeResponse = "";
       let category: ChatMessage['category'] = 'general';
       let metadata: ChatMessage['metadata'] = {};
 
       // Quick Action: Portfolio Overview
-      if (message.includes('comprehensive overview of all active client portfolios with key performance metrics')) {
+      if (message.includes('give me a comprehensive overview')) {
+        console.log('EMME Debug - Portfolio Overview triggered');
         category = 'launch';
         emmeResponse = `**Mock 5 Client Portfolio Intelligence Dashboard**
 
@@ -193,7 +195,8 @@ Which client requires immediate strategic attention?`;
           sources: ['Portfolio Analytics', 'Client Performance Data', 'Market Intelligence'],
           actionItems: ['Review BioPharma EU strategy', 'MedTech access programs', 'Global Therapeutics KOL plan']
         };
-      } else if (message.includes('what are the current competitive threats across our client portfolios')) {
+      } else if (message.includes('current competitive threats')) {
+        console.log('EMME Debug - Competitive Intelligence triggered');
         category = 'competitive';
         emmeResponse = `**Cross-Portfolio Competitive Intelligence Report**
 
@@ -247,7 +250,8 @@ Which competitive scenario requires deep-dive analysis?`;
           sources: ['Competitive Intelligence', 'Pipeline Database', 'Market Research'],
           actionItems: ['Finalize BioPharma response materials', 'Complete Q1 competitive briefings', 'Strategic planning session']
         };
-      } else if (message.includes('show me kol engagement opportunities and cross-client optimization strategies')) {
+      } else if (message.includes('kol engagement opportunities')) {
+        console.log('EMME Debug - KOL Network triggered');
         category = 'kol';
         emmeResponse = `**Strategic KOL Network Management Dashboard**
 
@@ -313,7 +317,8 @@ Which KOL relationship requires strategic enhancement?`;
           sources: ['KOL Database', 'Engagement Analytics', 'Publication Tracking'],
           actionItems: ['Annual KOL Summit planning', 'Publication pipeline review', 'Digital expansion strategy']
         };
-      } else if (message.includes('what are the current payer landscape challenges and market access opportunities')) {
+      } else if (message.includes('payer landscape challenges')) {
+        console.log('EMME Debug - Market Access triggered');
         category = 'market_access';
         emmeResponse = `**Integrated Market Access Intelligence Platform**
 
@@ -396,7 +401,8 @@ Which market access challenge requires immediate escalation?`;
           sources: ['Payer Intelligence', 'Formulary Database', 'Health Economics Research'],
           actionItems: ['UnitedHealthcare evidence review', 'Anthem education campaign', 'CMS filing preparation']
         };
-      } else if (message.includes('analyze current hcp campaign performance and optimization opportunities')) {
+      } else if (message.includes('hcp campaign performance')) {
+        console.log('EMME Debug - Campaign Analytics triggered');
         category = 'campaign';
         emmeResponse = `**Integrated HCP Campaign Performance Dashboard**
 
@@ -495,7 +501,8 @@ Which campaign element needs immediate optimization focus?`;
           sources: ['Campaign Analytics', 'HCP Engagement Data', 'Digital Performance Metrics'],
           actionItems: ['Interactive simulator launch', 'AI clinical decision support', 'Virtual conference series setup']
         };
-      } else if (message.includes('regulatory developments might impact our client portfolios')) {
+      } else if (message.includes('regulatory developments')) {
+        console.log('EMME Debug - Regulatory Intel triggered');
         category = 'general';
         emmeResponse = `**Regulatory Intelligence & Policy Impact Assessment**
 
