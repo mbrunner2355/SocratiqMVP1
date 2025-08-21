@@ -329,7 +329,124 @@ export function EMMEComprehensiveProjectCreator() {
         );
       }
       
-      // Overview tab content
+      if (insightsTab === 'timeline') {
+        return (
+          <div className="bg-white rounded-lg shadow-sm border p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                <span className="text-gray-600 text-sm">📅</span>
+              </div>
+              <h2 className="text-xl font-semibold text-red-500">Project Timeline</h2>
+            </div>
+            
+            <div className="space-y-8">
+              {/* Phase 1: Research & Analysis */}
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-0 w-4 h-4 bg-purple-500 rounded-full"></div>
+                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Phase 1: Research & Analysis</h3>
+                  <p className="text-sm text-gray-600 mb-2">Duration: 4-6 weeks</p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Competitive landscape analysis completion</li>
+                    <li>• Patient and provider persona development</li>
+                    <li>• Market access pathway assessment</li>
+                    <li>• Pricing strategy framework development</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Phase 2: Strategic Development */}
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-0 w-4 h-4 bg-red-500 rounded-full"></div>
+                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Phase 2: Strategic Development</h3>
+                  <p className="text-sm text-gray-600 mb-2">Duration: 6-8 weeks</p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Core messaging framework creation</li>
+                    <li>• Go-to-market model development</li>
+                    <li>• Regional adaptation strategies (US, UK, EU)</li>
+                    <li>• Stakeholder engagement plan</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Phase 3: Implementation Planning */}
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-0 w-4 h-4 bg-green-500 rounded-full"></div>
+                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Phase 3: Implementation Planning</h3>
+                  <p className="text-sm text-gray-600 mb-2">Duration: 4-5 weeks</p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Launch campaign development</li>
+                    <li>• Channel strategy finalization</li>
+                    <li>• Training materials creation</li>
+                    <li>• Success metrics definition</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Phase 4: Pre-Launch */}
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-0 w-4 h-4 bg-blue-500 rounded-full"></div>
+                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Phase 4: Pre-Launch Preparation</h3>
+                  <p className="text-sm text-gray-600 mb-2">Duration: 3-4 weeks</p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Final regulatory approval coordination</li>
+                    <li>• Launch readiness assessment</li>
+                    <li>• Team training and preparation</li>
+                    <li>• Market entry execution planning</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Phase 5: Launch */}
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-0 w-4 h-4 bg-yellow-500 rounded-full"></div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Phase 5: Market Launch</h3>
+                  <p className="text-sm text-gray-600 mb-2">Duration: Ongoing</p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Multi-market launch execution</li>
+                    <li>• Performance monitoring and optimization</li>
+                    <li>• Real-time strategy adjustments</li>
+                    <li>• Post-launch success evaluation</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Key Milestones Summary */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-4">Key Milestones</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-purple-50 rounded-lg">
+                  <h4 className="font-medium text-purple-900 mb-2">Research Complete</h4>
+                  <p className="text-sm text-purple-700">Week 6: All competitive analysis and persona work finished</p>
+                </div>
+                <div className="p-4 bg-red-50 rounded-lg">
+                  <h4 className="font-medium text-red-900 mb-2">Strategy Approval</h4>
+                  <p className="text-sm text-red-700">Week 14: Final messaging and go-to-market strategy approved</p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <h4 className="font-medium text-green-900 mb-2">Launch Readiness</h4>
+                  <p className="text-sm text-green-700">Week 19: All implementation plans and materials ready</p>
+                </div>
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-2">Market Entry</h4>
+                  <p className="text-sm text-blue-700">Week 23: Official launch across US, UK, and EU markets</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      
+      // Overview tab content (default)
       return (
         <div className="bg-white rounded-lg shadow-sm border p-8">
           <div className="mb-6">
