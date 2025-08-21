@@ -13,26 +13,43 @@ export function SimpleProjectManager() {
 
   // Clean up localStorage on component mount to remove old VMS Global project
   useEffect(() => {
-    const cleanupOldProjects = () => {
+    const cleanupAndDeduplicateProjects = () => {
       const stored = localStorage.getItem('emme-projects');
       if (stored) {
         try {
           let projects = JSON.parse(stored);
           const originalLength = projects.length;
           
-          // Remove the old "VMS Global" project without client/team info
-          projects = projects.filter((project: any) => {
-            if (project.name === "VMS Global" && !project.client && !project.team) {
-              return false;
+          // Remove duplicates and old projects
+          const uniqueProjects = projects.reduce((acc: any[], current: any) => {
+            // Skip old VMS Global projects without proper client/team info
+            if (current.name === "VMS Global" && (!current.client || current.client !== "PharmaX")) {
+              return acc;
             }
-            return true;
-          });
+            
+            // Check for duplicates by name and client
+            const existing = acc.find((p: any) => 
+              p.name === current.name && 
+              p.client === current.client
+            );
+            
+            if (!existing) {
+              acc.push(current);
+            } else {
+              // Keep the most recent version
+              const currentDate = new Date(current.updatedAt || current.createdAt);
+              const existingDate = new Date(existing.updatedAt || existing.createdAt);
+              if (currentDate > existingDate) {
+                const index = acc.indexOf(existing);
+                acc[index] = current;
+              }
+            }
+            return acc;
+          }, []);
           
-          if (projects.length !== originalLength) {
-            localStorage.setItem('emme-projects', JSON.stringify(projects));
-            console.log('Cleaned up old VMS Global project');
-            // Force a refresh of the projects list
-            window.location.reload();
+          if (projects.length !== originalLength || uniqueProjects.length !== projects.length) {
+            localStorage.setItem('emme-projects', JSON.stringify(uniqueProjects));
+            console.log(`Cleaned up projects: ${originalLength} → ${uniqueProjects.length}`);
           }
         } catch (error) {
           console.error('Failed to cleanup projects:', error);
@@ -40,7 +57,7 @@ export function SimpleProjectManager() {
       }
     };
     
-    cleanupOldProjects();
+    cleanupAndDeduplicateProjects();
   }, []);
 
   // Fetch project data - with fallback for API routing issues
