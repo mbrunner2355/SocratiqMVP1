@@ -298,22 +298,38 @@ export function SimpleProjectManager() {
                 </div>
                 
                 <div className="ml-4 text-right">
-                  <Button
-                    onClick={() => {
-                      // Navigate to project workspace starting with Project Insights
-                      setSelectedProject(project);
-                      // Store project context and navigate to Project Insights by default
-                      sessionStorage.setItem('current-project', JSON.stringify(project));
-                      const lastSection = sessionStorage.getItem(`project-${project.id}-last-section`) || 'project-insights';
-                      window.dispatchEvent(new CustomEvent('navigateToModule', { 
-                        detail: { moduleId: lastSection, projectData: project }
-                      }));
-                    }}
-                    variant="outline"
-                    size="sm"
-                  >
-                    Open Project
-                  </Button>
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      onClick={() => {
+                        // Navigate to project workspace - resume where user left off
+                        setSelectedProject(project);
+                        sessionStorage.setItem('current-project', JSON.stringify(project));
+                        const lastSection = sessionStorage.getItem(`project-${project.id}-last-section`) || 'project-insights';
+                        window.dispatchEvent(new CustomEvent('navigateToModule', { 
+                          detail: { moduleId: lastSection, projectData: project }
+                        }));
+                      }}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      size="sm"
+                    >
+                      Continue Work
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        // Navigate to edit mode (project creation with existing data)
+                        setSelectedProject(project);
+                        sessionStorage.setItem('current-project', JSON.stringify(project));
+                        sessionStorage.setItem('edit-mode', 'true');
+                        window.dispatchEvent(new CustomEvent('navigateToModule', { 
+                          detail: { moduleId: 'create-project', projectData: project }
+                        }));
+                      }}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Edit Project
+                    </Button>
+                  </div>
                   <div className="mt-2 text-xs text-gray-500">
                     Created: {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'Unknown'}
                   </div>

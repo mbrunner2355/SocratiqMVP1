@@ -38,16 +38,40 @@ export function EMMEComprehensiveProjectCreator() {
   // Check if we're opening an existing project from session storage
   useEffect(() => {
     const currentProject = sessionStorage.getItem('current-project');
+    const editMode = sessionStorage.getItem('edit-mode');
+    
     if (currentProject) {
       try {
         const project = JSON.parse(currentProject);
         setProjectName(project.name);
-        setIsProjectSetup(false); // Skip setup, go directly to project workspace
         
-        // Set the active navigation based on URL or default to project-insights
-        const currentView = window.location.hash.replace('#', '') || 'project-insights';
-        if (['project-insights', 'framework', 'client-content', 'playground', 'strategy-map', 'dashboard'].includes(currentView)) {
-          setActiveProjectNav(currentView);
+        // If in edit mode, show the setup form with existing data
+        if (editMode === 'true') {
+          setIsProjectSetup(true);
+          setFormData({
+            name: project.name || 'VMS Global Campaign',
+            client: project.client || 'PharmaX',
+            team: project.team || 'm5 alpha',
+            summary: project.summary || 'Launch readiness investigation-al and strategic planning for PRODUCT A dual NK receptor antagonist in US, UK, EU with patient and provider messaging. Include pric',
+            organizationType: project.organizationType || 'pharmaceutical',
+            therapeuticArea: project.therapeuticArea || 'womens-health',
+            developmentStage: project.developmentStage || '',
+            patientPopulation: project.patientPopulation || '',
+            hcpInsights: project.hcpInsights || '',
+            clinicalEndpoints: project.clinicalEndpoints || '',
+            status: project.status || 'active'
+          });
+          // Clear edit mode flag
+          sessionStorage.removeItem('edit-mode');
+        } else {
+          // Regular project workspace - skip setup
+          setIsProjectSetup(false);
+          
+          // Set the active navigation based on URL or default to project-insights
+          const currentView = window.location.hash.replace('#', '') || 'project-insights';
+          if (['project-insights', 'framework', 'client-content', 'playground', 'strategy-map', 'dashboard'].includes(currentView)) {
+            setActiveProjectNav(currentView);
+          }
         }
       } catch (error) {
         console.error('Failed to parse current project:', error);
@@ -229,7 +253,7 @@ export function EMMEComprehensiveProjectCreator() {
             disabled={createProjectMutation.isPending}
             className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 rounded-md font-medium"
           >
-            {createProjectMutation.isPending ? 'Creating...' : "Let's get to work!"}
+            {createProjectMutation.isPending ? 'Saving...' : (sessionStorage.getItem('current-project') ? 'Save Changes' : "Let's get to work!")}
           </Button>
         </div>
       </div>
