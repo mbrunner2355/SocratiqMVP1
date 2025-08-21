@@ -17,6 +17,7 @@ import BayesianMonteCarloManager from "@/components/BayesianMonteCarloManager";
 import MultiParadigmReasoningDashboard from "@/components/MultiParadigmReasoningDashboard";
 import SophieTrustManager from "@/components/SophieTrustManager";
 import AgentsManager from "@/components/AgentsManager";
+import GraphVisualization from "@/components/GraphVisualization";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -72,6 +73,7 @@ function App() {
           <Route path="/trust" component={() => <Layout><SophieTrustManager /></Layout>} />
           <Route path="/trust/monitoring" component={() => <Layout><SophieTrustManager /></Layout>} />
           <Route path="/agents" component={() => <Layout><AgentsManager /></Layout>} />
+          <Route path="/graphs" component={() => <Layout><GraphVisualization /></Layout>} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           
