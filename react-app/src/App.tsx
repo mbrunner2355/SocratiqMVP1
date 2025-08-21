@@ -1,4 +1,4 @@
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -135,7 +135,9 @@ function Router() {
       <Route path="/sophie/chat" component={SophieChat} />
       <Route path="/corpus" component={CorpusManager} />
       <Route path="/pipeline" component={PipelineManager} />
-      <Route path="/analytics" component={Analytics} />
+      <Route path="/analytics">
+        {() => <Analytics analytics={{}} />}
+      </Route>
       <Route path="/trace" component={TraceManager} />
       <Route path="/build" component={BuildDashboard} />
       <Route path="/fedscout" component={FedScoutDashboard} />

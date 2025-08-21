@@ -25,16 +25,15 @@ import {
   CheckCircle
 } from "lucide-react";
 import { useTenantStyling } from "@/components/TenantProvider";
-import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
+// Partner branding functionality will be implemented later
 import { EMMEHomeChat } from "./EMMEHomeChat";
 
 export function EMMEHome() {
   const [, setLocation] = useLocation();
   
-  // Get EMME Connect branding configuration
-  const partnerId = detectPartnerContext();
-  const brand = getPartnerBrand(partnerId);
-  const isEMMEEngage = partnerId === 'emme-engage';
+  // EMME Engage branding configuration
+  const partnerId = 'emme-engage';
+  const isEMMEEngage = true;
 
   // Key metrics data
   const keyMetrics = [
