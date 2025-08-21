@@ -452,7 +452,7 @@ export function EMMEComprehensiveProjectCreator() {
           <div className="mb-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
-                <span className="text-gray-600 text-sm">U</span>
+                <span className="text-gray-600 text-sm">📊</span>
               </div>
               <h2 className="text-xl font-semibold text-red-500">Non-Hormonal Treatment Launch Preparation</h2>
             </div>
