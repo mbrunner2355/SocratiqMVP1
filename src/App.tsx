@@ -18,6 +18,7 @@ import MultiParadigmReasoningDashboard from "@/components/MultiParadigmReasoning
 import SophieTrustManager from "@/components/SophieTrustManager";
 import AgentsManager from "@/components/AgentsManager";
 import GraphVisualization from "@/components/GraphVisualization";
+import EMMEEngageWhiteLabel from "@/components/EMMEEngageWhiteLabel";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -81,6 +82,7 @@ function App() {
           <Route path="/ip" component={() => <Layout><IP /></Layout>} />
           <Route path="/trials" component={() => <Layout><Trials /></Layout>} />
           <Route path="/labs" component={() => <Layout><Labs /></Layout>} />
+          <Route path="/mock5-client" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
           
           {/* 404 Route */}
           <Route component={NotFound} />

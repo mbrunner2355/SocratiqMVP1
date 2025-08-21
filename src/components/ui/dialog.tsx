@@ -30,6 +30,11 @@ interface DialogTitleProps {
   children: React.ReactNode;
 }
 
+interface DialogDescriptionProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
 const DialogContext = React.createContext<{
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -115,4 +120,12 @@ function DialogTitle({ className, children }: DialogTitleProps) {
   );
 }
 
-export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle };
+function DialogDescription({ className, children }: DialogDescriptionProps) {
+  return (
+    <p className={cn("text-sm text-muted-foreground", className)}>
+      {children}
+    </p>
+  );
+}
+
+export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription };
