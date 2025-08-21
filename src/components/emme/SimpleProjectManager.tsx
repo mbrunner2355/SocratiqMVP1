@@ -20,28 +20,34 @@ export function SimpleProjectManager() {
           let projects = JSON.parse(stored);
           const originalLength = projects.length;
           
-          // Remove duplicates and old projects
+          // Remove duplicates and old projects, and update status for incomplete projects
           const uniqueProjects = projects.reduce((acc: any[], current: any) => {
             // Skip old VMS Global projects without proper client/team info
             if (current.name === "VMS Global" && (!current.client || current.client !== "PharmaX")) {
               return acc;
             }
             
+            // Update status to draft if project is incomplete
+            const updatedCurrent = {
+              ...current,
+              status: (!current.developmentStage || !current.patientPopulation) ? 'draft' : (current.status || 'active')
+            };
+            
             // Check for duplicates by name and client
             const existing = acc.find((p: any) => 
-              p.name === current.name && 
-              p.client === current.client
+              p.name === updatedCurrent.name && 
+              p.client === updatedCurrent.client
             );
             
             if (!existing) {
-              acc.push(current);
+              acc.push(updatedCurrent);
             } else {
               // Keep the most recent version
-              const currentDate = new Date(current.updatedAt || current.createdAt);
+              const currentDate = new Date(updatedCurrent.updatedAt || updatedCurrent.createdAt);
               const existingDate = new Date(existing.updatedAt || existing.createdAt);
               if (currentDate > existingDate) {
                 const index = acc.indexOf(existing);
-                acc[index] = current;
+                acc[index] = updatedCurrent;
               }
             }
             return acc;
