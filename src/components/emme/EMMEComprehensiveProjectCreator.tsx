@@ -1020,7 +1020,6 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                   <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                   <Input placeholder="Search..." className="pl-10 w-64" />
                 </div>
-                <Button className="bg-purple-600 hover:bg-purple-700">New Project</Button>
                 <Bell className="w-5 h-5 text-gray-400" />
               </div>
             </div>
@@ -1114,7 +1113,6 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
-              <Button className="bg-purple-600 hover:bg-purple-700">New Project</Button>
               <Bell className="w-5 h-5 text-gray-400" />
             </div>
           </div>
