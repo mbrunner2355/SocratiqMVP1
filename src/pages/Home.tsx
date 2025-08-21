@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,7 @@ import {
   Layers,
   Lock
 } from "lucide-react";
+import { mockAnalytics } from "@/lib/mock-data";
 import { SophieLogo } from "@/components/SophieLogo";
 
 interface AnalyticsData {
@@ -32,12 +32,9 @@ interface AnalyticsData {
 }
 
 export default function Home() {
-  const { data: analytics } = useQuery<AnalyticsData>({
-    queryKey: ["/api/analytics"],
-    refetchInterval: 5000,
-  });
-
-  const totalEntities = analytics ? Object.values(analytics.entityStats).reduce((sum, count) => sum + count, 0) : 0;
+  // Use mock data for development
+  const analytics = mockAnalytics;
+  const totalEntities = Object.values(analytics.entityStats).reduce((sum, count) => sum + count, 0);
 
   const quickActions = [
     { 
