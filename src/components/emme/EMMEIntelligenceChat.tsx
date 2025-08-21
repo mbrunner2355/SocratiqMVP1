@@ -139,7 +139,7 @@ export function EMMEIntelligenceChat() {
       let metadata: ChatMessage['metadata'] = {};
 
       // Quick Action: Portfolio Overview
-      if (message.includes('comprehensive overview of all active client portfolios')) {
+      if (message.includes('comprehensive overview of all active client portfolios with key performance metrics')) {
         category = 'launch';
         emmeResponse = `**Mock 5 Client Portfolio Intelligence Dashboard**
 
@@ -193,7 +193,7 @@ Which client requires immediate strategic attention?`;
           sources: ['Portfolio Analytics', 'Client Performance Data', 'Market Intelligence'],
           actionItems: ['Review BioPharma EU strategy', 'MedTech access programs', 'Global Therapeutics KOL plan']
         };
-      } else if (message.includes('current competitive threats across our client portfolios')) {
+      } else if (message.includes('what are the current competitive threats across our client portfolios')) {
         category = 'competitive';
         emmeResponse = `**Cross-Portfolio Competitive Intelligence Report**
 
@@ -247,7 +247,7 @@ Which competitive scenario requires deep-dive analysis?`;
           sources: ['Competitive Intelligence', 'Pipeline Database', 'Market Research'],
           actionItems: ['Finalize BioPharma response materials', 'Complete Q1 competitive briefings', 'Strategic planning session']
         };
-      } else if (message.includes('kol engagement opportunities and cross-client optimization strategies')) {
+      } else if (message.includes('show me kol engagement opportunities and cross-client optimization strategies')) {
         category = 'kol';
         emmeResponse = `**Strategic KOL Network Management Dashboard**
 
@@ -313,7 +313,7 @@ Which KOL relationship requires strategic enhancement?`;
           sources: ['KOL Database', 'Engagement Analytics', 'Publication Tracking'],
           actionItems: ['Annual KOL Summit planning', 'Publication pipeline review', 'Digital expansion strategy']
         };
-      } else if (message.includes('current payer landscape challenges and market access opportunities')) {
+      } else if (message.includes('what are the current payer landscape challenges and market access opportunities')) {
         category = 'market_access';
         emmeResponse = `**Integrated Market Access Intelligence Platform**
 
