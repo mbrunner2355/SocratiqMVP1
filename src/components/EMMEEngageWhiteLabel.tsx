@@ -169,6 +169,56 @@ function EMMEEngageWhiteLabel() {
         return <CompetitiveIntelligence />;
       case "scenario-modeling":
         return <div className="p-6"><h1 className="text-2xl font-bold">Strategic Scenario Modeling</h1><p>AI-powered strategic scenario planning and outcomes modeling</p></div>;
+        
+      // Framework sections for project-specific navigation
+      case "exploration":
+      case "research-hub":
+        return <div className="p-6">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Exploration</h1>
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <p className="text-gray-600 mb-4">Advanced research and competitive intelligence platform for in-depth market exploration and strategic analysis.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-gray-900 mb-2">Market Research</h3>
+                  <p className="text-sm text-gray-600">Deep dive into market dynamics and opportunities</p>
+                </div>
+                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-gray-900 mb-2">Competitive Analysis</h3>
+                  <p className="text-sm text-gray-600">Comprehensive competitive landscape mapping</p>
+                </div>
+                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-gray-900 mb-2">Strategic Insights</h3>
+                  <p className="text-sm text-gray-600">AI-powered strategic recommendations and forecasting</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>;
+      
+      case "human-insights":
+        return <div className="p-6">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Human Insights</h1>
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <p className="text-gray-600 mb-4">Human-centered intelligence combining behavioral analytics, stakeholder insights, and patient journey mapping.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-gray-900 mb-2">Patient Journey Mapping</h3>
+                  <p className="text-sm text-gray-600">Comprehensive patient experience and touchpoint analysis</p>
+                </div>
+                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-gray-900 mb-2">Stakeholder Analysis</h3>
+                  <p className="text-sm text-gray-600">Key stakeholder identification and engagement strategies</p>
+                </div>
+                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-gray-900 mb-2">Behavioral Analytics</h3>
+                  <p className="text-sm text-gray-600">Human behavior patterns and decision-making insights</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>;
       
       // Stakeholder Engagement
       case "stakeholder-engagement":
