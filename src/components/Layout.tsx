@@ -362,7 +362,7 @@ export default function Layout({ children }: LayoutProps) {
   ]);
   const [inputMessage, setInputMessage] = useState("");
 
-  // Update the initial message when agent changes
+  // Update the initial message when agent changes - avoid infinite loop
   useEffect(() => {
     setMessages([
       {
@@ -374,7 +374,7 @@ export default function Layout({ children }: LayoutProps) {
         timestamp: new Date(),
       }
     ]);
-  }, [isInEMMEConnect, user]);
+  }, [isInEMMEConnect]);
 
   const handleLogout = () => {
     window.location.href = "/api/logout";

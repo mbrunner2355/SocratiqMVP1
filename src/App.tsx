@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toast/toaster";
 // Import all page components
 import Layout from "@/components/Layout";
 import Dashboard from "@/pages/dashboard";
+import PlatformDashboard from "@/pages/PlatformDashboard";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -37,7 +38,7 @@ function App() {
         <Switch>
           {/* Main landing pages */}
           <Route path="/" component={() => <Layout><div /></Layout>} />
-          <Route path="/dashboard" component={() => <Layout><div /></Layout>} />
+          <Route path="/dashboard" component={() => <Layout><PlatformDashboard /></Layout>} />
           <Route path="/landing" component={Landing} />
           <Route path="/login" component={Login} />
           

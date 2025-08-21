@@ -33,7 +33,7 @@ interface PlatformAnalytics {
   lastUpdated: string;
 }
 
-export function PlatformDashboard() {
+export default function PlatformDashboard() {
   const [activeModule, setActiveModule] = useState<string>('overview');
 
   const { data: analytics, isLoading } = useQuery<PlatformAnalytics>({
