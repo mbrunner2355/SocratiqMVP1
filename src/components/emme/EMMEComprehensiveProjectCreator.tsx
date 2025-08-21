@@ -88,10 +88,10 @@ export function EMMEComprehensiveProjectCreator() {
           <div>
             <label className="block text-sm font-medium mb-2">Organization Type</label>
             <Select>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select organization type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50">
                 <SelectItem value="pharmaceutical">Pharmaceutical Company</SelectItem>
                 <SelectItem value="biotech">Biotechnology Company</SelectItem>
                 <SelectItem value="medical-device">Medical Device Company</SelectItem>
@@ -102,10 +102,10 @@ export function EMMEComprehensiveProjectCreator() {
           <div>
             <label className="block text-sm font-medium mb-2">Primary Therapeutic Area</label>
             <Select>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select primary therapeutic area" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50">
                 <SelectItem value="womens-health">Women's Health</SelectItem>
                 <SelectItem value="oncology">Oncology</SelectItem>
                 <SelectItem value="neurology">Neurology</SelectItem>
@@ -172,10 +172,10 @@ export function EMMEComprehensiveProjectCreator() {
           <div>
             <label className="block text-sm font-medium mb-2">Development Stage</label>
             <Select>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select current development stage" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50">
                 <SelectItem value="phase-1">Phase 1</SelectItem>
                 <SelectItem value="phase-2">Phase 2</SelectItem>
                 <SelectItem value="phase-3">Phase 3</SelectItem>
