@@ -15,7 +15,6 @@ import {
   BarChart3,
   Users,
   CheckCircle,
-  Clock,
   AlertTriangle,
   Target,
   TrendingUp,
@@ -23,11 +22,7 @@ import {
   Layers,
   Network,
   Link,
-  Globe,
-  Share2,
-  Archive,
-  User,
-  Search
+  Globe
 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 
@@ -69,7 +64,7 @@ interface DataQuality {
   assessedAt: string;
 }
 
-export function PipelineManager() {
+export default function PipelineManager() {
   const [selectedTab, setSelectedTab] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
@@ -85,7 +80,7 @@ export function PipelineManager() {
 
   // Register model mutation
   const registerModelMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/models', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/models', { method: 'POST', body: JSON.stringify(data) }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/pipeline/models'] });
       queryClient.invalidateQueries({ queryKey: ['/api/pipeline/analytics/models'] });
@@ -94,7 +89,7 @@ export function PipelineManager() {
 
   // Process document mutation
   const processDocumentMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/pipeline/process', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/pipeline/process', { method: 'POST', body: JSON.stringify(data) }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/pipeline/analytics/models'] });
     }
@@ -102,32 +97,32 @@ export function PipelineManager() {
 
   // Quality assessment mutation
   const assessQualityMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/quality/assess', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/quality/assess', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   // GNN mutations
   const generateEmbeddingsMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/embeddings/generate', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/embeddings/generate', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   const linkPredictionMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/link-prediction', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/link-prediction', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   const nodeClassificationMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/node-classification', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/node-classification', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   const clusteringMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/clustering', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/clustering', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   const anomalyDetectionMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/anomaly-detection', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/anomaly-detection', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   const crossDomainReasoningMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/cross-domain-reasoning', 'POST', data),
+    mutationFn: (data: any) => apiRequest('/api/pipeline/gnn/cross-domain-reasoning', { method: 'POST', body: JSON.stringify(data) }),
   });
 
   const getDomainColor = (domain: string) => {

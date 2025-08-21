@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toast/toaster";
 import Layout from "@/components/Layout";
 import Dashboard from "@/pages/dashboard";
 import PlatformDashboard from "@/pages/PlatformDashboard";
+import PipelineManager from "@/components/PipelineManager";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -53,6 +54,7 @@ function App() {
           <Route path="/fedscout" component={FedScout} />
           
           {/* Core Platform Routes */}
+          <Route path="/pipeline" component={() => <Layout><PipelineManager /></Layout>} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           
