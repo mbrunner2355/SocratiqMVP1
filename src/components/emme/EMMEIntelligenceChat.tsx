@@ -138,8 +138,8 @@ export function EMMEIntelligenceChat() {
       let category: ChatMessage['category'] = 'general';
       let metadata: ChatMessage['metadata'] = {};
 
-      // Sophisticated pharmaceutical intelligence responses
-      if (message.includes('portfolio') || message.includes('overview') || message.includes('client')) {
+      // Quick Action: Portfolio Overview
+      if (message.includes('comprehensive overview of all active client portfolios')) {
         category = 'launch';
         emmeResponse = `**Mock 5 Client Portfolio Intelligence Dashboard**
 
@@ -193,7 +193,7 @@ Which client requires immediate strategic attention?`;
           sources: ['Portfolio Analytics', 'Client Performance Data', 'Market Intelligence'],
           actionItems: ['Review BioPharma EU strategy', 'MedTech access programs', 'Global Therapeutics KOL plan']
         };
-      } else if (message.includes('competitive') || message.includes('threat') || message.includes('competitor')) {
+      } else if (message.includes('current competitive threats across our client portfolios')) {
         category = 'competitive';
         emmeResponse = `**Cross-Portfolio Competitive Intelligence Report**
 
@@ -247,7 +247,7 @@ Which competitive scenario requires deep-dive analysis?`;
           sources: ['Competitive Intelligence', 'Pipeline Database', 'Market Research'],
           actionItems: ['Finalize BioPharma response materials', 'Complete Q1 competitive briefings', 'Strategic planning session']
         };
-      } else if (message.includes('kol') || message.includes('opinion leader') || message.includes('engagement')) {
+      } else if (message.includes('kol engagement opportunities and cross-client optimization strategies')) {
         category = 'kol';
         emmeResponse = `**Strategic KOL Network Management Dashboard**
 
@@ -313,7 +313,7 @@ Which KOL relationship requires strategic enhancement?`;
           sources: ['KOL Database', 'Engagement Analytics', 'Publication Tracking'],
           actionItems: ['Annual KOL Summit planning', 'Publication pipeline review', 'Digital expansion strategy']
         };
-      } else if (message.includes('market access') || message.includes('payer') || message.includes('formulary')) {
+      } else if (message.includes('current payer landscape challenges and market access opportunities')) {
         category = 'market_access';
         emmeResponse = `**Integrated Market Access Intelligence Platform**
 
@@ -396,7 +396,7 @@ Which market access challenge requires immediate escalation?`;
           sources: ['Payer Intelligence', 'Formulary Database', 'Health Economics Research'],
           actionItems: ['UnitedHealthcare evidence review', 'Anthem education campaign', 'CMS filing preparation']
         };
-      } else if (message.includes('campaign') || message.includes('hcp') || message.includes('marketing')) {
+      } else if (message.includes('analyze current hcp campaign performance and optimization opportunities')) {
         category = 'campaign';
         emmeResponse = `**Integrated HCP Campaign Performance Dashboard**
 
@@ -494,6 +494,91 @@ Which campaign element needs immediate optimization focus?`;
           confidence: 0.88,
           sources: ['Campaign Analytics', 'HCP Engagement Data', 'Digital Performance Metrics'],
           actionItems: ['Interactive simulator launch', 'AI clinical decision support', 'Virtual conference series setup']
+        };
+      } else if (message.includes('regulatory developments might impact our client portfolios')) {
+        category = 'general';
+        emmeResponse = `**Regulatory Intelligence & Policy Impact Assessment**
+
+**🏛️ Current Regulatory Landscape Analysis**
+
+**FDA Policy Updates (Q4 2024)**
+• **Accelerated Approval Reform**: Enhanced post-market study requirements affecting 3 client assets
+• **Real-World Evidence Guidance**: New framework supporting BioPharma Solutions' outcomes data
+• **Combination Therapy Policies**: Streamlined pathway benefiting Global Therapeutics CNS portfolio
+• **Patient-Reported Outcomes**: Increased emphasis on PRO endpoints across all therapeutic areas
+
+**Immediate Impact Assessment:**
+
+**BioPharma Solutions - Oncology**
+• **Benefit**: New RWE guidance supports accelerated market access
+• **Risk**: Enhanced safety monitoring requirements (+$2.3M annual cost)
+• **Opportunity**: Combination therapy pathway for next-generation asset
+• **Timeline**: FDA meeting scheduled January 2025 for pathway confirmation
+
+**MedTech Innovations - Gene Therapy**
+• **Benefit**: Expedited review maintained for rare disease indication
+• **Challenge**: Manufacturing standards upgraded (FDA inspection Q1 2025)
+• **Opportunity**: Pediatric voucher eligibility confirmed
+• **Risk Management**: Quality systems audit preparation underway
+
+**Global Therapeutics - CNS Portfolio**
+• **Benefit**: Mental health parity enforcement supporting market access
+• **Opportunity**: Breakthrough designation pathway remains favorable
+• **Challenge**: Real-world safety data requirements extended to 24 months
+• **Strategic Response**: Phase 3 extension study initiated
+
+**Emerging Biotech - Immunology**
+• **Risk**: JAK inhibitor class warnings affecting market positioning
+• **Opportunity**: Risk mitigation strategy differentiates safety profile
+• **Benefit**: Biomarker-driven approval pathway available
+• **Preparation**: Risk management plan submitted to FDA
+
+**🌍 Global Regulatory Harmonization**
+
+**EU HTA Regulation (January 2025)**
+• **Impact**: Standardized health technology assessment across EU
+• **Preparation**: Value dossiers completed for 3 client assets
+• **Timeline**: Joint clinical assessments begin Q2 2025
+• **Strategic Advantage**: Early preparation provides competitive edge
+
+**ICH E6(R3) GCP Guidelines**
+• **Implementation**: Digital trial technologies formally recognized
+• **Benefit**: Reduced monitoring costs for all active studies
+• **Risk**: Enhanced data integrity requirements across portfolio
+• **Investment**: $1.8M technology upgrade budget approved
+
+**🔍 Emerging Policy Trends**
+
+**Priority Areas (Next 12 Months):**
+1. **AI in Drug Development**: FDA framework expected Q2 2025
+2. **Decentralized Trials**: Permanent policy guidance anticipated
+3. **Digital Biomarkers**: Qualification pathway clarification
+4. **Environmental Sustainability**: Regulatory requirements expanding
+
+**Policy Intelligence Dashboard:**
+• **Monitoring**: 47 regulatory dockets across 12 countries
+• **Early Warnings**: 23 policy changes identified 6+ months ahead
+• **Client Advantage**: Average 4-month head start on regulatory responses
+• **Success Rate**: 94% favorable outcomes on policy-related submissions
+
+**⚡ Immediate Action Items:**
+1. **This Week**: Submit MedTech manufacturing supplement (FDA deadline)
+2. **Month-End**: Complete EU HTA value dossiers for 2 remaining clients
+3. **Q1 2025**: Prepare for enhanced safety monitoring implementation
+4. **Strategic**: Develop AI-assisted regulatory intelligence platform
+
+**Regulatory Risk Assessment:**
+• **High Priority**: 2 clients with immediate filing requirements
+• **Medium Risk**: 4 assets with evolving regulatory pathways
+• **Low Impact**: 1 client benefiting from policy changes
+• **Portfolio Resilience**: 89% regulatory success rate maintained
+
+Which regulatory development requires immediate strategic response?`;
+        
+        metadata = {
+          confidence: 0.93,
+          sources: ['Regulatory Intelligence', 'FDA Communications', 'Global Policy Database'],
+          actionItems: ['MedTech manufacturing supplement', 'EU HTA dossier completion', 'AI regulatory platform development']
         };
       } else {
         // General pharmaceutical intelligence response
