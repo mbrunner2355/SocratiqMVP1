@@ -69,6 +69,7 @@ function App() {
           <Route path="/models/bayesian-mc" component={() => <Layout><BayesianMonteCarloManager /></Layout>} />
           <Route path="/models/multi-paradigm" component={() => <Layout><MultiParadigmReasoningDashboard /></Layout>} />
           <Route path="/trust" component={() => <Layout><SophieTrustManager /></Layout>} />
+          <Route path="/trust/monitoring" component={() => <Layout><SophieTrustManager /></Layout>} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           
