@@ -429,17 +429,6 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
 
             {/* Right Actions */}
             <div className="flex items-center space-x-3">
-              <Button 
-                className={isEMMEEngage ? "bg-purple-600 hover:bg-purple-700 text-white" : ""}
-                style={!isEMMEEngage ? { backgroundColor: '#9B7FB8' } : {}}
-                size="sm"
-                onClick={() => {
-                  setActiveNav("create-project");
-                  onViewChange?.("create-project");
-                }}
-              >
-                New Project
-              </Button>
               <Button variant="outline" size="sm">
                 <HelpCircle className="w-4 h-4" />
               </Button>
