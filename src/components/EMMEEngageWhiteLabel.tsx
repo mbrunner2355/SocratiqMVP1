@@ -69,7 +69,10 @@ function EMMEEngageWhiteLabel() {
   // Always show Intelligence Brief as primary dashboard
   console.log("EMMEEngageWhiteLabel activeView:", activeView);
   const [projectContext, setProjectContext] = useState<any>(null);
-  const { tenant, isLoading: tenantLoading } = useTenant();
+  
+  // Mock tenant data for development
+  const tenant = { id: "mock5", name: "EMME Mock 5" };
+  const tenantLoading = false;
 
   // Listen for navigation events from project wizard and load saved context
   useEffect(() => {
@@ -103,26 +106,24 @@ function EMMEEngageWhiteLabel() {
     
     return () => window.removeEventListener('navigateToModule', handleNavigateToModule);
   }, []);
-  const { primaryColor, secondaryColor, logo, brandName } = useTenantStyling();
+  // Mock styling and features for development
+  const primaryColor = "#1f2937";
+  const secondaryColor = "#3b82f6";
+  const logo = null;
+  const brandName = "EMME Engage";
   
-  // Feature flags
-  const hasProjectManagement = useFeature("project_management");
-  const hasPartnershipAnalytics = useFeature("partnership_analytics");
-  const hasMarketIntelligence = useFeature("market_intelligence");
-  const hasRegulatoryInsights = useFeature("regulatory_insights");
-  const hasCompetitiveAnalysis = useFeature("competitive_analysis");
+  // Feature flags - all enabled for demo
+  const hasProjectManagement = true;
+  const hasPartnershipAnalytics = true;
+  const hasMarketIntelligence = true;
+  const hasRegulatoryInsights = true;
+  const hasCompetitiveAnalysis = true;
 
-  // Fetch tenant usage data
-  const { data: usage, isLoading: usageLoading } = useQuery<TenantUsage>({
-    queryKey: ["/api/tenant/usage"],
-    enabled: !!tenant
-  });
-
-  // Fetch tenant analytics
-  const { data: analytics, isLoading: analyticsLoading } = useQuery<TenantAnalytics>({
-    queryKey: ["/api/tenant/analytics"],
-    enabled: !!tenant
-  });
+  // Mock usage and analytics data for development
+  const usage = null;
+  const usageLoading = false;
+  const analytics = null;
+  const analyticsLoading = false;
 
   if (tenantLoading) {
     return (
