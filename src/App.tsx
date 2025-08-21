@@ -11,6 +11,7 @@ import PlatformDashboard from "@/pages/PlatformDashboard";
 import PipelineManager from "@/components/PipelineManager";
 import Analytics from "@/components/Analytics";
 import TransformersManager from "@/components/TransformersManager";
+import LLMManager from "@/components/LLMManager";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -59,6 +60,7 @@ function App() {
           <Route path="/pipeline" component={() => <Layout><PipelineManager /></Layout>} />
           <Route path="/pipeline/analytics" component={() => <Layout><Analytics /></Layout>} />
           <Route path="/models/transformers" component={() => <Layout><TransformersManager /></Layout>} />
+          <Route path="/models/llm" component={() => <Layout><LLMManager /></Layout>} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           
