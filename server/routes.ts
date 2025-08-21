@@ -4,7 +4,7 @@ import multer from 'multer';
 import path from 'path';
 import { storage } from "./storage";
 import { fileProcessor } from "./services/fileProcessor";
-import { insertDocumentSchema, projects, insertProjectSchema } from "@shared/schema";
+import { insertDocumentSchema, projects, insertProjectSchema } from "../shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 // Import will be handled dynamically by authManager
@@ -54,6 +54,11 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Test route to verify API routing works
+  app.get('/api/test', (req, res) => {
+    res.json({ message: 'API routing works!', timestamp: new Date().toISOString() });
+  });
+
   // Apply tenant middleware globally to identify tenant from domain/headers
   app.use(tenantMiddleware);
   
