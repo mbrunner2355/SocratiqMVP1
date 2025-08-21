@@ -133,8 +133,9 @@ export function EMMEIntelligenceChat() {
     onSuccess: (response) => {
       setChatMessages(prev => prev.filter(msg => !msg.isTyping));
       
-      const message = currentMessage.toLowerCase();
+      const message = (currentMessage || chatMutation.variables?.toString() || '').toLowerCase();
       console.log('EMME Debug - Full message:', message);
+      console.log('EMME Debug - Current message state:', currentMessage);
       let emmeResponse = "";
       let category: ChatMessage['category'] = 'general';
       let metadata: ChatMessage['metadata'] = {};
@@ -687,7 +688,27 @@ What specific pharmaceutical intelligence challenge can I help you address today
 
   const handleQuickAction = (action: QuickAction) => {
     setCurrentMessage(action.prompt);
-    setTimeout(() => handleSendMessage(), 100);
+    
+    // Immediately trigger the message send with the action prompt
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      content: action.prompt,
+      sender: 'user',
+      timestamp: new Date(),
+    };
+    setChatMessages(prev => [...prev, userMessage]);
+
+    const typingMessage: ChatMessage = {
+      id: `typing-${Date.now()}`,
+      content: "EMME is analyzing pharmaceutical intelligence...",
+      sender: 'emme',
+      timestamp: new Date(),
+      isTyping: true
+    };
+    setChatMessages(prev => [...prev, typingMessage]);
+
+    // Set the current message for processing and trigger mutation
+    chatMutation.mutate(action.prompt);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
