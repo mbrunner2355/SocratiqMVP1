@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
+import { StreamingText } from './StreamingText';
 
 interface ChatMessage {
   id: string;
@@ -34,6 +35,7 @@ interface ChatMessage {
   sender: 'user' | 'emme';
   timestamp: Date;
   isTyping?: boolean;
+  isStreaming?: boolean;
   category?: 'launch' | 'market_access' | 'competitive' | 'kol' | 'campaign' | 'general';
   metadata?: {
     confidence?: number;
@@ -645,7 +647,8 @@ What specific pharmaceutical intelligence challenge can I help you address today
         sender: 'emme',
         timestamp: new Date(),
         category,
-        metadata
+        metadata,
+        isStreaming: true
       };
       setChatMessages(prev => [...prev, emmeMessage]);
     },
@@ -865,12 +868,12 @@ What specific pharmaceutical intelligence challenge can I help you address today
                         </div>
                       )}
                       <div
-                        className={`max-w-[95%] p-4 rounded-lg ${
+                        className={`max-w-full p-4 rounded-lg ${
                           message.sender === 'user'
-                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
+                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white max-w-[85%]'
                             : message.isTyping
-                              ? 'bg-gray-100 text-gray-600'
-                              : 'bg-white border shadow-sm'
+                              ? 'bg-gray-100 text-gray-600 max-w-[90%]'
+                              : 'bg-white border shadow-sm max-w-full'
                         }`}
                       >
                         {message.isTyping ? (
@@ -882,9 +885,25 @@ What specific pharmaceutical intelligence challenge can I help you address today
                           </div>
                         ) : (
                           <>
-                            <div className="prose prose-sm max-w-none">
-                              <p className="whitespace-pre-line text-sm leading-relaxed">{message.content}</p>
-                            </div>
+                            {message.isStreaming ? (
+                              <StreamingText 
+                                content={message.content}
+                                speed={8}
+                                onComplete={() => {
+                                  setChatMessages(prev => 
+                                    prev.map(msg => 
+                                      msg.id === message.id 
+                                        ? { ...msg, isStreaming: false }
+                                        : msg
+                                    )
+                                  );
+                                }}
+                              />
+                            ) : (
+                              <div className="prose prose-sm max-w-none">
+                                <p className="whitespace-pre-line text-sm leading-relaxed">{message.content}</p>
+                              </div>
+                            )}
                             {message.metadata && (
                               <div className="mt-2 pt-2 border-t border-gray-200">
                                 <div className="flex items-center justify-between text-xs text-gray-500">
