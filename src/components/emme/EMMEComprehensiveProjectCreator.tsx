@@ -5,6 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Bell } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 // Top navigation tabs - starting with Organization Overview
 const TOP_TABS = [
@@ -32,6 +35,47 @@ export function EMMEComprehensiveProjectCreator() {
   const [projectName, setProjectName] = useState('VMS Global');
   const [isProjectSetup, setIsProjectSetup] = useState(true);
   const [activeProjectNav, setActiveProjectNav] = useState('background');
+  
+  // Form data state
+  const [formData, setFormData] = useState({
+    name: 'VMS Global',
+    organizationType: '',
+    therapeuticArea: '',
+    developmentStage: '',
+    patientPopulation: '',
+    hcpInsights: '',
+    clinicalEndpoints: '',
+    status: 'active'
+  });
+
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const createProjectMutation = useMutation({
+    mutationFn: async (projectData: typeof formData) => {
+      return apiRequest('/api/projects', {
+        method: 'POST',
+        body: projectData
+      });
+    },
+    onSuccess: (newProject) => {
+      toast({
+        title: "Project Created",
+        description: `${newProject.name} has been created successfully!`,
+      });
+      // Invalidate projects cache to refresh the list
+      queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
+      setIsProjectSetup(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create project. Please try again.",
+        variant: "destructive"
+      });
+      console.error('Failed to create project:', error);
+    }
+  });
 
   const handleNextStep = () => {
     const tabOrder = ['organization-overview', 'initiative-overview', 'clinical-trials', 'xxxx', 'xxx'];
@@ -50,7 +94,7 @@ export function EMMEComprehensiveProjectCreator() {
   };
 
   const handleCompleteSetup = () => {
-    setIsProjectSetup(false);
+    createProjectMutation.mutate(formData);
     setActiveTab('initiative-overview');
   };
 
@@ -64,8 +108,11 @@ export function EMMEComprehensiveProjectCreator() {
           <div>
             <label className="block text-sm font-medium mb-2">Project Name</label>
             <Input 
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
+              value={formData.name}
+              onChange={(e) => {
+                setFormData(prev => ({ ...prev, name: e.target.value }));
+                setProjectName(e.target.value);
+              }}
               placeholder="Enter project name (e.g., VMS Global)"
               className="text-lg"
             />
@@ -73,7 +120,7 @@ export function EMMEComprehensiveProjectCreator() {
           
           <div className="relative">
             <label className="block text-sm font-medium mb-2">Organization Type</label>
-            <Select>
+            <Select onValueChange={(value) => setFormData(prev => ({ ...prev, organizationType: value }))}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select organization type" />
               </SelectTrigger>
@@ -87,7 +134,7 @@ export function EMMEComprehensiveProjectCreator() {
 
           <div className="relative">
             <label className="block text-sm font-medium mb-2">Primary Therapeutic Area</label>
-            <Select>
+            <Select onValueChange={(value) => setFormData(prev => ({ ...prev, therapeuticArea: value }))}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select primary therapeutic area" />
               </SelectTrigger>
@@ -103,7 +150,12 @@ export function EMMEComprehensiveProjectCreator() {
 
           <div className="flex justify-between pt-4">
             <Button variant="outline" disabled>Previous</Button>
-            <Button onClick={handleCompleteSetup}>Complete Setup</Button>
+            <Button 
+              onClick={handleCompleteSetup} 
+              disabled={createProjectMutation.isPending}
+            >
+              {createProjectMutation.isPending ? 'Creating Project...' : 'Complete Setup'}
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -212,7 +264,18 @@ export function EMMEComprehensiveProjectCreator() {
       case 'organization-overview':
         return renderOrganizationOverview();
       case 'initiative-overview':
-        return renderInitiativeOverview();
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Initiative Overview - {projectName}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Project setup completed successfully! Use the navigation sidebar to explore different sections of your project.</p>
+              </CardContent>
+            </Card>
+          </div>
+        );
       case 'clinical-trials':
         return renderClinicalTrials();
       case 'xxxx':

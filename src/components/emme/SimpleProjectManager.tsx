@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Plus, FolderOpen, Search, Building, Users, Calendar, Target, Activity, CheckCircle, FileText } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { type Project } from '@shared/schema';
 
 // Form validation schema
 const projectFormSchema = z.object({
@@ -127,8 +129,19 @@ const THERAPEUTIC_AREAS = [
 export function SimpleProjectManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProject, setSelectedProject] = useState<any>(null);
-  const [projects, setProjects] = useState(MOCK_PROJECTS);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
+  // Fetch real project data from database
+  const { data: projects = [], isLoading, error } = useQuery({
+    queryKey: ['/api/projects'],
+    queryFn: async (): Promise<Project[]> => {
+      const response = await fetch('/api/projects');
+      if (!response.ok) {
+        throw new Error('Failed to fetch projects');
+      }
+      return response.json();
+    }
+  });
 
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(projectFormSchema),
@@ -139,9 +152,8 @@ export function SimpleProjectManager() {
   });
 
   const filteredProjects = projects.filter(project =>
-    project.projectTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.therapeuticArea.toLowerCase().includes(searchTerm.toLowerCase())
+    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (project.therapeuticArea && project.therapeuticArea.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleCreateProject = (data: ProjectFormData) => {
@@ -615,37 +627,62 @@ export function SimpleProjectManager() {
         />
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <Card>
+          <CardContent className="p-6">
+            <div className="animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-red-600">Error loading projects: {error.message}</p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Projects List */}
       <div className="grid gap-4">
-        {filteredProjects.map((project) => (
+        {!isLoading && !error && filteredProjects.map((project) => (
           <Card key={project.id} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{project.projectTitle}</h3>
-                    <Badge className={getPriorityColor(project.priority)}>{project.priority}</Badge>
-                    <Badge className={`${getStatusColor(project.status)} text-white`}>{project.status}</Badge>
+                    <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
+                    <Badge className={`${getStatusColor(project.status || 'draft')} text-white`}>
+                      {(project.status || 'draft').replace('_', ' ').toUpperCase()}
+                    </Badge>
                   </div>
                   
-                  <p className="text-gray-600 mb-3">{project.description}</p>
+                  <p className="text-gray-600 mb-3">
+                    {project.patientPopulation || 'Patient population and clinical insights not specified'}
+                  </p>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <Building className="w-4 h-4 text-gray-400" />
-                      <span>{project.client}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-gray-400" />
-                      <span>{project.team}</span>
+                      <span>{project.organizationType || 'Not specified'}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Target className="w-4 h-4 text-gray-400" />
-                      <span>{project.therapeuticArea}</span>
+                      <span>{project.therapeuticArea || 'Unspecified area'}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-gray-400" />
+                      <span>{project.developmentStage || 'Not specified'}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-400" />
-                      <span>{project.endDate}</span>
+                      <span>{project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'No date'}</span>
                     </div>
                   </div>
                 </div>
@@ -658,20 +695,31 @@ export function SimpleProjectManager() {
                   >
                     View Details
                   </Button>
-                  <div className="mt-2">
-                    <span className="text-sm text-gray-600">Progress: {project.progress}%</span>
-                    <div className="w-24 bg-gray-200 rounded-full h-1.5 mt-1">
-                      <div 
-                        className="bg-purple-600 h-1.5 rounded-full transition-all duration-300"
-                        style={{ width: `${project.progress}%` }}
-                      ></div>
-                    </div>
+                  <div className="mt-2 text-xs text-gray-500">
+                    Created: {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'Unknown'}
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
+        
+        {/* Empty State */}
+        {!isLoading && !error && filteredProjects.length === 0 && (
+          <Card>
+            <CardContent className="p-12 text-center">
+              <FolderOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No projects found</h3>
+              <p className="text-gray-600 mb-4">
+                {searchTerm ? 'No projects match your search criteria.' : 'Create your first project to get started.'}
+              </p>
+              <Button onClick={() => setIsCreateDialogOpen(true)}>
+                <Plus className="w-4 h-4 mr-2" />
+                Create New Project
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

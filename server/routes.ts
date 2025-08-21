@@ -4,7 +4,9 @@ import multer from 'multer';
 import path from 'path';
 import { storage } from "./storage";
 import { fileProcessor } from "./services/fileProcessor";
-import { insertDocumentSchema } from "@shared/schema";
+import { insertDocumentSchema, projects, insertProjectSchema } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 // Import will be handled dynamically by authManager
 import meshRoutes from "./routes-mesh";
 import sophieRoutes from "./routes-sophie";
@@ -287,11 +289,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get('/api/emme/active-projects', async (req, res) => {
-    res.json([
-      { name: 'Elinzanetant VMS Launch', status: 'active', progress: 78, therapeuticArea: "Women's Health" },
-      { name: 'Oncology Pipeline Assessment', status: 'planning', progress: 23, therapeuticArea: 'Oncology' },
-      { name: 'Cardiology Market Access', status: 'active', progress: 67, therapeuticArea: 'Cardiology' }
-    ]);
+    try {
+      const activeProjects = await db.select().from(projects).where(eq(projects.status, 'active'));
+      res.json(activeProjects);
+    } catch (error) {
+      console.error('Error fetching active projects:', error);
+      res.status(500).json({ error: 'Failed to fetch active projects' });
+    }
+  });
+
+  // Get all projects
+  app.get('/api/projects', async (req, res) => {
+    try {
+      const allProjects = await db.select().from(projects);
+      res.json(allProjects);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      res.status(500).json({ error: 'Failed to fetch projects' });
+    }
+  });
+
+  // Create new project
+  app.post('/api/projects', async (req, res) => {
+    try {
+      const projectData = insertProjectSchema.parse(req.body);
+      const [newProject] = await db.insert(projects).values(projectData).returning();
+      res.json(newProject);
+    } catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create project' });
+    }
   });
 
   // Delete document

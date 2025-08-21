@@ -127,6 +127,31 @@ export const ROLE_PERMISSIONS = {
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 
+// EMME Projects table for pharmaceutical project management
+export const projects = pgTable("projects", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  organizationType: text("organization_type"),
+  therapeuticArea: text("therapeutic_area"),
+  developmentStage: text("development_stage"),
+  patientPopulation: text("patient_population"),
+  hcpInsights: text("hcp_insights"),
+  clinicalEndpoints: text("clinical_endpoints"),
+  status: text("status").default("active"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  userId: varchar("user_id").references(() => users.id),
+});
+
+export const insertProjectSchema = createInsertSchema(projects).omit({ 
+  id: true, 
+  createdAt: true, 
+  updatedAt: true 
+});
+
+export type InsertProject = typeof projects.$inferInsert;
+export type Project = typeof projects.$inferSelect;
+
 // Sophie Impact Lens™ Schema - Pattern-based decision impact assessment
 export const sophiePatterns = pgTable("sophie_patterns", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
