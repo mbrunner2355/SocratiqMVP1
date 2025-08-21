@@ -21,13 +21,8 @@ if (process.env.VITE_SECRET_ACCESS_KEY) {
   process.env.VITE_SECRET_ACCESS_KEY = process.env.VITE_SECRET_ACCESS_KEY;
 }
 
-// Set API base URL for AWS Lambda compatibility
-if (process.env.VITE_API_BASE_URL) {
-  process.env.VITE_API_BASE_URL = process.env.VITE_API_BASE_URL;
-} else {
-  // Default to AWS Lambda URL for production deployment compatibility
-  process.env.VITE_API_BASE_URL = "https://1d6xdpfju9.execute-api.us-east-1.amazonaws.com/Prod";
-}
+// Override to serve React app instead of Express API
+process.env.VITE_API_BASE_URL = "http://localhost:5000";
 
 // Set server environment variables for Cognito authentication
 process.env.VITE_COGNITO_CLIENT_SECRET = process.env.VITE_COGNITO_CLIENT_SECRET || process.env.COGNITO_CLIENT_SECRET;
