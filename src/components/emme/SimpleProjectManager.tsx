@@ -99,7 +99,7 @@ export function SimpleProjectManager() {
       case 'active': return 'bg-green-500';
       case 'completed': return 'bg-blue-500';
       case 'draft': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-yellow-500'; // Default to draft for new projects
     }
   };
 

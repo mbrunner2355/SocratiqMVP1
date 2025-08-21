@@ -92,7 +92,7 @@ export function EMMEComprehensiveProjectCreator() {
     patientPopulation: '',
     hcpInsights: '',
     clinicalEndpoints: '',
-    status: 'active'
+    status: 'draft'
   });
 
   const { toast } = useToast();
@@ -205,6 +205,34 @@ export function EMMEComprehensiveProjectCreator() {
     }
   };
 
+  // Check if project has all required data for activation
+  const isProjectComplete = () => {
+    return formData.name && 
+           formData.client && 
+           formData.team && 
+           formData.summary && 
+           formData.developmentStage &&
+           formData.patientPopulation;
+  };
+
+  // Handle project activation
+  const handleActivateProject = () => {
+    const updatedFormData = { ...formData, status: 'active' };
+    setFormData(updatedFormData);
+    
+    // Update in localStorage
+    const existingProjects = JSON.parse(localStorage.getItem('emme-projects') || '[]');
+    const updatedProjects = existingProjects.map((p: any) => 
+      p.id === formData.id ? { ...p, status: 'active' } : p
+    );
+    localStorage.setItem('emme-projects', JSON.stringify(updatedProjects));
+    
+    toast({
+      title: "Project Activated",
+      description: `${formData.name} is now active and ready for launch!`,
+    });
+  };
+
   const renderOrganizationOverview = () => (
     <div className="max-w-2xl mx-auto space-y-6 p-6">
       <div className="space-y-6">
@@ -274,7 +302,7 @@ export function EMMEComprehensiveProjectCreator() {
             disabled={createProjectMutation.isPending}
             className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 rounded-md font-medium"
           >
-            {createProjectMutation.isPending ? 'Saving...' : (sessionStorage.getItem('current-project') ? 'Save Changes' : "Let's get to work!")}
+            {createProjectMutation.isPending ? 'Saving...' : (sessionStorage.getItem('current-project') ? 'Save Changes' : "Save as Draft")}
           </Button>
         </div>
       </div>
@@ -990,8 +1018,24 @@ export function EMMEComprehensiveProjectCreator() {
       <div className="flex-1 flex flex-col">
         <div className="bg-white border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 capitalize">{activeProjectNav}</h1>
             <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-bold text-gray-900 capitalize">{activeProjectNav}</h1>
+              {formData.status === 'draft' && (
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                  DRAFT
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              {formData.status === 'draft' && (
+                <Button 
+                  onClick={handleActivateProject}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                  disabled={!isProjectComplete()}
+                >
+                  Activate Project
+                </Button>
+              )}
               <div className="relative">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search..." className="pl-10 w-64" />
