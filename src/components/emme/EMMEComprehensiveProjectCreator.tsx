@@ -60,8 +60,15 @@ export function EMMEComprehensiveProjectCreator() {
             patientPopulation: project.patientPopulation || '',
             hcpInsights: project.hcpInsights || '',
             clinicalEndpoints: project.clinicalEndpoints || '',
-            status: project.status || 'active'
+            status: project.status || (!project.developmentStage || !project.patientPopulation ? 'draft' : 'active')
           });
+          // Update project in localStorage with correct status
+          const existingProjects = JSON.parse(localStorage.getItem('emme-projects') || '[]');
+          const updatedProjects = existingProjects.map((p: any) => 
+            p.id === project.id ? { ...p, status: (!p.developmentStage || !p.patientPopulation ? 'draft' : p.status || 'active') } : p
+          );
+          localStorage.setItem('emme-projects', JSON.stringify(updatedProjects));
+          
           // Clear edit mode flag
           sessionStorage.removeItem('edit-mode');
         } else {
