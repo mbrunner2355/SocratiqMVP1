@@ -38,9 +38,12 @@ export function EMMEComprehensiveProjectCreator() {
   
   // Form data state
   const [formData, setFormData] = useState({
-    name: 'VMS Global',
-    organizationType: '',
-    therapeuticArea: '',
+    name: 'VMS Global Campaign',
+    client: 'PharmaX',
+    team: 'm5 alpha',
+    summary: 'Launch readiness investigation-al and strategic planning for PRODUCT A dual NK receptor antagonist in US, UK, EU with patient and provider messaging. Include pric',
+    organizationType: 'pharmaceutical',
+    therapeuticArea: 'womens-health',
     developmentStage: '',
     patientPopulation: '',
     hcpInsights: '',
@@ -139,66 +142,78 @@ export function EMMEComprehensiveProjectCreator() {
   };
 
   const renderOrganizationOverview = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Project Setup - Organization Overview</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Project Name</label>
-            <Input 
-              value={formData.name}
-              onChange={(e) => {
-                setFormData(prev => ({ ...prev, name: e.target.value }));
-                setProjectName(e.target.value);
-              }}
-              placeholder="Enter project name (e.g., VMS Global)"
-              className="text-lg"
-            />
-          </div>
-          
+    <div className="max-w-2xl mx-auto space-y-6 p-6">
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Project Title</label>
+          <Input 
+            value={formData.name}
+            onChange={(e) => {
+              setFormData(prev => ({ ...prev, name: e.target.value }));
+              setProjectName(e.target.value);
+            }}
+            className="text-base bg-gray-50 border-gray-200"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Client</label>
           <div className="relative">
-            <label className="block text-sm font-medium mb-2">Organization Type</label>
-            <Select onValueChange={(value) => setFormData(prev => ({ ...prev, organizationType: value }))}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select organization type" />
-              </SelectTrigger>
-              <SelectContent className="z-[100] bg-white border shadow-lg max-h-60">
-                <SelectItem value="pharmaceutical">Pharmaceutical Company</SelectItem>
-                <SelectItem value="biotech">Biotechnology Company</SelectItem>
-                <SelectItem value="medical-device">Medical Device Company</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="relative">
-            <label className="block text-sm font-medium mb-2">Primary Therapeutic Area</label>
-            <Select onValueChange={(value) => setFormData(prev => ({ ...prev, therapeuticArea: value }))}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select primary therapeutic area" />
-              </SelectTrigger>
-              <SelectContent className="z-[100] bg-white border shadow-lg max-h-60">
-                <SelectItem value="womens-health">Women's Health</SelectItem>
-                <SelectItem value="oncology">Oncology</SelectItem>
-                <SelectItem value="neurology">Neurology</SelectItem>
-                <SelectItem value="cardiology">Cardiology</SelectItem>
-                <SelectItem value="endocrinology">Endocrinology</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex justify-between pt-4">
-            <Button variant="outline" disabled>Previous</Button>
-            <Button 
-              onClick={handleCompleteSetup} 
-              disabled={createProjectMutation.isPending}
+            <Select 
+              value={formData.client}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, client: value }))}
             >
-              {createProjectMutation.isPending ? 'Creating Project...' : 'Complete Setup'}
-            </Button>
+              <SelectTrigger className="w-full bg-gray-50 border-gray-200">
+                <SelectValue placeholder="Select client" />
+              </SelectTrigger>
+              <SelectContent className="z-[100] bg-white border shadow-lg">
+                <SelectItem value="PharmaX">PharmaX</SelectItem>
+                <SelectItem value="BioTech Alpha">BioTech Alpha</SelectItem>
+                <SelectItem value="Global Pharma">Global Pharma</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Team</label>
+          <div className="relative">
+            <Select 
+              value={formData.team}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, team: value }))}
+            >
+              <SelectTrigger className="w-full bg-gray-50 border-gray-200">
+                <SelectValue placeholder="Select team" />
+              </SelectTrigger>
+              <SelectContent className="z-[100] bg-white border shadow-lg">
+                <SelectItem value="m5 alpha">m5 alpha</SelectItem>
+                <SelectItem value="beta team">beta team</SelectItem>
+                <SelectItem value="gamma squad">gamma squad</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Summary</label>
+          <Textarea 
+            value={formData.summary}
+            onChange={(e) => setFormData(prev => ({ ...prev, summary: e.target.value }))}
+            className="bg-gray-50 border-gray-200 min-h-[100px] resize-none"
+            rows={4}
+          />
+        </div>
+
+        <div className="flex justify-center pt-8">
+          <Button 
+            onClick={handleCompleteSetup}
+            disabled={createProjectMutation.isPending}
+            className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 rounded-md font-medium"
+          >
+            {createProjectMutation.isPending ? 'Creating...' : "Let's get to work!"}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 
