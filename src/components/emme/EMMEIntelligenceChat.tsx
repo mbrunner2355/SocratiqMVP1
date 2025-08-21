@@ -640,8 +640,8 @@ What specific pharmaceutical intelligence challenge can I help you address today
   }, [chatMessages]);
 
   return (
-    <div className={`${isExpanded ? 'fixed inset-4 z-50' : 'w-full'}`}>
-      <Card className="bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 border-purple-200 shadow-xl">
+    <div className={`${isExpanded ? 'w-full max-w-6xl mx-auto' : 'w-full'}`}>
+      <Card className={`bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 border-purple-200 ${isExpanded ? 'shadow-2xl' : 'shadow-xl'}`}>
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -737,7 +737,7 @@ What specific pharmaceutical intelligence challenge can I help you address today
 
               {/* Chat Messages */}
               <ScrollArea 
-                className={`${isExpanded ? 'h-96' : 'h-64'} w-full pr-2`}
+                className={`${isExpanded ? 'h-80' : 'h-64'} w-full pr-2`}
                 ref={scrollAreaRef}
               >
                 <div className="space-y-4">
