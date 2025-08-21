@@ -156,6 +156,8 @@ function EMMEEngageWhiteLabel() {
         return <EMMEComprehensiveProjectCreator />;
       case "projects":
         return <SimpleProjectManager />;
+      case "view-projects":
+        return <SimpleProjectManager />;
       // Strategic Intelligence
       case "strategic-intelligence":
         return <StrategicIntelligenceModule />;

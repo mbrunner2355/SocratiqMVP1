@@ -195,7 +195,12 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
     {
       id: "projects",
       label: "Projects",
-      icon: <FolderOpen className="w-5 h-5" />
+      icon: <FolderOpen className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenuItems: [
+        { id: "view-projects", label: "View Projects", icon: <FolderOpen className="w-4 h-4" /> },
+        { id: "create-project", label: "Create New Project", icon: <Plus className="w-4 h-4" /> }
+      ]
     },
     {
       id: "clients",
@@ -206,11 +211,6 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       id: "chat",
       label: "Chat with EMME",
       icon: <MessageCircle className="w-5 h-5" />
-    },
-    {
-      id: "create-project",
-      label: "Create new project",
-      icon: <Plus className="w-5 h-5" />
     },
     {
       id: "smart-wizard",
