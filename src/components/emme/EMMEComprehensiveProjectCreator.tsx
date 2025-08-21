@@ -113,7 +113,7 @@ export function EMMEComprehensiveProjectCreator() {
   const renderBackgroundContent = () => (
     <div className="space-y-6">
       <div className="flex justify-end mb-4">
-        <Button className="bg-green-600 hover:bg-green-700 text-white">Complete</Button>
+        <Button className="bg-purple-600 hover:bg-purple-700 text-white">Complete</Button>
       </div>
       
       <Card>
@@ -317,7 +317,7 @@ export function EMMEComprehensiveProjectCreator() {
                 onClick={() => setActiveProjectNav(item.id)}
                 className={`w-full text-left px-3 py-2 text-sm rounded transition-colors ${
                   item.id === activeProjectNav
-                    ? 'bg-orange-50 text-orange-700 font-medium'
+                    ? 'bg-purple-50 text-purple-700 font-medium'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
@@ -338,7 +338,7 @@ export function EMMEComprehensiveProjectCreator() {
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
-              <Button className="bg-red-600 hover:bg-red-700">New Project</Button>
+              <Button className="bg-purple-600 hover:bg-purple-700">New Project</Button>
               <Bell className="w-5 h-5 text-gray-400" />
             </div>
           </div>
@@ -352,7 +352,7 @@ export function EMMEComprehensiveProjectCreator() {
                 key={tab.id}
                 className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                   tab.id === activeTab
-                    ? 'border-orange-500 text-orange-600'
+                    ? 'border-purple-500 text-purple-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
                 onClick={() => setActiveTab(tab.id)}
