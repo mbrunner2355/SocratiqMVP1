@@ -339,7 +339,7 @@ export function SimpleProjectManager() {
                       className="bg-purple-600 hover:bg-purple-700 text-white"
                       size="sm"
                     >
-                      Continue Work
+                      View Project
                     </Button>
                     <Button
                       onClick={() => {
