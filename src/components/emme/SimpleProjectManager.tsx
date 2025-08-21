@@ -222,22 +222,41 @@ export function SimpleProjectManager() {
                     </Badge>
                   </div>
                   
-                  <p className="text-gray-600 mb-3">
-                    {project.patientPopulation || 'Patient population and clinical insights not specified'}
-                  </p>
+                  {/* Show summary if available from form */}
+                  {project.summary && (
+                    <p className="text-gray-600 mb-3 line-clamp-2">{project.summary}</p>
+                  )}
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Building className="w-4 h-4 text-gray-400" />
-                      <span>{project.organizationType || 'Not specified'}</span>
-                    </div>
+                    {/* Show client from form if available */}
+                    {project.client ? (
+                      <div className="flex items-center gap-2">
+                        <Building className="w-4 h-4 text-gray-400" />
+                        <span>Client: {project.client}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Building className="w-4 h-4 text-gray-400" />
+                        <span>{project.organizationType || 'Not specified'}</span>
+                      </div>
+                    )}
+                    
+                    {/* Show team from form if available */}
+                    {project.team ? (
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-gray-400" />
+                        <span>Team: {project.team}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Target className="w-4 h-4 text-gray-400" />
+                        <span>{project.therapeuticArea || 'Unspecified area'}</span>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center gap-2">
                       <Target className="w-4 h-4 text-gray-400" />
                       <span>{project.therapeuticArea || 'Unspecified area'}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-gray-400" />
-                      <span>{project.developmentStage || 'Not specified'}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-400" />
