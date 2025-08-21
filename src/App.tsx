@@ -14,6 +14,7 @@ import TransformersManager from "@/components/TransformersManager";
 import LLMManager from "@/components/LLMManager";
 import AdvancedNLPDashboard from "@/components/AdvancedNLPDashboard";
 import BayesianMonteCarloManager from "@/components/BayesianMonteCarloManager";
+import MultiParadigmReasoningDashboard from "@/components/MultiParadigmReasoningDashboard";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -65,6 +66,7 @@ function App() {
           <Route path="/models/llm" component={() => <Layout><LLMManager /></Layout>} />
           <Route path="/models/advanced-nlp" component={() => <Layout><AdvancedNLPDashboard /></Layout>} />
           <Route path="/models/bayesian-mc" component={() => <Layout><BayesianMonteCarloManager /></Layout>} />
+          <Route path="/models/multi-paradigm" component={() => <Layout><MultiParadigmReasoningDashboard /></Layout>} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           
