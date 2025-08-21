@@ -550,7 +550,6 @@ export function EMMEComprehensiveProjectCreator() {
   };
 
   const renderFrameworkContent = () => {
-    const [frameworkTab, setFrameworkTab] = useState('background');
     
     const renderBackgroundContent = () => (
       <div className="space-y-6">
