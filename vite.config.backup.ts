@@ -12,16 +12,11 @@ export default defineConfig({
       '@/lib': path.resolve(__dirname, './src/lib'),
       '@/stores': path.resolve(__dirname, './src/stores'),
       '@/types': path.resolve(__dirname, './src/types'),
-      '@/utils': path.resolve(__dirname, './src/utils'),
-      '@shared': path.resolve(__dirname, './src/shared')
+      '@/utils': path.resolve(__dirname, './src/utils')
     }
   },
   server: {
-    host: '0.0.0.0',  // Allow external connections
-    port: 5000,       // Keep current port for compatibility
-    allowedHosts: [
-      '.replit.dev',  // Allow all replit.dev subdomains
-      'localhost'
-    ]
+    port: 3000,
+    host: '0.0.0.0'
   }
 })
