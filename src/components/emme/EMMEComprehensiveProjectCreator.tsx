@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Bell } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
+
 import { useToast } from '@/hooks/use-toast';
 
 // Top navigation tabs - starting with Organization Overview
@@ -146,13 +146,24 @@ export function EMMEComprehensiveProjectCreator() {
       }
     },
     onSuccess: (newProject) => {
+      const currentProject = sessionStorage.getItem('current-project');
+      const isEditing = currentProject ? true : false;
+      
       toast({
-        title: "Project Created",
-        description: `${newProject.name} has been created successfully!`,
+        title: isEditing ? "Project Updated" : "Project Created",
+        description: `${newProject.name} has been ${isEditing ? 'updated' : 'created'} successfully!`,
       });
+      
       // Invalidate projects cache to refresh the list
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
-      setIsProjectSetup(false);
+      
+      // If editing, go to project workspace; if new, continue creation flow
+      if (isEditing) {
+        setIsProjectSetup(true);
+        setActiveProjectNav('project-insights');
+      } else {
+        setIsProjectSetup(false);
+      }
     },
     onError: (error) => {
       toast({
@@ -182,7 +193,16 @@ export function EMMEComprehensiveProjectCreator() {
 
   const handleCompleteSetup = () => {
     createProjectMutation.mutate(formData);
-    setActiveTab('initiative-overview');
+    
+    // If we're editing an existing project, go to project workspace
+    const currentProject = sessionStorage.getItem('current-project');
+    if (currentProject) {
+      setIsProjectSetup(true);
+      setActiveProjectNav('project-insights');
+    } else {
+      // New project creation flow
+      setActiveTab('initiative-overview');
+    }
   };
 
   const renderOrganizationOverview = () => (
