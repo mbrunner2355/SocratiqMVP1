@@ -55,7 +55,7 @@ interface PolicyViolation {
   reportedAt: string;
 }
 
-export function SophieTrustManager() {
+export default function SophieTrustManager() {
   const [selectedTab, setSelectedTab] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
