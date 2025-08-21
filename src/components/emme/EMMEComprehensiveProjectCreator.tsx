@@ -34,6 +34,7 @@ export function EMMEComprehensiveProjectCreator() {
   const [isProjectSetup, setIsProjectSetup] = useState(true);
   const [activeProjectNav, setActiveProjectNav] = useState('project-insights');
   const [insightsTab, setInsightsTab] = useState('overview');
+  const [frameworkTab, setFrameworkTab] = useState('background');
 
   // Check if we're opening an existing project from session storage
   useEffect(() => {
@@ -548,76 +549,244 @@ export function EMMEComprehensiveProjectCreator() {
     );
   };
 
-  const renderFrameworkContent = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Framework</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-gray-600">Framework content will be displayed here</p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderBackgroundContent = () => (
-    <div className="space-y-6">
-      <div className="flex justify-end mb-4">
-        <Button className="bg-purple-600 hover:bg-purple-700 text-white">Complete</Button>
-      </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-pink-500">▼</span>
-            Mechanism & CE
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-gray-700">
-            <strong>PRODUCT A</strong> is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, a novel, non-hormonal mechanism of action.
-          </p>
-          
-          <p className="text-sm text-gray-700">
-            It targets KNDy neurons (Kisspeptin, Neurokinin B, Dynorphin) in the hypothalamus — key players in thermoregulation and reproductive hormone signaling.
-          </p>
-          
-          <div className="pl-4">
-            <p className="text-sm text-gray-700 mb-2">
-              <span className="text-pink-500">▶</span> During menopause, estrogen decline causes these neurons to become hyperactive, triggering hot flashes and sleep disruptions. By modulating this pathway, PRODUCT A helps restore thermal balance without affecting hormone levels.
+  const renderFrameworkContent = () => {
+    const [frameworkTab, setFrameworkTab] = useState('background');
+    
+    const renderBackgroundContent = () => (
+      <div className="space-y-6">
+        <div className="flex justify-end mb-4">
+          <Button className="bg-green-600 hover:bg-green-700 text-white">Complete</Button>
+        </div>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-red-500">▼</span>
+              Mechanism & CE
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-gray-700">
+              <strong>PRODUCT A</strong> is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, a novel, non-hormonal mechanism of action.
             </p>
             
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm font-semibold text-gray-800 mb-2">Phase 1 & 2 Trials:</p>
-              <p className="text-sm text-gray-700">
-                Phase 1 studies established safety, pharmacokinetics, and pharmacodynamics, confirming oral bioavailability and tolerability in healthy women.
+            <p className="text-sm text-gray-700">
+              It targets KNDy neurons (Kisspeptin, Neurokinin B, Dynorphin) in the hypothalamus — key players in thermoregulation and reproductive hormone signaling.
+            </p>
+            
+            <div className="pl-4">
+              <p className="text-sm text-gray-700 mb-2">
+                <span className="text-red-500">▶</span> During menopause, estrogen decline causes these neurons to become hyperactive, triggering hot flashes and sleep disruptions. By modulating this pathway, PRODUCT A helps restore thermal balance without affecting hormone levels.
               </p>
               
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-sm font-semibold text-gray-800 mb-2">Phase 1 & 2 Trials:</p>
+                <p className="text-sm text-gray-700">
+                  Phase 1 studies established safety, pharmacokinetics, and pharmacodynamics, confirming oral bioavailability and tolerability in healthy women.
+                </p>
+                
+                <p className="text-sm text-gray-700 mt-2">
+                  Phase 2b (SWITCH-1) trial identified the optimal 120 mg dose, showing a statistically significant reduction in hot flash frequency and severity by week 4, with a favorable safety profile.
+                </p>
+              </div>
+              
               <p className="text-sm text-gray-700 mt-2">
-                Phase 2b (SWITCH-1) trial identified the optimal 120 mg dose, showing a statistically significant reduction in hot flash frequency and severity by week 4, with a favorable safety profile.
+                <span className="text-red-500">▶</span> Additional findings from early-phase research indicated positive effects on sleep quality, reduced wake time, and no impact on hormone-sensitive tissues.
               </p>
             </div>
-            
-            <p className="text-sm text-gray-700 mt-2">
-              <span className="text-pink-500">▶</span> Additional findings from early-phase research indicated positive effects on sleep quality, reduced wake time, and no impact on hormone-sensitive tissues.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>What can I help you with?</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="min-h-[100px] bg-gray-50 rounded-lg flex items-center justify-center">
-            <p className="text-gray-500">Chat interface placeholder</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>What can I help you with?</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="min-h-[100px] bg-gray-50 rounded-lg flex items-center justify-center">
+              <p className="text-gray-500">AI assistant for pharmaceutical intelligence</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+
+    const renderExplorationContent = () => (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Product Overview - Key Findings from OASIS Trials</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Efficacy</h3>
+              <p className="text-sm text-gray-700 mb-2">
+                Eluzainetalnt demonstrated statistically significant reductions in the frequency and severity of moderate to severe VMS from baseline to weeks 4 and 12 compared to placebo.
+              </p>
+              <p className="text-sm text-gray-700">
+                Notably, improvements were observed as early as week 1 and were sustained over the study periods.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Safety</h3>
+              <p className="text-sm text-gray-700">
+                The long-term safety profile over 52 weeks was consistent with previous findings, confirming a favorable safety profile. No incidences of endometrial hyperplasia or malignant neoplasms were observed, and there was no signal of hepatotoxicity.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Regulatory Progress</h3>
+              <p className="text-sm text-gray-700">
+                Based on the positive outcomes from the OASIS program, Bayer submitted data to health authorities for marketing authorization of eluzainetalnt as a treatment for moderate to severe VMS associated with menopause. In October 2024, Bayer applied for approval with the European Medicines Agency (EMA).
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Conclusion</h3>
+              <p className="text-sm text-gray-700">
+                The progression of eluzainetalnt through the OASIS Phase 3 trials has solidified its potential as a non-hormonal, once-daily oral treatment for moderate to severe VMS associated with menopause. The consistent efficacy and favorable safety profile observed across these studies support its promise as a novel therapeutic option for women seeking relief from menopausal symptoms.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Sources & References</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <p className="text-sm font-medium text-blue-900">Reuters Healthcare Report</p>
+                <p className="text-xs text-blue-700">Pharmaceutical applications and regulatory updates</p>
+              </div>
+              <div className="p-3 bg-green-50 rounded-lg">
+                <p className="text-sm font-medium text-green-900">PatientCareOnline Clinical Review</p>
+                <p className="text-xs text-green-700">Eluzainetalnt efficacy data and breast cancer treatment protocols</p>
+              </div>
+              <div className="p-3 bg-purple-50 rounded-lg">
+                <p className="text-sm font-medium text-purple-900">BMJ Clinical Evidence</p>
+                <p className="text-xs text-purple-700">Peer-reviewed clinical outcomes and safety profiles</p>
+              </div>
+              <div className="p-3 bg-orange-50 rounded-lg">
+                <p className="text-sm font-medium text-orange-900">ClinicalTrials.gov Database</p>
+                <p className="text-xs text-orange-700">OASIS trial registry and complete study protocols</p>
+              </div>
+              <div className="p-3 bg-red-50 rounded-lg">
+                <p className="text-sm font-medium text-red-900">Bayer Pharmaceutical News</p>
+                <p className="text-xs text-red-700">Phase 3 study announcements and regulatory submissions</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+
+    const renderHumanInsightsContent = () => (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Human Insights & Research Questions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">ASKED CHAT: Strategic Research Direction</h3>
+              <p className="text-sm text-gray-700 mb-3">
+                "The next step in this project would be a deep dive into Eluzainetalnt. I think we should start from the beginning. I guess that would be with the early clinical trials, right? Or possibly journal articles and research?"
+              </p>
+              
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">Acumen Questions</h4>
+                <ul className="space-y-1 text-sm text-blue-800">
+                  <li>• Where does the information from the OASIS Trials come from? Is that known from the customer?</li>
+                  <li>• Where does this information go in this screen?</li>
+                  <li>• What CHAT question is asked when these sources are uploaded to CHAT and then asked this chat question?</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Strategic Thinking</h3>
+              <p className="text-sm text-gray-700">
+                "My thought here is that we create a Corpus or Corpora of information from which we can. The insights would be included in that."
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Information Architecture</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-900 mb-2">Data Sources</h4>
+                  <ul className="space-y-1 text-xs text-gray-700">
+                    <li>• Clinical trial databases</li>
+                    <li>• Peer-reviewed publications</li>
+                    <li>• Regulatory submissions</li>
+                    <li>• Market research reports</li>
+                  </ul>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-900 mb-2">AI Integration</h4>
+                  <ul className="space-y-1 text-xs text-gray-700">
+                    <li>• Document corpus creation</li>
+                    <li>• Intelligent question answering</li>
+                    <li>• Strategic insight generation</li>
+                    <li>• Evidence synthesis</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+
+    return (
+      <div className="space-y-6">
+        {/* Framework Navigation Tabs */}
+        <div className="border-b border-gray-200">
+          <div className="flex space-x-8">
+            <button 
+              onClick={() => setFrameworkTab('background')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                frameworkTab === 'background'
+                  ? 'border-red-500 text-red-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Background
+            </button>
+            <button 
+              onClick={() => setFrameworkTab('exploration')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                frameworkTab === 'exploration'
+                  ? 'border-red-500 text-red-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Exploration
+            </button>
+            <button 
+              onClick={() => setFrameworkTab('human-insights')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                frameworkTab === 'human-insights'
+                  ? 'border-red-500 text-red-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Human Insights
+            </button>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+        </div>
+
+        {/* Framework Content */}
+        {frameworkTab === 'background' && renderBackgroundContent()}
+        {frameworkTab === 'exploration' && renderExplorationContent()}
+        {frameworkTab === 'human-insights' && renderHumanInsightsContent()}
+      </div>
+    );
+  };
+
+
 
   const renderClinicalTrials = () => (
     <div className="space-y-6">
