@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useTenant, useFeature, useTenantStyling } from "@/components/TenantProvider";
 import { useQuery } from "@tanstack/react-query";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
 import { InsightEngine } from "@/components/emme/InsightEngine";
@@ -158,6 +160,112 @@ function EMMEEngageWhiteLabel() {
         return <SimpleProjectManager />;
       case "view-projects":
         return <SimpleProjectManager />;
+      
+      // Project Framework sections
+      case "background":
+        return <div className="p-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                <span>Framework</span>
+                <span>→</span>
+                <span className="font-medium text-purple-600">Background</span>
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Background</h1>
+              <p className="text-gray-600">Comprehensive pharmaceutical intelligence and market analysis</p>
+            </div>
+            
+            {projectContext && (
+              <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">{projectContext.name}</h2>
+                  <Badge className="bg-purple-100 text-purple-700">
+                    {projectContext.therapeuticArea}
+                  </Badge>
+                </div>
+                <p className="text-gray-600 mb-4">{projectContext.patientPopulation}</p>
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <span className="text-blue-600 font-semibold">CE</span>
+                  </div>
+                  Mechanism & CE
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  PRODUCT A is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, 
+                  targeting key players in thermoregulation and reproductive hormonal signaling during menopause.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-gray-900">Phase 1 & 2 Trials:</h4>
+                  <p className="text-sm text-gray-600">
+                    Studies established safety, pharmacokinetics, and pharmacodynamics, 
+                    confirming oral bioavailability and tolerability in healthy women.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <span className="text-green-600 font-semibold">TD</span>
+                  </div>
+                  Tolerability & Delivery
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Mild, placebo-like side effect profile across all phases of clinical development, 
+                  with consistently well-tolerated dosing.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-gray-900">Safety Profile:</h4>
+                  <p className="text-sm text-gray-600">
+                    Most frequently reported: Headache, Nausea, Fatigue, Nasopharyngitis. 
+                    No hepatotoxicity or endometrial risk observed.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <span className="text-orange-600 font-semibold">UN</span>
+                  </div>
+                  Unmet Need
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Significant proportion of women in both U.S. and U.K. opt out of hormone therapy (HT) 
+                  for menopause symptoms due to associated risk concerns.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-gray-900">Market Statistics:</h4>
+                  <p className="text-sm text-gray-600">
+                    U.S.: 1.8% to 4.7% HT usage • U.K.: ~10% usage
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-8 flex justify-between items-center">
+              <Button variant="outline" disabled>
+                ← Previous
+              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => {
+                    sessionStorage.setItem(`project-${projectContext?.id}-last-section`, 'exploration');
+                    setActiveView('exploration');
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  Next: Exploration →
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>;
       // Strategic Intelligence
       case "strategic-intelligence":
         return <StrategicIntelligenceModule />;
@@ -175,22 +283,81 @@ function EMMEEngageWhiteLabel() {
       case "research-hub":
         return <div className="p-6">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">Exploration</h1>
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <p className="text-gray-600 mb-4">Advanced research and competitive intelligence platform for in-depth market exploration and strategic analysis.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-gray-900 mb-2">Market Research</h3>
-                  <p className="text-sm text-gray-600">Deep dive into market dynamics and opportunities</p>
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                <span>Framework</span>
+                <span>→</span>
+                <span className="font-medium text-purple-600">Exploration</span>
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Exploration</h1>
+              <p className="text-gray-600">Advanced research and competitive intelligence platform for in-depth market exploration and strategic analysis.</p>
+            </div>
+            
+            {projectContext && (
+              <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">{projectContext.name}</h2>
+                  <Badge className="bg-purple-100 text-purple-700">
+                    {projectContext.therapeuticArea}
+                  </Badge>
                 </div>
-                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-gray-900 mb-2">Competitive Analysis</h3>
-                  <p className="text-sm text-gray-600">Comprehensive competitive landscape mapping</p>
-                </div>
-                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-gray-900 mb-2">Strategic Insights</h3>
-                  <p className="text-sm text-gray-600">AI-powered strategic recommendations and forecasting</p>
-                </div>
+                <p className="text-gray-600 mb-4">{projectContext.patientPopulation}</p>
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Market Research</h3>
+                <p className="text-gray-600 mb-4">Deep dive into market dynamics and opportunities</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Market size and growth projections</li>
+                  <li>• Patient population analysis</li>
+                  <li>• Treatment pathway mapping</li>
+                  <li>• Regulatory landscape review</li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Competitive Analysis</h3>
+                <p className="text-gray-600 mb-4">Comprehensive competitive landscape mapping</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Competitor product profiles</li>
+                  <li>• Pipeline analysis</li>
+                  <li>• Market positioning</li>
+                  <li>• SWOT analysis</li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Strategic Insights</h3>
+                <p className="text-gray-600 mb-4">AI-powered strategic recommendations and forecasting</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Market entry strategies</li>
+                  <li>• Risk assessment</li>
+                  <li>• Opportunity identification</li>
+                  <li>• Scenario planning</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-8 flex justify-between items-center">
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  sessionStorage.setItem(`project-${projectContext?.id}-last-section`, 'background');
+                  setActiveView('background');
+                }}
+              >
+                ← Back: Background
+              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => {
+                    sessionStorage.setItem(`project-${projectContext?.id}-last-section`, 'human-insights');
+                    setActiveView('human-insights');
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  Next: Human Insights →
+                </Button>
               </div>
             </div>
           </div>
@@ -199,22 +366,78 @@ function EMMEEngageWhiteLabel() {
       case "human-insights":
         return <div className="p-6">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">Human Insights</h1>
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <p className="text-gray-600 mb-4">Human-centered intelligence combining behavioral analytics, stakeholder insights, and patient journey mapping.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-gray-900 mb-2">Patient Journey Mapping</h3>
-                  <p className="text-sm text-gray-600">Comprehensive patient experience and touchpoint analysis</p>
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                <span>Framework</span>
+                <span>→</span>
+                <span className="font-medium text-purple-600">Human Insights</span>
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Human Insights</h1>
+              <p className="text-gray-600">Human-centered intelligence combining behavioral analytics, stakeholder insights, and patient journey mapping.</p>
+            </div>
+            
+            {projectContext && (
+              <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">{projectContext.name}</h2>
+                  <Badge className="bg-purple-100 text-purple-700">
+                    {projectContext.therapeuticArea}
+                  </Badge>
                 </div>
-                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-gray-900 mb-2">Stakeholder Analysis</h3>
-                  <p className="text-sm text-gray-600">Key stakeholder identification and engagement strategies</p>
-                </div>
-                <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-gray-900 mb-2">Behavioral Analytics</h3>
-                  <p className="text-sm text-gray-600">Human behavior patterns and decision-making insights</p>
-                </div>
+                <p className="text-gray-600 mb-4">{projectContext.patientPopulation}</p>
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Patient Journey Mapping</h3>
+                <p className="text-gray-600 mb-4">Comprehensive patient experience and touchpoint analysis</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Pre-diagnosis awareness</li>
+                  <li>• Healthcare provider interactions</li>
+                  <li>• Treatment decision factors</li>
+                  <li>• Post-treatment outcomes</li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Stakeholder Analysis</h3>
+                <p className="text-gray-600 mb-4">Key stakeholder identification and engagement strategies</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Healthcare professionals</li>
+                  <li>• Patient advocacy groups</li>
+                  <li>• Payers and regulators</li>
+                  <li>• Key opinion leaders</li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Behavioral Analytics</h3>
+                <p className="text-gray-600 mb-4">Human behavior patterns and decision-making insights</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Treatment adherence patterns</li>
+                  <li>• Decision-making triggers</li>
+                  <li>• Communication preferences</li>
+                  <li>• Engagement optimization</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-8 flex justify-between items-center">
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  sessionStorage.setItem(`project-${projectContext?.id}-last-section`, 'exploration');
+                  setActiveView('exploration');
+                }}
+              >
+                ← Back: Exploration
+              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline"
+                  disabled
+                >
+                  Complete Framework ✓
+                </Button>
               </div>
             </div>
           </div>

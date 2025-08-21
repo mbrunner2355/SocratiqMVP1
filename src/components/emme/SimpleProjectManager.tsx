@@ -248,11 +248,20 @@ export function SimpleProjectManager() {
                 
                 <div className="ml-4 text-right">
                   <Button
-                    onClick={() => setSelectedProject(project)}
+                    onClick={() => {
+                      // Navigate to project workspace (Framework sections)
+                      setSelectedProject(project);
+                      // Store project context and navigate to where user left off
+                      sessionStorage.setItem('current-project', JSON.stringify(project));
+                      const lastSection = sessionStorage.getItem(`project-${project.id}-last-section`) || 'background';
+                      window.dispatchEvent(new CustomEvent('navigateToModule', { 
+                        detail: { moduleId: lastSection, projectData: project }
+                      }));
+                    }}
                     variant="outline"
                     size="sm"
                   >
-                    View Details
+                    Open Project
                   </Button>
                   <div className="mt-2 text-xs text-gray-500">
                     Created: {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'Unknown'}
