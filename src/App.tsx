@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toast/toaster";
 
 // Import all page components
-import Home from "@/pages/Home";
+import Home from "@/pages/SimpleHome";
 import Dashboard from "@/pages/dashboard";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";

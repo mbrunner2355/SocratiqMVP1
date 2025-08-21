@@ -1,38 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { 
   FileText, 
   Network, 
   Shield, 
   Bot, 
-  Building2, 
-  Users, 
   Target,
-  TrendingUp,
   Activity,
   Clock,
-  CheckCircle,
-  Zap,
-  Layers,
-  Lock
+  CheckCircle
 } from "lucide-react";
 import { mockAnalytics } from "@/lib/mock-data";
 import { SophieLogo } from "@/components/SophieLogo";
 
-interface AnalyticsData {
-  entityStats: { [key: string]: number };
-  processingStats: {
-    totalDocuments: number;
-    processingQueue: number;
-    avgProcessingTime: number;
-    avgAccuracy: number;
-  };
-}
-
-export default function Home() {
-  // Use mock data for development
+export default function SimpleHome() {
   const analytics = mockAnalytics;
   const totalEntities = Object.values(analytics.entityStats).reduce((sum, count) => sum + count, 0);
 
@@ -52,17 +34,17 @@ export default function Home() {
       color: "bg-green-500"
     },
     { 
-      label: "Asset Profiling", 
-      href: "/profile", 
-      icon: Users, 
-      description: "Phase 2-NDA translational intelligence",
+      label: "Document Processing", 
+      href: "/transform", 
+      icon: FileText, 
+      description: "AI-powered document analysis",
       color: "bg-purple-500"
     },
     { 
-      label: "Construction Intelligence", 
-      href: "/build", 
-      icon: Layers, 
-      description: "AEC project optimization and risk analysis",
+      label: "Knowledge Graph", 
+      href: "/mesh", 
+      icon: Network, 
+      description: "Semantic knowledge visualization",
       color: "bg-orange-500"
     },
   ];
@@ -74,73 +56,58 @@ export default function Home() {
     { name: "IP™", status: "active", uptime: "99.7%", color: "bg-blue-600" },
     { name: "EMME Connect™", status: "active", uptime: "99.6%", color: "bg-green-600" },
     { name: "Trials™", status: "active", uptime: "99.5%", color: "bg-indigo-500" },
-    { name: "Profile™", status: "active", uptime: "99.4%", color: "bg-purple-600" },
-    { name: "Build™", status: "active", uptime: "99.3%", color: "bg-orange-500" },
-    { name: "Labs", status: "development", uptime: "Coming Q2", color: "bg-gray-400" },
   ];
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome to SocratIQ™
-            </h1>
-            <p className="text-gray-600">
-              AI-enhanced intelligence platform for life sciences development and commercialization
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="flex items-center space-x-2 mb-2">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <span className="text-sm font-medium text-gray-700">All Systems Operational</span>
-            </div>
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
-              Sophie™ AI Ready
-            </Badge>
-          </div>
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">SocratIQ Transform™</h1>
+          <p className="text-gray-600">AI-Powered Document Intelligence Platform</p>
         </div>
+        <Badge variant="secondary" className="bg-green-100 text-green-800">
+          All Systems Operational
+        </Badge>
       </div>
 
-      {/* Platform Overview Stats */}
+      {/* Analytics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active IP Assets</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total Entities</CardTitle>
+            <Bot className="h-4 w-4 text-gray-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">247</div>
-            <p className="text-xs text-muted-foreground">
-              Patents & applications
+            <div className="text-2xl font-bold">{totalEntities}</div>
+            <p className="text-xs text-gray-600">
+              Extracted from {analytics.processingStats.totalDocuments} documents
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">505(b)(2) Opportunities</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Processing Queue</CardTitle>
+            <Clock className="h-4 w-4 text-gray-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23</div>
-            <p className="text-xs text-muted-foreground">
-              Repositioning candidates
+            <div className="text-2xl font-bold">{analytics.processingStats.processingQueue}</div>
+            <p className="text-xs text-gray-600">
+              Documents in queue
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Audit Events</CardTitle>
-            <Lock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Accuracy Rate</CardTitle>
+            <Target className="h-4 w-4 text-gray-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,847</div>
-            <p className="text-xs text-muted-foreground">
-              Blockchain verified transactions
+            <div className="text-2xl font-bold">{Math.round(analytics.processingStats.avgAccuracy * 100)}%</div>
+            <p className="text-xs text-gray-600">
+              AI extraction precision
             </p>
           </CardContent>
         </Card>
@@ -148,11 +115,11 @@ export default function Home() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Trials</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <Activity className="h-4 w-4 text-gray-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-600">
               Clinical studies monitored
             </p>
           </CardContent>
@@ -163,7 +130,7 @@ export default function Home() {
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-gray-600">
             Jump to frequently used features and capabilities
           </p>
         </CardHeader>
@@ -200,7 +167,7 @@ export default function Home() {
               <Activity className="w-5 h-5" />
               <span>Module Status</span>
             </CardTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-600">
               Real-time status of all SocratIQ modules
             </p>
           </CardHeader>
@@ -213,7 +180,7 @@ export default function Home() {
                     <span className="font-medium">{module.name}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-muted-foreground">{module.uptime}</span>
+                    <span className="text-sm text-gray-600">{module.uptime}</span>
                     <CheckCircle className="w-4 h-4 text-green-500" />
                   </div>
                 </div>
@@ -228,7 +195,7 @@ export default function Home() {
               <SophieLogo size="sm" className="w-5 h-5" />
               <span>Sophie™ AI Colleague</span>
             </CardTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-600">
               Your intelligent guide through the platform
             </p>
           </CardHeader>
