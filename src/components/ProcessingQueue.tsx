@@ -1,56 +1,59 @@
-import { useQuery } from "@tanstack/react-query";
 import { FileText, Loader } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import type { Document } from "@shared/schema";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+const mockProcessingDocs = [
+  {
+    id: '1',
+    name: 'FDA_Submission_Draft.pdf',
+    progress: 45,
+    status: 'Extracting entities...'
+  },
+  {
+    id: '2',
+    name: 'Patent_Application.docx', 
+    progress: 78,
+    status: 'Building knowledge graph...'
+  }
+];
 
 export default function ProcessingQueue() {
-  const { data: documents = [] } = useQuery<Document[]>({
-    queryKey: ["/api/documents"],
-    refetchInterval: 2000, // Refresh every 2 seconds for real-time updates
-  });
-
-  const processingDocuments = documents.filter(doc => 
-    doc.status === 'queued' || doc.status === 'processing'
-  );
-
-  if (processingDocuments.length === 0) {
+  if (mockProcessingDocs.length === 0) {
     return null;
   }
 
   return (
-    <div className="mt-6">
-      <h3 className="text-sm font-medium text-secondary mb-3">Processing Queue</h3>
-      <div className="space-y-3">
-        {processingDocuments.map((document) => (
-          <div key={document.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <FileText className="w-5 h-5 text-gray-400" />
-                <div>
-                  <p className="text-sm font-medium text-secondary">{document.originalName}</p>
-                  <p className="text-xs text-gray-600">
-                    {Math.round(document.fileSize / 1024)} KB • {
-                      document.status === 'queued' ? 'Queued...' : 'Processing...'
-                    }
-                  </p>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2">
+          <Loader className="w-5 h-5 animate-spin" />
+          <span>Processing Queue</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {mockProcessingDocs.map((doc) => (
+            <div key={doc.id} className="bg-gray-50 rounded-lg p-4 border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-3">
+                  <FileText className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm font-medium">{doc.name}</p>
+                    <p className="text-xs text-gray-600">{doc.status}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Loader className="w-4 h-4 animate-spin text-blue-500" />
+                  <span className="text-xs text-blue-600 font-medium">
+                    {doc.progress}%
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Loader className="w-4 h-4 animate-spin text-accent" />
-                <span className="text-xs text-accent font-medium">
-                  {document.processingProgress || 0}%
-                </span>
-              </div>
+              <Progress value={doc.progress} className="h-2" />
             </div>
-            <div className="mt-2">
-              <Progress 
-                value={document.processingProgress || 0} 
-                className="h-2"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

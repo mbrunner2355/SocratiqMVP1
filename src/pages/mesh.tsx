@@ -47,7 +47,7 @@ export default function Mesh() {
           </p>
         </CardHeader>
         <CardContent>
-          <Analytics analytics={analytics} />
+          <Analytics />
         </CardContent>
       </Card>
 
