@@ -237,7 +237,7 @@ export function EMMEComprehensiveProjectCreator() {
     // Update in localStorage
     const existingProjects = JSON.parse(localStorage.getItem('emme-projects') || '[]');
     const updatedProjects = existingProjects.map((p: any) => 
-      p.id === formData.id ? { ...p, status: 'active' } : p
+      p.id === (formData as any).id ? { ...p, status: 'active' } : p
     );
     localStorage.setItem('emme-projects', JSON.stringify(updatedProjects));
     
