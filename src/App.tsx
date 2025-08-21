@@ -12,6 +12,7 @@ import PipelineManager from "@/components/PipelineManager";
 import Analytics from "@/components/Analytics";
 import TransformersManager from "@/components/TransformersManager";
 import LLMManager from "@/components/LLMManager";
+import AdvancedNLPDashboard from "@/components/AdvancedNLPDashboard";
 import Transform from "@/pages/transform";
 import Mesh from "@/pages/mesh";
 import IP from "@/pages/ip";
@@ -61,6 +62,7 @@ function App() {
           <Route path="/pipeline/analytics" component={() => <Layout><Analytics /></Layout>} />
           <Route path="/models/transformers" component={() => <Layout><TransformersManager /></Layout>} />
           <Route path="/models/llm" component={() => <Layout><LLMManager /></Layout>} />
+          <Route path="/models/advanced-nlp" component={() => <Layout><AdvancedNLPDashboard /></Layout>} />
           <Route path="/transform" component={Transform} />
           <Route path="/mesh" component={Mesh} />
           

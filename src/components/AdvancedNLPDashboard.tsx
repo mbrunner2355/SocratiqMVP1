@@ -66,7 +66,7 @@ interface Document {
   metadata?: any;
 }
 
-export function AdvancedNLPDashboard() {
+export default function AdvancedNLPDashboard() {
   const [activeTab, setActiveTab] = useState("process");
   const [selectedDocument, setSelectedDocument] = useState<string>("");
   const [testText, setTestText] = useState("");
