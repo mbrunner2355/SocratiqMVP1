@@ -4,40 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Building2, 
-  Users, 
-  Search, 
-  FileText, 
-  BarChart3, 
-  Target, 
-  Settings,
-  Globe,
-  BookOpen,
-  Lightbulb,
-  MessageSquare,
-  Bell,
-  Home
-} from 'lucide-react';
-
-// Main navigation items (simplified left sidebar)
-const MAIN_NAV_ITEMS = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'projects', label: 'Projects', icon: FileText },
-  { id: 'clients', label: 'Clients', icon: Users },
-  { id: 'chat-emme', label: 'Chat with EMME', icon: MessageSquare },
-  { id: 'create-project', label: 'Create new project', icon: Target, active: true },
-  { id: 'smart-wizard', label: 'Smart Wizard', icon: Lightbulb },
-  { id: 'strategic-intelligence', label: 'Strategic Intelligence', icon: BarChart3 },
-  { id: 'stakeholder-engagement', label: 'Stakeholder Engagement', icon: Users },
-  { id: 'content-orchestration', label: 'Content Orchestration', icon: FileText },
-  { id: 'equity-access', label: 'Equity & Access', icon: Globe },
-  { id: 'corpus', label: 'Corpus', icon: BookOpen },
-  { id: 'data-platform', label: 'Data Platform', icon: Building2 },
-  { id: 'models', label: 'Models', icon: Settings },
-  { id: 'trust', label: 'Trust', icon: Target },
-  { id: 'alerts', label: 'Alerts', icon: Bell }
-];
+import { Search, Bell } from 'lucide-react';
 
 // Top navigation tabs - starting with Organization Overview
 const TOP_TABS = [
@@ -249,51 +216,7 @@ export function EMMEComprehensiveProjectCreator() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Left Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
-        <div className="p-4">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="flex items-center gap-1">
-              <span className="text-xl font-bold text-purple-600">emme</span>
-              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">vi</span>
-            </div>
-            <span className="text-xs text-gray-500">powered by SocratIQ</span>
-          </div>
-          
-          {/* Main Navigation */}
-          <div className="space-y-1">
-            {MAIN_NAV_ITEMS.map((item) => {
-              const IconComponent = item.icon;
-              return (
-                <div
-                  key={item.id}
-                  className={`flex items-center gap-3 p-2 rounded cursor-pointer transition-colors ${
-                    item.active 
-                      ? 'bg-purple-50 text-purple-700 font-medium'
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  <IconComponent className="w-4 h-4" />
-                  <span className="text-sm">{item.label}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Project Info */}
-          <div className="mt-6 p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Building2 className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">{projectName}</span>
-            </div>
-            <div className="text-xs text-gray-500">
-              Project Setup in Progress
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div className="flex flex-col h-full bg-gray-50">
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
