@@ -180,13 +180,13 @@ export function EMMEComprehensiveProjectCreator() {
       // Invalidate projects cache to refresh the list
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
       
-      // If editing, go to project workspace; if new, continue creation flow
-      if (isEditing) {
-        setIsProjectSetup(true);
-        setActiveProjectNav('project-insights');
-      } else {
-        setIsProjectSetup(false);
-      }
+      // Always redirect to project list after creation/update
+      // Clear session storage and navigate to project list
+      sessionStorage.removeItem('current-project');
+      sessionStorage.removeItem('edit-mode');
+      
+      // Navigate back to project list
+      window.dispatchEvent(new CustomEvent('navigate-to', { detail: 'view-projects' }));
     },
     onError: (error) => {
       toast({
@@ -216,16 +216,7 @@ export function EMMEComprehensiveProjectCreator() {
 
   const handleCompleteSetup = () => {
     createProjectMutation.mutate(formData);
-    
-    // If we're editing an existing project, go to project workspace
-    const currentProject = sessionStorage.getItem('current-project');
-    if (currentProject) {
-      setIsProjectSetup(true);
-      setActiveProjectNav('project-insights');
-    } else {
-      // New project creation flow
-      setActiveTab('initiative-overview');
-    }
+    // The onSuccess handler will navigate back to project list
   };
 
   // Check if project has all required data for activation
@@ -325,7 +316,7 @@ export function EMMEComprehensiveProjectCreator() {
             disabled={createProjectMutation.isPending}
             className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 rounded-md font-medium"
           >
-            {createProjectMutation.isPending ? 'Saving...' : (sessionStorage.getItem('current-project') ? 'Save Changes' : "Save as Draft")}
+{createProjectMutation.isPending ? 'Creating...' : (sessionStorage.getItem('current-project') ? 'Update Project' : "Create Project")}
           </Button>
         </div>
       </div>
