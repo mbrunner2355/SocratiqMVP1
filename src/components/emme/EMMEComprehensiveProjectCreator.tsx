@@ -15,9 +15,23 @@ const TOP_TABS = [
   { id: 'xxx', label: 'XXX' }
 ];
 
+// Project structure navigation items
+const PROJECT_NAV_ITEMS = [
+  { id: 'framework', label: 'Framework', icon: 'document' },
+  { id: 'background', label: 'Background', icon: 'info', active: true },
+  { id: 'exploration', label: 'Exploration', icon: 'search' },
+  { id: 'human-insights', label: 'Human Insights', icon: 'users' },
+  { id: 'client-content', label: 'Client Content', icon: 'content' },
+  { id: 'playground', label: 'Playground', icon: 'play' },
+  { id: 'strategy-map', label: 'Strategy Map', icon: 'map' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'chart' }
+];
+
 export function EMMEComprehensiveProjectCreator() {
   const [activeTab, setActiveTab] = useState('organization-overview');
   const [projectName, setProjectName] = useState('VMS Global');
+  const [isProjectSetup, setIsProjectSetup] = useState(true);
+  const [activeProjectNav, setActiveProjectNav] = useState('background');
 
   const handleNextStep = () => {
     const tabOrder = ['organization-overview', 'initiative-overview', 'clinical-trials', 'xxxx', 'xxx'];
@@ -33,6 +47,11 @@ export function EMMEComprehensiveProjectCreator() {
     if (currentIndex > 0) {
       setActiveTab(tabOrder[currentIndex - 1]);
     }
+  };
+
+  const handleCompleteSetup = () => {
+    setIsProjectSetup(false);
+    setActiveTab('initiative-overview');
   };
 
   const renderOrganizationOverview = () => (
@@ -84,45 +103,65 @@ export function EMMEComprehensiveProjectCreator() {
 
           <div className="flex justify-between pt-4">
             <Button variant="outline" disabled>Previous</Button>
-            <Button onClick={handleNextStep}>Next: Initiative Overview</Button>
+            <Button onClick={handleCompleteSetup}>Complete Setup</Button>
           </div>
         </CardContent>
       </Card>
     </div>
   );
 
-  const renderInitiativeOverview = () => (
+  const renderBackgroundContent = () => (
     <div className="space-y-6">
+      <div className="flex justify-end mb-4">
+        <Button className="bg-green-600 hover:bg-green-700 text-white">Complete</Button>
+      </div>
+      
       <Card>
         <CardHeader>
-          <CardTitle>Human Insights & Patient Journey</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-pink-500">▼</span>
+            Mechanism & CE
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Patient Population</label>
-            <Textarea 
-              placeholder="Describe target patient population and unmet needs..."
-              className="min-h-[100px]"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Example: Women experiencing vasomotor symptoms during menopause, particularly those seeking non-hormonal treatment options
-            </p>
-          </div>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-gray-700">
+            <strong>PRODUCT A</strong> is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, a novel, non-hormonal mechanism of action.
+          </p>
           
-          <div>
-            <label className="block text-sm font-medium mb-2">Healthcare Provider Insights</label>
-            <Textarea 
-              placeholder="Key insights from healthcare providers..."
-              className="min-h-[100px]"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Example: Clinicians need effective non-hormonal alternatives for patients with contraindications to hormone therapy
+          <p className="text-sm text-gray-700">
+            It targets KNDy neurons (Kisspeptin, Neurokinin B, Dynorphin) in the hypothalamus — key players in thermoregulation and reproductive hormone signaling.
+          </p>
+          
+          <div className="pl-4">
+            <p className="text-sm text-gray-700 mb-2">
+              <span className="text-pink-500">▶</span> During menopause, estrogen decline causes these neurons to become hyperactive, triggering hot flashes and sleep disruptions. By modulating this pathway, PRODUCT A helps restore thermal balance without affecting hormone levels.
+            </p>
+            
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm font-semibold text-gray-800 mb-2">Phase 1 & 2 Trials:</p>
+              <p className="text-sm text-gray-700">
+                Phase 1 studies established safety, pharmacokinetics, and pharmacodynamics, confirming oral bioavailability and tolerability in healthy women.
+              </p>
+              
+              <p className="text-sm text-gray-700 mt-2">
+                Phase 2b (SWITCH-1) trial identified the optimal 120 mg dose, showing a statistically significant reduction in hot flash frequency and severity by week 4, with a favorable safety profile.
+              </p>
+            </div>
+            
+            <p className="text-sm text-gray-700 mt-2">
+              <span className="text-pink-500">▶</span> Additional findings from early-phase research indicated positive effects on sleep quality, reduced wake time, and no impact on hormone-sensitive tissues.
             </p>
           </div>
+        </CardContent>
+      </Card>
 
-          <div className="flex justify-between pt-4">
-            <Button variant="outline" onClick={handlePreviousStep}>Previous</Button>
-            <Button onClick={handleNextStep}>Next: Clinical Trials</Button>
+      <Card>
+        <CardHeader>
+          <CardTitle>What can I help you with?</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="min-h-[100px] bg-gray-50 rounded-lg flex items-center justify-center">
+            <p className="text-gray-500">Chat interface placeholder</p>
           </div>
         </CardContent>
       </Card>
@@ -215,33 +254,97 @@ export function EMMEComprehensiveProjectCreator() {
     }
   };
 
+  if (isProjectSetup) {
+    return (
+      <div className="flex flex-col h-full bg-gray-50">
+        <div className="flex-1 flex flex-col">
+          <div className="bg-white border-b border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{projectName} - Project Setup</h1>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                  <Input placeholder="Search..." className="pl-10 w-64" />
+                </div>
+                <Button className="bg-purple-600 hover:bg-purple-700">New Project</Button>
+                <Bell className="w-5 h-5 text-gray-400" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border-b border-gray-200">
+            <div className="flex items-center px-4">
+              {TOP_TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                    tab.id === activeTab
+                      ? 'border-purple-500 text-purple-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1 p-6 overflow-y-auto">
+            {renderContent()}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-full bg-gray-50">
-      {/* Main Content */}
+    <div className="flex h-full bg-gray-50">
+      {/* Project Structure Sidebar */}
+      <div className="w-64 bg-white border-r border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-5 h-5 bg-gray-300 rounded"></div>
+            <span className="font-medium text-gray-800">{projectName}</span>
+          </div>
+          
+          <div className="space-y-1">
+            {PROJECT_NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveProjectNav(item.id)}
+                className={`w-full text-left px-3 py-2 text-sm rounded transition-colors ${
+                  item.id === activeProjectNav
+                    ? 'bg-orange-50 text-orange-700 font-medium'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <div className="bg-white border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{projectName} - Project Setup</h1>
-            </div>
+            <h1 className="text-2xl font-bold text-gray-900 capitalize">{activeProjectNav}</h1>
             <div className="flex items-center gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search..."
-                  className="pl-10 w-64"
-                />
+                <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                New Project
-              </Button>
+              <Button className="bg-red-600 hover:bg-red-700">New Project</Button>
               <Bell className="w-5 h-5 text-gray-400" />
             </div>
           </div>
         </div>
 
-        {/* Top Tabs */}
+        {/* Content Navigation Tabs */}
         <div className="bg-white border-b border-gray-200">
           <div className="flex items-center px-4">
             {TOP_TABS.map((tab) => (
@@ -249,7 +352,7 @@ export function EMMEComprehensiveProjectCreator() {
                 key={tab.id}
                 className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                   tab.id === activeTab
-                    ? 'border-purple-500 text-purple-600'
+                    ? 'border-orange-500 text-orange-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
                 onClick={() => setActiveTab(tab.id)}
@@ -260,9 +363,20 @@ export function EMMEComprehensiveProjectCreator() {
           </div>
         </div>
 
-        {/* Content Area */}
         <div className="flex-1 p-6 overflow-y-auto">
-          {renderContent()}
+          {activeProjectNav === 'background' && renderBackgroundContent()}
+          {activeProjectNav !== 'background' && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="capitalize">{activeProjectNav}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Content for {activeProjectNav} section</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
       </div>
     </div>
