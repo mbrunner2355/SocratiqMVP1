@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,38 @@ import { type Project } from '@shared/schema';
 export function SimpleProjectManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Clean up localStorage on component mount to remove old VMS Global project
+  useEffect(() => {
+    const cleanupOldProjects = () => {
+      const stored = localStorage.getItem('emme-projects');
+      if (stored) {
+        try {
+          let projects = JSON.parse(stored);
+          const originalLength = projects.length;
+          
+          // Remove the old "VMS Global" project without client/team info
+          projects = projects.filter((project: any) => {
+            if (project.name === "VMS Global" && !project.client && !project.team) {
+              return false;
+            }
+            return true;
+          });
+          
+          if (projects.length !== originalLength) {
+            localStorage.setItem('emme-projects', JSON.stringify(projects));
+            console.log('Cleaned up old VMS Global project');
+            // Force a refresh of the projects list
+            window.location.reload();
+          }
+        } catch (error) {
+          console.error('Failed to cleanup projects:', error);
+        }
+      }
+    };
+    
+    cleanupOldProjects();
+  }, []);
 
   // Fetch project data - with fallback for API routing issues
   const { data: projects = [], isLoading, error } = useQuery({
