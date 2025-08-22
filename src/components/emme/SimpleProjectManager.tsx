@@ -22,10 +22,8 @@ export function SimpleProjectManager() {
           
           // Remove duplicates and old projects, and update status for incomplete projects
           const uniqueProjects = projects.reduce((acc: any[], current: any) => {
-            // Skip old VMS Global projects without proper client/team info
-            if (current.name === "VMS Global" && (!current.client || current.client !== "PharmaX")) {
-              return acc;
-            }
+            // Preserve all VMS projects - don't remove them in cleanup
+            // The user had a specific VMS project created yesterday that should be preserved
             
             // Update status to draft if project is incomplete
             const updatedCurrent = {
@@ -74,36 +72,9 @@ export function SimpleProjectManager() {
       const stored = localStorage.getItem('emme-projects');
       let projects = stored ? JSON.parse(stored) : [];
       
-      // Check if VMS Global project exists with proper data
-      const hasVMS = projects.some((p: any) => 
-        p.name === "VMS Global" && 
-        p.client === "Vertex Pharmaceuticals" &&
-        p.developmentStage && 
-        p.patientPopulation
-      );
-      
-      if (!hasVMS) {
-        const vmsProject = {
-          id: 'vms-global-001',
-          name: 'VMS Global',
-          client: 'Vertex Pharmaceuticals',
-          team: 'Strategic Marketing Team',
-          summary: 'Comprehensive VMS (Value Messaging Strategy) development for global pharmaceutical launch across multiple therapeutic areas including CF, sickle cell disease, and pain management.',
-          organizationType: 'Pharmaceutical Company',
-          therapeuticArea: 'Rare Diseases / Cystic Fibrosis',
-          developmentStage: 'Phase III/Pre-Launch',
-          patientPopulation: 'Cystic Fibrosis patients with specific CFTR mutations',
-          hcpInsights: 'Focus on pulmonologists, CF specialists, and pediatric care teams',
-          clinicalEndpoints: 'Lung function improvement, exacerbation reduction, quality of life metrics',
-          status: 'active',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        
-        projects.push(vmsProject);
-        localStorage.setItem('emme-projects', JSON.stringify(projects));
-        console.log('Added VMS Global project to localStorage');
-      }
+      // Don't auto-create VMS project - the user wants their original one back
+      // Instead, let's preserve whatever VMS project data exists
+      console.log('Preserving existing project data, not auto-creating VMS project');
     };
     
     ensureVMSProject();
