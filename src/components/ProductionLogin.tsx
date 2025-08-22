@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { apiRequest } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
-import emmeEngageLogo from "@/assets/emme-engage-logo.png";
+// import emmeEngageLogo from "@/assets/emme-engage-logo.png";
 
 interface ProductionLoginProps {
   onLoginSuccess: () => void;
@@ -54,7 +54,7 @@ export function ProductionLogin({ onLoginSuccess }: ProductionLoginProps) {
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <img 
-              src={emmeEngageLogo} 
+              src="/api/placeholder/150/50" 
               alt="EMME Engage"
               className="h-12 w-auto object-contain"
             />

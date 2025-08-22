@@ -389,7 +389,7 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
         <div className={`p-6 border-b ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'}`}>
           <div className="flex items-center justify-center mb-2">
             <img 
-              src={emmeEngageLogo} 
+              src="/api/placeholder/150/50" 
               alt="EMME Engage - Pharmaceutical Marketing Intelligence"
               className="h-10 w-auto object-contain"
             />
