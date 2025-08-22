@@ -16,7 +16,7 @@ export default function EMMEEngageLanding() {
     // For development - go directly to the main app
     // Set partner app indicator for routing
     localStorage.setItem('partner-app', 'emme-engage');
-    window.location.href = "/dashboard";
+    NavigationService.goTo('/dashboard');
   };
 
   return (

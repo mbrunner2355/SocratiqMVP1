@@ -1,516 +1,257 @@
-import { Switch, Route } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@/hooks/useAuth";
-import React from "react";
-import { useState } from "react";
+// src/App.tsx
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Create queryClient directly here to avoid import issues
+// Navigation Service
+import { NavigationService } from './lib/navigation';
+
+// Layout Components
+import Layout from './components/Layout';
+import { PostLoginLanding } from './components/PostLoginLanding';
+
+// Landing Pages
+import EMMEEngageLanding from './pages/emme-engage-landing';
+import EMMEHealthLanding from './pages/emme-health-landing';
+
+// Main App Components
+import {SophieChat} from './components/SophieChat';
+import {EMMEConnectEnhanced} from './components/EMMEConnectEnhanced';
+import {EMMEEngageApp} from './components/EMMEEngageApp';
+
+// Core Platform Components
+import Transform from './pages/transform';
+import Mesh from './pages/mesh';
+import {SophieIntelligenceBrief} from './components/SophieIntelligenceBrief';
+import {SophieIntelligenceDashboard} from './components/SophieIntelligenceDashboard';
+import {SophieDashboard} from './components/SophieDashboard';
+import {SophieAnalysis} from './components/SophieAnalysis';
+
+// VMS Intelligence Hub
+import { VMSIntelligenceHub } from './components/emme/VMSIntelligenceHub';
+
+// Project Management
+import { EMMEProjectManager } from './components/EMMEProjectManager';
+import { ProjectDetails } from './components/ProjectDetails';
+
+// Auth Components
+import Login from './pages/login';
+
+// Other Components
+import LLMManager from './components/LLMManager';
+import GraphNeuralNetworkManager from './components/GraphNeuralNetworkManager';
+import { AdvancedNLPDashboard } from './components/AdvancedNLPDashboard';
+import MultiParadigmReasoningDashboard from './components/MultiParadigmReasoningDashboard';
+import { SocratIQPlatform } from './components/SocratIQPlatform';
+import { PlatformDashboard } from './pages/PlatformDashboard';
+import AgentsManager from './components/AgentsManager';
+import AgenticRAGManager from './components/AgenticRAGManager';
+import {BuildDashboard} from './components/BuildDashboard';
+import TraceAudit from './components/TraceAudit';
+import { TraceManager } from './components/TraceManager';
+import Analytics from './components/Analytics';
+import { FedScoutDashboard } from './components/FedScoutDashboard';
+import {FedScoutManager} from './components/FedScoutManager';
+import GraphVisualization from './components/GraphVisualization';
+import GraphVisualizationManager from './components/GraphVisualizationManager';
+import { TenantProvider } from './components/TenantProvider';
+import { ProfileManager } from './components/ProfileManager';
+import FileUpload from './components/FileUpload';
+import { FileUploadComponent } from './components/FileUploadComponent';
+import { CorpusManager } from './components/CorpusManager';
+import { BlockchainDashboard } from './components/BlockchainDashboard';
+import BayesianMonteCarloManager from './components/BayesianMonteCarloManager';
+import { PartnerAppsManager } from './components/PartnerAppsManager';
+import { PartnerBrandingDemo } from './components/PartnerBrandingDemo';
+import { PipelineManager } from './components/PipelineManager';
+import ProcessingQueue from './components/ProcessingQueue';
+import TransformersManager from './components/TransformersManager';
+import VectorDatabaseManager from './components/VectorDatabaseManager';
+import { CognitoLogin } from './components/CognitoLogin';
+import DocumentList from './components/DocumentList';
+import { SophieModelsManager } from './components/SophieModelsManager';
+import { SophieOrchestrator } from './components/SophieOrchestrator';
+import { SophieTrustManager } from './components/SophieTrustManager';
+import Sidebar from './components/Sidebar';
+
+// Page Components
+import Landing from './pages/Landing';
+import Home from './pages/Home';
+import NotFound from './pages/not-found';
+import RiskAnalyzer from './pages/RiskAnalyzer';
+import AuditTrail from './pages/ip/audit-trail';
+import FedScout from './pages/fedscout';
+import KnowledgeGraph from './pages/ip/knowledge-graph';
+import ResearchHub from './pages/ip/research-hub';
+import Upload from './pages/ip/upload';
+import IP from './pages/ip';
+import Labs from './pages/labs';
+import Dashboard from './pages/dashboard';
+import Trials from './pages/trials';
+import SophieLanding from './pages/sophie-landing';
+import SophieImpactLens from './pages/SophieImpactLens';
+import Brief from './pages/sophie/brief';
+import AdminDashboard from './pages/AdminDashboard';
+
+
+// Protected Route Component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
+// Public Route Component (redirect if already authenticated)
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" replace />;
+};
+
+// Create a query client instance
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchInterval: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 3,
-    },
-    mutations: {
-      retry: false,
     },
   },
 });
 
-// Import all major platform components - use direct imports
-import { SocratIQPlatform } from "@/components/SocratIQPlatform";
-import { EMMEEngageApp } from "@/components/EMMEEngageApp";
-import { EMMELayout } from "@/components/emme/EMMELayout";
-import { EMMEHome } from "@/components/emme/EMMEHome";
-
-// Conditional imports for components that exist
-let ClientManager, ProjectManager, ProjectDetails;
-let ContentOrchestrationModule, StrategicIntelligenceModule, StakeholderEngagementModule, EquityAccessModule;
-let SophieDashboard, SophieIntelligenceDashboard, SophieChat;
-let CorpusManager, PipelineManager, ProcessingQueue, Analytics, TraceManager;
-let BuildDashboard, FedScoutDashboard, BlockchainDashboard;
-let NotFound, Landing, Home, Dashboard;
-
-try {
-  ClientManager = require("@/components/emme/ClientManager").ClientManager;
-  ProjectManager = require("@/components/emme/ProjectManager").ProjectManager;
-  ProjectDetails = require("@/components/ProjectDetails").ProjectDetails;
-} catch {
-  // Fallback components
-  ClientManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Client Manager</h1></div>;
-  ProjectManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Project Manager</h1></div>;
-  ProjectDetails = () => <div className="p-6"><h1 className="text-2xl font-bold">Project Details</h1></div>;
-}
-
-try {
-  ContentOrchestrationModule = require("@/components/emme/ContentOrchestrationModule").ContentOrchestrationModule;
-  StrategicIntelligenceModule = require("@/components/emme/StrategicIntelligenceModule").StrategicIntelligenceModule;
-  StakeholderEngagementModule = require("@/components/emme/StakeholderEngagementModule").StakeholderEngagementModule;
-  EquityAccessModule = require("@/components/emme/EquityAccessModule").EquityAccessModule;
-} catch {
-  ContentOrchestrationModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1></div>;
-  StrategicIntelligenceModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Strategic Intelligence</h1></div>;
-  StakeholderEngagementModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1></div>;
-  EquityAccessModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Equity Access</h1></div>;
-}
-
-try {
-  SophieDashboard = require("@/components/SophieDashboard").SophieDashboard;
-  SophieIntelligenceDashboard = require("@/components/SophieIntelligenceDashboard").SophieIntelligenceDashboard;
-  SophieChat = require("@/components/SophieChat").SophieChat;
-} catch {
-  SophieDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Sophie Dashboard</h1></div>;
-  SophieIntelligenceDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Sophie Intelligence</h1></div>;
-  SophieChat = () => <div className="p-6"><h1 className="text-2xl font-bold">Sophie Chat</h1></div>;
-}
-
-try {
-  CorpusManager = require("@/components/CorpusManager").CorpusManager;
-  PipelineManager = require("@/components/PipelineManager").PipelineManager;
-  ProcessingQueue = require("@/components/ProcessingQueue").default;
-  Analytics = require("@/components/Analytics").default;
-  TraceManager = require("@/components/TraceManager").TraceManager;
-} catch {
-  CorpusManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Corpus Manager</h1></div>;
-  PipelineManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Pipeline Manager</h1></div>;
-  ProcessingQueue = () => <div className="p-6"><h1 className="text-2xl font-bold">Processing Queue</h1></div>;
-  Analytics = () => <div className="p-6"><h1 className="text-2xl font-bold">Analytics</h1></div>;
-  TraceManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Trace Manager</h1></div>;
-}
-
-try {
-  BuildDashboard = require("@/components/BuildDashboard").BuildDashboard;
-  FedScoutDashboard = require("@/components/FedScoutDashboard").FedScoutDashboard;
-  BlockchainDashboard = require("@/components/BlockchainDashboard").BlockchainDashboard;
-} catch {
-  BuildDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Build Dashboard</h1></div>;
-  FedScoutDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">FedScout Dashboard</h1></div>;
-  BlockchainDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Blockchain Dashboard</h1></div>;
-}
-
-try {
-  NotFound = require("@/pages/not-found").default;
-  Landing = require("@/pages/Landing").default;
-  Home = require("@/pages/Home").default;
-  Dashboard = require("@/pages/dashboard").default;
-} catch {
-  NotFound = () => <div className="p-6"><h1 className="text-2xl font-bold">404 - Page Not Found</h1></div>;
-  Landing = () => <div className="p-6"><h1 className="text-2xl font-bold">Landing Page</h1></div>;
-  Home = () => <div className="p-6"><h1 className="text-2xl font-bold">Home Page</h1></div>;
-  Dashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Dashboard</h1></div>;
-}
-
-// Import tenant provider for multi-tenant support
-import { TenantProvider } from "@/components/TenantProvider";
-
-// Error Boundary Component
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode; componentName: string },
-  { hasError: boolean; error?: Error }
-> {
-  constructor(props: { children: React.ReactNode; componentName: string }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error(`Error in ${this.props.componentName}:`, error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="p-4 bg-red-50 border border-red-200 rounded">
-          <h3 className="text-red-800 font-semibold">Error in {this.props.componentName}</h3>
-          <p className="text-red-600 text-sm">{this.state.error?.message}</p>
-          <button 
-            onClick={() => this.setState({ hasError: false })}
-            className="mt-2 px-4 py-2 bg-red-600 text-white rounded text-sm"
-          >
-            Try Again
-          </button>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-  </div>
-);
-
-// Safe wrapper for components that might not exist
-const SafeComponent = ({ children, fallback, componentName }: { 
-  children: React.ReactNode; 
-  fallback?: React.ReactNode;
-  componentName: string;
-}) => {
-  try {
-    return <>{children}</>;
-  } catch (error) {
-    console.error(`Failed to render ${componentName}:`, error);
-    return fallback || (
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <h3 className="text-yellow-800 font-semibold">Component temporarily unavailable</h3>
-        <p className="text-yellow-600 text-sm">{componentName} is being loaded...</p>
-      </div>
-    );
-  }
-};
-
-// Container component to handle EMME Engage app navigation state
-function EMMEEngageAppContainer() {
-  const [currentView, setCurrentView] = useState("home");
-  
-  const handleViewChange = (viewId: string) => {
-    console.log(`Navigation clicked: ${viewId}`);
-    setCurrentView(viewId);
-  };
-  
-  const renderCurrentView = () => {
-    switch(currentView) {
-      case "home":
-        return (
-          <SafeComponent componentName="EMMEHome">
-            <ErrorBoundary componentName="EMMEHome">
-              <EMMEHome />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "clients":
-        return (
-          <SafeComponent componentName="ClientManager">
-            <ErrorBoundary componentName="ClientManager">
-              <ClientManager />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "projects":
-        return (
-          <SafeComponent componentName="ProjectManager">
-            <ErrorBoundary componentName="ProjectManager">
-              <ProjectManager mode="list" />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "create-project":
-        return (
-          <SafeComponent componentName="ProjectManager-Create">
-            <ErrorBoundary componentName="ProjectManager-Create">
-              <ProjectManager mode="create" />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "smart-wizard":
-        return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Advanced project creation wizard with AI guidance.</p></div>;
-      case "strategic-intelligence":
-        return (
-          <SafeComponent componentName="StrategicIntelligenceModule">
-            <ErrorBoundary componentName="StrategicIntelligenceModule">
-              <StrategicIntelligenceModule />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "stakeholder-engagement":
-        return (
-          <SafeComponent componentName="StakeholderEngagementModule">
-            <ErrorBoundary componentName="StakeholderEngagementModule">
-              <StakeholderEngagementModule />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "content-orchestration":
-        return (
-          <SafeComponent componentName="ContentOrchestrationModule">
-            <ErrorBoundary componentName="ContentOrchestrationModule">
-              <ContentOrchestrationModule />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "equity-access":
-        return (
-          <SafeComponent componentName="EquityAccessModule">
-            <ErrorBoundary componentName="EquityAccessModule">
-              <EquityAccessModule />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "corpus":
-        return (
-          <SafeComponent componentName="CorpusManager">
-            <ErrorBoundary componentName="CorpusManager">
-              <CorpusManager />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "data-pipeline":
-        return (
-          <SafeComponent componentName="PipelineManager">
-            <ErrorBoundary componentName="PipelineManager">
-              <PipelineManager />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "data-ingestion":
-        return (
-          <SafeComponent componentName="ProcessingQueue">
-            <ErrorBoundary componentName="ProcessingQueue">
-              <ProcessingQueue />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "api-management":
-        return (
-          <SafeComponent componentName="Analytics">
-            <ErrorBoundary componentName="Analytics">
-              <Analytics />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "trace":
-        return (
-          <SafeComponent componentName="TraceManager">
-            <ErrorBoundary componentName="TraceManager">
-              <TraceManager />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "sophie":
-        return (
-          <SafeComponent componentName="SophieDashboard">
-            <ErrorBoundary componentName="SophieDashboard">
-              <SophieDashboard />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "sophie-intelligence":
-        return (
-          <SafeComponent componentName="SophieIntelligenceDashboard">
-            <ErrorBoundary componentName="SophieIntelligenceDashboard">
-              <SophieIntelligenceDashboard />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "sophie-chat":
-        return (
-          <SafeComponent componentName="SophieChat">
-            <ErrorBoundary componentName="SophieChat">
-              <SophieChat />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "build":
-        return (
-          <SafeComponent componentName="BuildDashboard">
-            <ErrorBoundary componentName="BuildDashboard">
-              <BuildDashboard />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "fedscout":
-        return (
-          <SafeComponent componentName="FedScoutDashboard">
-            <ErrorBoundary componentName="FedScoutDashboard">
-              <FedScoutDashboard />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      case "blockchain":
-        return (
-          <SafeComponent componentName="BlockchainDashboard">
-            <ErrorBoundary componentName="BlockchainDashboard">
-              <BlockchainDashboard />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-      default:
-        return (
-          <SafeComponent componentName="EMMEHome-Default">
-            <ErrorBoundary componentName="EMMEHome-Default">
-              <EMMEHome />
-            </ErrorBoundary>
-          </SafeComponent>
-        );
-    }
-  };
-  
-  return (
-    <SafeComponent componentName="EMMELayout">
-      <ErrorBoundary componentName="EMMELayout">
-        <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
-          {renderCurrentView()}
-        </EMMELayout>
-      </ErrorBoundary>
-    </SafeComponent>
-  );
-}
-
-function Router() {
-  const { isLoading } = useAuth();
-  
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  return (
-    <Switch>
-      <Route path="/" component={() => (
-        <SafeComponent componentName="SocratIQPlatform">
-          <ErrorBoundary componentName="SocratIQPlatform">
-            <SocratIQPlatform />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/landing" component={() => (
-        <SafeComponent componentName="Landing">
-          <ErrorBoundary componentName="Landing">
-            <Landing />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/home" component={() => (
-        <SafeComponent componentName="Home">
-          <ErrorBoundary componentName="Home">
-            <Home />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/dashboard" component={() => (
-        <SafeComponent componentName="Dashboard">
-          <ErrorBoundary componentName="Dashboard">
-            <Dashboard />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/emme-engage" component={() => (
-        <SafeComponent componentName="EMMEEngageApp">
-          <ErrorBoundary componentName="EMMEEngageApp">
-            <EMMEEngageApp />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
-      <Route path="/emme-engage/projects/:id">
-        {(params) => (
-          <SafeComponent componentName="ProjectDetails">
-            <ErrorBoundary componentName="ProjectDetails">
-              <ProjectDetails projectId={params.id} onBack={() => window.history.back()} />
-            </ErrorBoundary>
-          </SafeComponent>
-        )}
-      </Route>
-      <Route path="/sophie" component={() => (
-        <SafeComponent componentName="SophieDashboard-Route">
-          <ErrorBoundary componentName="SophieDashboard-Route">
-            <SophieDashboard />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/sophie/intelligence" component={() => (
-        <SafeComponent componentName="SophieIntelligenceDashboard-Route">
-          <ErrorBoundary componentName="SophieIntelligenceDashboard-Route">
-            <SophieIntelligenceDashboard />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/sophie/chat" component={() => (
-        <SafeComponent componentName="SophieChat-Route">
-          <ErrorBoundary componentName="SophieChat-Route">
-            <SophieChat />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/corpus" component={() => (
-        <SafeComponent componentName="CorpusManager-Route">
-          <ErrorBoundary componentName="CorpusManager-Route">
-            <CorpusManager />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/pipeline" component={() => (
-        <SafeComponent componentName="PipelineManager-Route">
-          <ErrorBoundary componentName="PipelineManager-Route">
-            <PipelineManager />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/analytics">
-        {() => (
-          <SafeComponent componentName="Analytics-Route">
-            <ErrorBoundary componentName="Analytics-Route">
-              <Analytics analytics={{}} />
-            </ErrorBoundary>
-          </SafeComponent>
-        )}
-      </Route>
-      <Route path="/trace" component={() => (
-        <SafeComponent componentName="TraceManager-Route">
-          <ErrorBoundary componentName="TraceManager-Route">
-            <TraceManager />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/build" component={() => (
-        <SafeComponent componentName="BuildDashboard-Route">
-          <ErrorBoundary componentName="BuildDashboard-Route">
-            <BuildDashboard />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/fedscout" component={() => (
-        <SafeComponent componentName="FedScoutDashboard-Route">
-          <ErrorBoundary componentName="FedScoutDashboard-Route">
-            <FedScoutDashboard />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route path="/blockchain" component={() => (
-        <SafeComponent componentName="BlockchainDashboard-Route">
-          <ErrorBoundary componentName="BlockchainDashboard-Route">
-            <BlockchainDashboard />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-      <Route component={() => (
-        <SafeComponent componentName="NotFound">
-          <ErrorBoundary componentName="NotFound">
-            <NotFound />
-          </ErrorBoundary>
-        </SafeComponent>
-      )} />
-    </Switch>
-  );
-}
-
 function App() {
-  console.log("App component rendering, creating QueryClient...");
-  
   return (
-    <ErrorBoundary componentName="App">
-      <QueryClientProvider client={queryClient}>
-        <TenantProvider>
-          <TooltipProvider>
-            <div className="min-h-screen bg-background">
-              <Router />
-            </div>
-            <Toaster />
-          </TooltipProvider>
-        </TenantProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Landing Pages */}
+          <Route path="/emme-engage" element={<EMMEEngageLanding />} />
+          <Route path="/emme-health" element={<EMMEHealthLanding />} />
+          
+          {/* Auth Routes */}
+          <Route path="/login" element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
+
+          {/* Protected Routes with Layout */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }>
+            {/* Dashboard/Landing */}
+            <Route index element={<PostLoginLanding />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="home" element={<Home />} />
+            
+            {/* Sophie Routes */}
+            <Route path="sophie" element={<SophieChat />} />
+            <Route path="sophie/brief" element={<Brief />} />
+            <Route path="sophie/dashboard" element={<SophieDashboard />} />
+            <Route path="sophie/analysis" element={<SophieAnalysis />} />
+            <Route path="sophie/intelligence-brief" element={<SophieIntelligenceBrief />} />
+            <Route path="sophie/intelligence-dashboard" element={<SophieIntelligenceDashboard />} />
+            <Route path="sophie/admin" element={<AdminDashboard />} />
+            <Route path="sophie-landing" element={<SophieLanding />} />
+            <Route path="sophie-impact-lens" element={<SophieImpactLens />} />
+            
+            {/* EMME Connect Routes */}
+            <Route path="emme" element={<SophieChat />} />
+            <Route path="emme-engage/app" element={<EMMEEngageApp />} />
+            <Route path="emme/research-hub" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/competitive-intelligence" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/regulatory-strategy" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/market-access" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/content-library" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/partnerships" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/analytics-dashboard" element={<EMMEConnectEnhanced />} />
+            <Route path="emme/projects" element={<EMMEProjectManager />} />
+            <Route path="emme/questions" element={<EMMEConnectEnhanced />} />
+            
+            {/* VMS Intelligence Hub */}
+            <Route path="vms" element={<VMSIntelligenceHub />} />
+            <Route path="vms/*" element={<VMSIntelligenceHub />} />
+            
+            {/* Core Platform Routes */}
+            <Route path="transform" element={<Transform />} />
+            <Route path="mesh" element={<Mesh />} />
+            <Route path="platform" element={<SocratIQPlatform />} />
+            <Route path="platform-dashboard" element={<PlatformDashboard />} />
+            
+            {/* Trust & Risk Management */}
+            <Route path="trust" element={<SophieTrustManager />} />
+            <Route path="risk-analyzer" element={<RiskAnalyzer />} />
+            <Route path="trace-audit" element={<TraceAudit />} />
+            <Route path="trace-manager" element={<TraceManager />} />
+            <Route path="audit-trail" element={<AuditTrail />} />
+            
+            {/* Agents & RAG */}
+            <Route path="agents" element={<AgentsManager />} />
+            <Route path="agentic-rag" element={<AgenticRAGManager />} />
+            
+            {/* Knowledge Graphs */}
+            <Route path="graphs" element={<GraphVisualization />} />
+            <Route path="knowledge-graph" element={<KnowledgeGraph />} />
+            <Route path="graph-visualization" element={<GraphVisualizationManager />} />
+            
+            {/* Neural Networks & AI */}
+            <Route path="gnn" element={<GraphNeuralNetworkManager />} />
+            <Route path="llm-manager" element={<LLMManager />} />
+            <Route path="nlp-dashboard" element={<AdvancedNLPDashboard />} />
+            <Route path="multi-paradigm" element={<MultiParadigmReasoningDashboard />} />
+            <Route path="sophie-models" element={<SophieModelsManager />} />
+            <Route path="sophie-orchestrator" element={<SophieOrchestrator />} />
+            
+            {/* Data Management */}
+            <Route path="upload" element={<Upload />} />
+            <Route path="file-upload" element={<FileUpload />} />
+            <Route path="documents" element={<DocumentList />} />
+            <Route path="corpus-manager" element={<CorpusManager />} />
+            <Route path="vector-database" element={<VectorDatabaseManager />} />
+            <Route path="processing-queue" element={<ProcessingQueue />} />
+            <Route path="transformers" element={<TransformersManager />} />
+            
+            {/* Analytics & Monitoring */}
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="research-hub" element={<ResearchHub />} />
+            
+            {/* Federal & Compliance */}
+            <Route path="fedscout" element={<FedScout />} />
+            <Route path="fedscout-dashboard" element={<FedScoutDashboard />} />
+            <Route path="fedscout-manager" element={<FedScoutManager />} />
+            
+            {/* Build & Pipeline */}
+            <Route path="build" element={<BuildDashboard />} />
+            <Route path="pipeline-manager" element={<PipelineManager />} />
+            
+            {/* Blockchain & Advanced Features */}
+            <Route path="blockchain" element={<BlockchainDashboard />} />
+            <Route path="bayesian-monte-carlo" element={<BayesianMonteCarloManager />} />
+            
+            {/* Partner Management */}
+            <Route path="partners" element={<PartnerAppsManager />} />
+            <Route path="partner-branding" element={<PartnerBrandingDemo />} />
+            <Route path="tenant-provider" element={<TenantProvider />} />
+            
+            {/* User Management */}
+            <Route path="profile" element={<ProfileManager />} />
+            
+            {/* IP & Labs */}
+            <Route path="ip" element={<IP />} />
+            <Route path="labs" element={<Labs />} />
+            <Route path="trials" element={<Trials />} />
+            
+            {/* Project Management */}
+            <Route path="projects/:id" element={<ProjectDetails />} />
+            
+            {/* Catch-all for undefined protected routes */}
+            <Route path="*" element={<NotFound />} />
+          </Route>
+
+          {/* Default route - redirect to landing page */}
+          <Route path="*" element={<Navigate to="/emme-engage" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
