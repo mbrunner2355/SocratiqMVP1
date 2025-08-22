@@ -38,7 +38,8 @@ import {
   Send,
   Loader2,
   Pin,
-  PinOff
+  PinOff,
+  Archive
 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -203,7 +204,8 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
       hasSubmenu: true,
       submenuItems: [
         { id: "view-projects", label: "View Projects", icon: <FolderOpen className="w-4 h-4" /> },
-        { id: "create-project", label: "Create New Project", icon: <Plus className="w-4 h-4" /> }
+        { id: "create-project", label: "Create New Project", icon: <Plus className="w-4 h-4" /> },
+        { id: "backup", label: "Backup & Export", icon: <Archive className="w-4 h-4" /> }
       ]
     },
     {

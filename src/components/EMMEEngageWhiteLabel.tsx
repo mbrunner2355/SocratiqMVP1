@@ -35,7 +35,8 @@ import { EMMEDataSourcesDashboard } from "@/components/emme/EMMEDataSourcesDashb
 import { EMMEProductionDashboard } from "@/components/emme/EMMEProductionDashboard";
 import { SimpleProjectManager } from "@/components/emme/SimpleProjectManager";
 import { EMMEComprehensiveProjectCreator } from "@/components/emme/EMMEComprehensiveProjectCreator";
-import { Home, FolderPlus, Users, MessageSquare, Zap, Brain, FileText, Database, Shield, BarChart, AlertTriangle, Settings, Pin, PinOff } from 'lucide-react';
+import { Home, FolderPlus, Users, MessageSquare, Zap, Brain, FileText, Database, Shield, BarChart, AlertTriangle, Settings, Pin, PinOff, Archive } from 'lucide-react';
+import { ProjectBackupManager } from './ProjectBackupManager';
 
 
 interface TenantUsage {
@@ -74,6 +75,7 @@ const getMainNavIcon = (view: string) => {
     case 'create-project': return FolderPlus;
     case 'view-projects': return BarChart;
     case 'clients': return Users;
+    case 'backup': return Archive;
     case 'chat': return MessageSquare;
     case 'smart-wizard': return Zap;
     case 'strategic-intelligence': return Brain;
@@ -193,6 +195,8 @@ function EMMEEngageWhiteLabel() {
         return <SimpleProjectManager />;
       case "view-projects":
         return <SimpleProjectManager />;
+      case "backup":
+        return <ProjectBackupManager />;
 
       // Project Framework sections
       case "background":

@@ -29,6 +29,7 @@ import { registerEMMEProjectRoutes } from "./routes-emme-projects";
 import { registerTenantRoutes } from "./routes-tenant";
 import { tenantMiddleware, tenantAccessMiddleware } from "./middleware/tenant";
 import fedscoutRoutes from "./routes-fedscout";
+import { registerBackupRoutes } from "./routes-backup";
 import { pharmaceuticalCorpusBuilder } from "./services/pharmaceuticalCorpus";
 import { emmeDataProvider } from "./services/emmeDataProvider";
 
@@ -392,6 +393,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Multi-tenant configuration and white-label API
   registerTenantRoutes(app);
+  
+  // Project backup and export API
+  registerBackupRoutes(app);
 
   // SocratIQ Pharmaceutical Corpus™ - EMME Intelligence Corpus Management API
   app.get('/api/corpora', async (req, res) => {

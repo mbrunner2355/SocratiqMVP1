@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "./db";
-import { emmeProjects, type InsertEmmeProject } from "@shared/schema";
+import { emmeProjects, type InsertEmmeProject } from "../shared/schema";
 import { eq, desc, and, like, or } from "drizzle-orm";
 import { z } from "zod";
 
@@ -51,25 +51,25 @@ export function registerEMMEProjectRoutes(app: Express) {
       let whereConditions = [];
       
       if (query.status) {
-        whereConditions.push(eq(emmeProjects.status, query.status));
+        whereConditions.push(eq(emmeProjects.status, query.status as any));
       }
       
       if (query.type) {
-        whereConditions.push(eq(emmeProjects.type, query.type));
+        whereConditions.push(eq(emmeProjects.type, query.type as any));
       }
       
       if (query.client) {
-        whereConditions.push(eq(emmeProjects.client, query.client));
+        whereConditions.push(eq(emmeProjects.client, query.client as any));
       }
       
       if (query.search) {
         whereConditions.push(
           or(
-            like(emmeProjects.projectTitle, `%${query.search}%`),
-            like(emmeProjects.summary, `%${query.search}%`),
-            like(emmeProjects.client, `%${query.search}%`),
-            like(emmeProjects.team, `%${query.search}%`)
-          )
+            like(emmeProjects.projectTitle, `%${query.search}%` as any),
+            like(emmeProjects.summary, `%${query.search}%` as any),
+            like(emmeProjects.client, `%${query.search}%` as any),
+            like(emmeProjects.team, `%${query.search}%` as any)
+          ) as any
         );
       }
       
@@ -303,6 +303,76 @@ export function registerEMMEProjectRoutes(app: Express) {
     } catch (error) {
       console.error("Error fetching teams:", error);
       res.status(500).json({ error: "Failed to fetch teams" });
+    }
+  });
+
+  // Migration endpoint to import projects from localStorage backup
+  app.post("/api/emme/projects/import-backup", async (req, res) => {
+    try {
+      const { projects } = req.body;
+      
+      if (!projects || !Array.isArray(projects)) {
+        return res.status(400).json({ error: "Projects array is required" });
+      }
+
+      const importResults = [];
+      
+      for (const project of projects) {
+        try {
+          // Map localStorage project structure to database schema
+          const projectData: InsertEmmeProject = {
+            projectTitle: project.name || project.projectTitle || 'Imported Project',
+            client: project.client || 'Unknown Client',
+            team: project.team || 'Unknown Team',
+            summary: project.summary || 'Imported from localStorage backup',
+            type: project.organizationType === 'pharmaceutical' ? 'campaign' : 'campaign',
+            status: project.status || 'draft',
+            therapeuticArea: project.therapeuticArea,
+            createdBy: 'import-user',
+            metadata: {
+              importedFromLocalStorage: true,
+              importDate: new Date().toISOString(),
+              originalData: project
+            },
+            targetMarkets: [],
+            timeline: {},
+            budget: {},
+            stakeholders: [],
+            documents: [],
+            risks: [],
+            milestones: [],
+            tags: []
+          };
+
+          const [newProject] = await db
+            .insert(emmeProjects)
+            .values(projectData)
+            .returning();
+
+          importResults.push({
+            success: true,
+            originalId: project.id,
+            newId: newProject.id,
+            projectName: project.name || project.projectTitle
+          });
+        } catch (error) {
+          console.error('Error importing individual project:', error);
+          importResults.push({
+            success: false,
+            originalId: project.id,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            projectName: project.name || project.projectTitle
+          });
+        }
+      }
+
+      res.json({
+        message: `Import completed. ${importResults.filter(r => r.success).length} of ${projects.length} projects imported successfully.`,
+        results: importResults
+      });
+    } catch (error) {
+      console.error("Error importing projects backup:", error);
+      res.status(500).json({ error: "Failed to import projects backup" });
     }
   });
 }
