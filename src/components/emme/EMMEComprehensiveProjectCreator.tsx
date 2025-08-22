@@ -1341,9 +1341,6 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       <div className="space-y-6">
         {/* Initiative Section */}
         <div className="bg-white rounded-lg border">
-          <div className="px-4 py-3 bg-gray-100 border-b">
-            <h3 className="font-semibold text-gray-900">Initiative</h3>
-          </div>
           {[
             { id: 'unmet-need', label: 'Unmet Need' },
             { id: 'tolerability', label: 'Tolerability' },
