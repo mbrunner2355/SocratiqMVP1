@@ -35,6 +35,7 @@ export function EMMEComprehensiveProjectCreator() {
   const [activeProjectNav, setActiveProjectNav] = useState('project-insights');
   const [insightsTab, setInsightsTab] = useState('overview');
   const [frameworkTab, setFrameworkTab] = useState('background');
+  const [activeAccordion, setActiveAccordion] = useState('mission-vision');
 
   // Check if we're opening an existing project from session storage
   useEffect(() => {
@@ -761,158 +762,248 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
   const renderFrameworkContent = () => {
     
+    const renderAccordionContent = () => {
+      switch (activeAccordion) {
+        case 'mission-vision':
+          return (
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Mission Statement</h4>
+                <p className="text-sm text-gray-700">
+                  Global mission, introduced as part of its strategic repositioning to integrate its life science focus across pharmaceuticals, consumer health, and other science.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Vision</h4>
+                <p className="text-sm text-gray-700">
+                  <span className="text-red-500">▶</span> To be a trusted leader in life sciences, advancing health through innovation and sustainability, providing long-term societal value.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Core Values & Framework</h4>
+                <p className="text-sm text-gray-700">Leadership, Integrity, Agility, Efficiency</p>
+                <p className="text-sm text-gray-700">These values support an overarching commitment to:</p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Sustainability, Innovation, Patient Outcomes, and Collaboration</h4>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Guiding Principles in Action</h4>
+                <p className="text-sm text-gray-700">
+                  <span className="text-red-500">▶</span> Innovation for People and Planet – Using science to improve quality of life while reducing ecological footprint.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Patient-Centricity – Especially in pharma, promoting access-based innovation.</h4>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Digital Transformation – Democratizing access and enhancing R&D capabilities.</h4>
+              </div>
+            </div>
+          );
+
+        case 'unmet-need':
+          return (
+            <div className="space-y-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">Market Overview</h4>
+                <p className="text-sm text-blue-800">
+                  Significant gap in non-hormonal treatment options for menopausal symptoms, with majority of women avoiding hormone therapy due to safety concerns.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Current Treatment Limitations</h4>
+                <ul className="space-y-1 text-sm text-gray-700 ml-4">
+                  <li>• Limited non-hormonal efficacy options</li>
+                  <li>• Safety concerns with hormone therapy</li>
+                  <li>• Inadequate symptom management</li>
+                  <li>• Patient education gaps</li>
+                </ul>
+              </div>
+            </div>
+          );
+
+        case 'tolerability':
+          return (
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Safety Profile</h4>
+                <p className="text-sm text-gray-700">
+                  Once-daily oral administration with favorable safety profile demonstrated in Phase 2 trials. No hormone-related side effects observed.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Delivery Method</h4>
+                <p className="text-sm text-gray-700">
+                  Convenient oral dosing supports patient compliance and ease of administration compared to alternative delivery methods.
+                </p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-green-900 mb-2">Clinical Evidence</h4>
+                <p className="text-sm text-green-800">
+                  52-week safety data confirmed tolerability with no significant adverse events or hepatotoxicity signals.
+                </p>
+              </div>
+            </div>
+          );
+
+        case 'patient-population':
+          return (
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Target Demographics</h4>
+                <p className="text-sm text-gray-700">
+                  Women experiencing moderate to severe menopausal symptoms seeking non-hormonal alternatives.
+                </p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-purple-900 mb-2">Market Size</h4>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="font-medium text-purple-800">US Market</p>
+                    <p className="text-purple-700">~6 million women annually</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-purple-800">EU Market</p>
+                    <p className="text-purple-700">~4 million women annually</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Patient Characteristics</h4>
+                <ul className="space-y-1 text-sm text-gray-700 ml-4">
+                  <li>• Age range: 45-65 years</li>
+                  <li>• Contraindicated for hormone therapy</li>
+                  <li>• Preference for non-hormonal options</li>
+                  <li>• Quality of life impact from symptoms</li>
+                </ul>
+              </div>
+            </div>
+          );
+
+        case 'positioning':
+          return (
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Market Position</h4>
+                <p className="text-sm text-gray-700">
+                  Novel non-hormonal option positioned as first-in-class dual NK receptor antagonist for women avoiding or contraindicated for hormone therapy.
+                </p>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-orange-900 mb-2">Competitive Advantage</h4>
+                <ul className="space-y-1 text-sm text-orange-800 ml-4">
+                  <li>• Novel mechanism of action</li>
+                  <li>• Non-hormonal approach</li>
+                  <li>• Proven efficacy in Phase 3</li>
+                  <li>• Favorable safety profile</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Target Messaging</h4>
+                <p className="text-sm text-gray-700">
+                  Effective symptom relief without hormones - addressing the unmet need for safe, convenient treatment options.
+                </p>
+              </div>
+            </div>
+          );
+
+        case 'access-affordability':
+          return (
+            <div className="space-y-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="font-medium text-blue-900">UNITED STATES</p>
+                    <p className="text-blue-800">Average Among Menopausal Women</p>
+                    <p className="text-blue-800 font-semibold">4.7%</p>
+                    <p className="text-blue-800">Approximately 10%</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-blue-900">SUMMARY</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm text-gray-700">
+                  These figures suggest that a substantial majority of women experiencing menopausal symptoms opt out of hormone therapy, often due to risk aversion and misinformation.
+                </p>
+
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Implications</h4>
+                  <p className="text-sm text-gray-700">
+                    <strong>Unmet Need:</strong> The low uptake of HT highlights a significant unmet need for alternative, non-hormonal treatments for menopausal symptoms.
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <strong>Educational Efforts:</strong> There's a need for improved education and communication to address misconceptions about HT and inform women about available treatment options.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-yellow-900 mb-2">Market Access Strategy</h4>
+                <ul className="space-y-1 text-sm text-yellow-800 ml-4">
+                  <li>• Payer evidence development</li>
+                  <li>• Value-based pricing models</li>
+                  <li>• Patient assistance programs</li>
+                  <li>• Real-world evidence generation</li>
+                </ul>
+              </div>
+            </div>
+          );
+
+        default:
+          return null;
+      }
+    };
+
     const renderBackgroundContent = () => (
       <div className="space-y-6">
-        <div className="flex justify-end mb-4">
-          <Button className="bg-green-600 hover:bg-green-700 text-white">Complete</Button>
+        {/* Accordion Menu */}
+        <div className="bg-white rounded-lg border">
+          <div className="border-b border-gray-200">
+            {[
+              { id: 'mission-vision', label: 'Mission, Vision and Core Values', icon: '🎯' },
+              { id: 'unmet-need', label: 'Unmet Need', icon: '📋' },
+              { id: 'tolerability', label: 'Tolerability', icon: '✅' },
+              { id: 'patient-population', label: 'Patient Population', icon: '👥' },
+              { id: 'positioning', label: 'Positioning', icon: '🎯' },
+              { id: 'access-affordability', label: 'Access & Affordability', icon: '💰' }
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveAccordion(item.id)}
+                className={`w-full text-left px-6 py-4 flex items-center gap-3 hover:bg-gray-50 transition-colors ${
+                  activeAccordion === item.id ? 'bg-red-50 border-r-4 border-red-500' : ''
+                }`}
+              >
+                <span className="text-lg">{item.icon}</span>
+                <span className={`font-medium ${
+                  activeAccordion === item.id ? 'text-red-600' : 'text-gray-700'
+                }`}>
+                  {item.label}
+                </span>
+                <span className={`ml-auto text-sm ${
+                  activeAccordion === item.id ? 'text-red-500' : 'text-gray-400'
+                }`}>
+                  {activeAccordion === item.id ? '▼' : '▶'}
+                </span>
+              </button>
+            ))}
+          </div>
+          
+          {/* Content Area */}
+          <div className="p-6">
+            {renderAccordionContent()}
+          </div>
         </div>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="text-red-500">▼</span>
-              Mission, Vision and Core Values
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Mission Statement</h4>
-              <p className="text-sm text-gray-700">
-                Global mission, introduced as part of its strategic repositioning to integrate its life science focus across pharmaceuticals, consumer health, and other science.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Vision</h4>
-              <p className="text-sm text-gray-700">
-                <span className="text-red-500">▶</span> To be a trusted leader in life sciences, advancing health through innovation and sustainability, providing long-term societal value.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Core Values & Framework</h4>
-              <p className="text-sm text-gray-700">Leadership, Integrity, Agility, Efficiency</p>
-              <p className="text-sm text-gray-700">These values support an overarching commitment to:</p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Sustainability, Innovation, Patient Outcomes, and Collaboration</h4>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Guiding Principles in Action</h4>
-              <p className="text-sm text-gray-700">
-                <span className="text-red-500">▶</span> Innovation for People and Planet – Using science to improve quality of life while reducing ecological footprint.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Patient-Centricity – Especially in pharma, promoting access-based innovation.</h4>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Digital Transformation – Democratizing access and enhancing R&D capabilities.</h4>
-            </div>
-
-            {/* Expandable Dropdown Section */}
-            <div className="border-t pt-4">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-red-500">📋</span>
-                <h4 className="font-medium text-red-500">Unmet Need</h4>
-                <span className="text-red-500">▼</span>
-              </div>
-              
-              <div className="pl-6 space-y-4">
-                {/* Mechanism & CE */}
-                <div className="border-l-2 border-gray-200 pl-4">
-                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
-                    <span className="text-red-500">▶</span>
-                    <h5 className="font-medium text-gray-900">Mechanism & CE</h5>
-                  </div>
-                  <div className="mt-2 pl-6 text-sm text-gray-700">
-                    <p>Dual NK-1/NK-3 receptor antagonist targeting KNDy neurons for non-hormonal menopause symptom management.</p>
-                  </div>
-                </div>
-
-                {/* Tolerability & Delivery */}
-                <div className="border-l-2 border-gray-200 pl-4">
-                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
-                    <span className="text-red-500">▶</span>
-                    <h5 className="font-medium text-gray-900">Tolerability & Delivery</h5>
-                  </div>
-                  <div className="mt-2 pl-6 text-sm text-gray-700">
-                    <p>Once-daily oral administration with favorable safety profile and no hormone-related side effects.</p>
-                  </div>
-                </div>
-
-                {/* Patient Population */}
-                <div className="border-l-2 border-gray-200 pl-4">
-                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
-                    <span className="text-red-500">▶</span>
-                    <h5 className="font-medium text-gray-900">Patient Population</h5>
-                  </div>
-                  <div className="mt-2 pl-6 text-sm text-gray-700">
-                    <p>Women experiencing moderate to severe menopausal symptoms seeking non-hormonal alternatives.</p>
-                  </div>
-                </div>
-
-                {/* Positioning */}
-                <div className="border-l-2 border-gray-200 pl-4">
-                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
-                    <span className="text-red-500">▶</span>
-                    <h5 className="font-medium text-gray-900">Positioning</h5>
-                  </div>
-                  <div className="mt-2 pl-6 text-sm text-gray-700">
-                    <p>Novel non-hormonal option for women avoiding or contraindicated for hormone therapy.</p>
-                  </div>
-                </div>
-
-                {/* Access & Affordability */}
-                <div className="border-l-2 border-gray-200 pl-4">
-                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
-                    <span className="text-red-500">▶</span>
-                    <h5 className="font-medium text-gray-900">Access & Affordability</h5>
-                  </div>
-                  <div className="mt-2 pl-6 space-y-3">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <p className="font-medium text-blue-900">UNITED STATES</p>
-                          <p className="text-blue-800">Average Among Menopausal Women</p>
-                          <p className="text-blue-800 font-semibold">4.7%</p>
-                          <p className="text-blue-800">Approximately 10%</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-blue-900">SUMMARY</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-700">
-                        These figures suggest that a substantial majority of women experiencing menopausal symptoms opt out of hormone therapy, often due to risk aversion and misinformation.
-                      </p>
-
-                      <div>
-                        <h6 className="font-medium text-gray-900 mb-1">Implications</h6>
-                        <p className="text-sm text-gray-700">
-                          <strong>Unmet Need:</strong> The low uptake of HT highlights a significant unmet need for alternative, non-hormonal treatments for menopausal symptoms.
-                        </p>
-                        <p className="text-sm text-gray-700">
-                          <strong>Educational Efforts:</strong> There's a need for improved education and communication to address misconceptions about HT and inform women about available treatment options.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-sm text-gray-700 italic">
-              Let's take a deeper dive into public perceptions, especially in regard to women's health? Are there any direct correlations to either positive or negative women's health outcomes?
-            </p>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader>
