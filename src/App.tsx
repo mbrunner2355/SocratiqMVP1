@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toast/toaster";
 
 // Import all page components
 import Layout from "@/components/Layout";
-import Dashboard from "@/pages/dashboard";
+// import Dashboard from "@/pages/dashboard";
 import PlatformDashboard from "@/pages/PlatformDashboard";
 import PipelineManager from "@/components/PipelineManager";
 import Analytics from "@/components/Analytics";

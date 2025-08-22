@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 // import { useAuth } from "@/hooks/useAuth";
-import { type User } from "@shared/schema";
+// import { type User } from "@shared/schema";
 
 // Mock useAuth hook for development
 const useAuth = () => ({
-  user: { id: '1', email: 'admin@socratiq.com', name: 'SocratIQ Admin', role: 'admin' } as User,
+  user: { id: '1', email: 'admin@socratiq.com', name: 'SocratIQ Admin', role: 'admin' },
   isLoading: false,
   isAuthenticated: true
 });
@@ -18,7 +17,6 @@ import {
   Brain, 
   Settings, 
   MessageCircle,
-  FileText,
   Network,
   Shield,
   Building2,
@@ -28,8 +26,6 @@ import {
   GitBranch,
   Zap,
   Bot,
-  ChevronLeft,
-  ChevronRight,
   ChevronDown,
   ChevronUp,
   Home,
@@ -38,13 +34,8 @@ import {
   Cpu,
   Lock,
   Menu,
-  X,
-  Search,
-  Bell,
-  Lightbulb,
   Upload,
   Play,
-  Map,
   BarChart3,
   Handshake,
   FolderOpen,
@@ -53,8 +44,7 @@ import {
   Eye,
   CheckCircle,
   Clock,
-  AlertTriangle,
-  Archive
+  AlertTriangle
 } from "lucide-react";
 import { SophieLogo } from "./SophieLogo";
 import { SophieIntelligenceDashboard } from "./SophieIntelligenceDashboard";

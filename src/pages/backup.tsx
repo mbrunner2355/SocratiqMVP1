@@ -1,4 +1,3 @@
-import React from 'react';
 import { GlobalProjectBackup } from '@/components/GlobalProjectBackup';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
