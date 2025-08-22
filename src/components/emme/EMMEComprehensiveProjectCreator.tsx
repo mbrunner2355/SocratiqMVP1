@@ -335,57 +335,89 @@ export function EMMEComprehensiveProjectCreator() {
               <h2 className="text-xl font-semibold text-red-500">Scope</h2>
             </div>
             
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Competitive Analysis</h3>
-                <ul className="space-y-1 text-gray-700 ml-4">
-                  <li>• Landscape review of non-hormonal, hormonal, OTC, and natural alternatives</li>
-                  <li>• SWOT analyses for key competitors</li>
-                  <li>• Assessment of clinical positioning, messaging, patient targeting, and promotional strategies</li>
-                </ul>
+                <Textarea 
+                  defaultValue="• Landscape review of non-hormonal, hormonal, OTC, and natural alternatives
+• SWOT analyses for key competitors
+• Assessment of clinical positioning, messaging, patient targeting, and promotional strategies"
+                  className="min-h-[80px] text-gray-700"
+                  placeholder="Define competitive analysis scope..."
+                />
               </div>
               
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Pricing Models</h3>
-                <ul className="space-y-1 text-gray-700 ml-4">
-                  <li>• Evaluation of pricing strategies and structures across US, UK, and EU markets</li>
-                  <li>• Competitive benchmarking and price sensitivity analysis</li>
-                  <li>• Recommendations for pricing frameworks that support access and adoption</li>
-                </ul>
+                <Textarea 
+                  defaultValue="• Evaluation of pricing strategies and structures across US, UK, and EU markets
+• Competitive benchmarking and price sensitivity analysis
+• Recommendations for pricing frameworks that support access and adoption"
+                  className="min-h-[80px] text-gray-700"
+                  placeholder="Define pricing model scope..."
+                />
               </div>
               
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Persona Development</h3>
-                <ul className="space-y-1 text-gray-700 ml-4">
-                  <li>• Creation of patient personas reflecting demographics, psychographics, treatment preferences, and barriers</li>
-                  <li>• Development of provider personas including specialty types, decision drivers, and prescribing behaviors</li>
-                </ul>
+                <Textarea 
+                  defaultValue="• Creation of patient personas reflecting demographics, psychographics, treatment preferences, and barriers
+• Development of provider personas including specialty types, decision drivers, and prescribing behaviors"
+                  className="min-h-[80px] text-gray-700"
+                  placeholder="Define persona development scope..."
+                />
               </div>
               
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Messaging Framework</h3>
-                <ul className="space-y-1 text-gray-700 ml-4">
-                  <li>• Development of core messaging pillars for patients, providers, and payers</li>
-                  <li>• Adaptation of messaging to reflect cultural and regulatory differences across markets</li>
-                  <li>• Identification of potential areas for differentiated storytelling and education</li>
-                </ul>
+                <Textarea 
+                  defaultValue="• Development of core messaging pillars for patients, providers, and payers
+• Adaptation of messaging to reflect cultural and regulatory differences across markets
+• Identification of potential areas for differentiated storytelling and education"
+                  className="min-h-[80px] text-gray-700"
+                  placeholder="Define messaging framework scope..."
+                />
               </div>
               
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Market Access Strategy</h3>
-                <ul className="space-y-1 text-gray-700 ml-4">
-                  <li>• Assessment of reimbursement pathways and access requirements by market</li>
-                  <li>• Recommendations for evidence generation, HEOR (Health Economics and Outcomes Research) support, and stakeholder engagement</li>
-                </ul>
+                <Textarea 
+                  defaultValue="• Assessment of reimbursement pathways and access requirements by market
+• Recommendations for evidence generation, HEOR (Health Economics and Outcomes Research) support, and stakeholder engagement"
+                  className="min-h-[80px] text-gray-700"
+                  placeholder="Define market access strategy scope..."
+                />
               </div>
               
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Go-to-Market Models</h3>
-                <ul className="space-y-1 text-gray-700 ml-4">
-                  <li>• Development of launch models tailored to the dynamics of each region</li>
-                  <li>• Channel strategy recommendations (digital, in-person, hybrid)</li>
-                  <li>• Tactical launch planning support aligned to market nuances</li>
-                </ul>
+                <Textarea 
+                  defaultValue="• Development of launch models tailored to the dynamics of each region
+• Channel strategy recommendations (digital, in-person, hybrid)
+• Tactical launch planning support aligned to market nuances"
+                  className="min-h-[80px] text-gray-700"
+                  placeholder="Define go-to-market model scope..."
+                />
+              </div>
+
+              <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Scope Definition</p>
+                    <p className="text-sm text-gray-600">Customize each section to match your project requirements</p>
+                  </div>
+                  <Button 
+                    onClick={() => {
+                      toast({
+                        title: "Scope Saved",
+                        description: "Project scope has been updated.",
+                      });
+                    }}
+                    variant="outline"
+                  >
+                    Save Scope
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
