@@ -1149,21 +1149,236 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
         case 'unmet-need':
           return (
-            <div className="space-y-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">Market Overview</h4>
-                <p className="text-sm text-blue-800">
-                  Significant gap in non-hormonal treatment options for menopausal symptoms, with majority of women avoiding hormone therapy due to safety concerns.
-                </p>
+            <div className="space-y-6">
+              {/* Prevalence of Vasomotor Symptoms */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Prevalence of Vasomotor Symptoms (VMS)</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">VMS Prevalence Rate</label>
+                    <div className="flex items-center space-x-4">
+                      <input
+                        type="text"
+                        defaultValue="Up to 80% of women"
+                        className="flex-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                        placeholder="Enter prevalence rate..."
+                      />
+                    </div>
+                    <textarea
+                      defaultValue="experience vasomotor symptoms during the menopause transition. An estimated 20-25% report symptoms severe enough to disrupt daily life, sleep, mood, and work productivity."
+                      className="w-full mt-2 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter description..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Global Impact Projection</label>
+                    <div className="flex items-center space-x-4">
+                      <input
+                        type="text"
+                        defaultValue="By 2030, 1.2 billion women worldwide"
+                        className="flex-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                        placeholder="Enter global projection..."
+                      />
+                    </div>
+                    <textarea
+                      defaultValue="will be in menopause — positioning this as a global public health priority, not just a niche women's health issue."
+                      className="w-full mt-2 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter impact description..."
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Current Treatment Limitations</h4>
-                <ul className="space-y-1 text-sm text-gray-700 ml-4">
-                  <li>• Limited non-hormonal efficacy options</li>
-                  <li>• Safety concerns with hormone therapy</li>
-                  <li>• Inadequate symptom management</li>
-                  <li>• Patient education gaps</li>
-                </ul>
+
+              {/* Limitations of Current Therapies */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Limitations of Current Therapies</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hormone Therapy (HRT) Limitations</label>
+                    <textarea
+                      defaultValue="Hormone therapy (HRT) remains the most effective treatment but is not appropriate for all women: Contraindicated in those with or at risk for hormone-sensitive cancers (e.g., breast cancer)."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Enter HRT limitations..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Patient Reluctance Factors</label>
+                    <textarea
+                      defaultValue="Many women are reluctant to use hormones due to perceived risks, side effects, or personal preference. Over-the-counter remedies like soy, black cohosh, and evening primrose offer inconsistent or placebo-level efficacy, with limited guidance from providers."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Enter patient reluctance factors..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Care Fragmentation Issues</label>
+                    <textarea
+                      defaultValue="Stigma and fragmentation in care often delay or prevent symptom recognition and treatment."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter care fragmentation issues..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Market Demand for Non-Hormonal Options */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Market Demand for Non-Hormonal Options</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Therapeutic Gap Description</label>
+                    <textarea
+                      defaultValue="There is a significant therapeutic gap for safe, effective, non-hormonal therapies — particularly for:"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter therapeutic gap description..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Target Populations</label>
+                    <textarea
+                      defaultValue="• Women with cancer histories or estrogen contraindications\n• Women of color, who are more likely to experience severe VMS but less likely to receive treatment\n• Underserved populations facing access or affordability barriers to specialty care"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={4}
+                      placeholder="Enter target populations..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Market Demand Drivers</label>
+                    <textarea
+                      defaultValue="Growing awareness, combined with dissatisfaction with current options, is fueling strong demand for new solutions that are:\n• Clinically effective\n• Easy to take\n• Accessible and inclusive"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={4}
+                      placeholder="Enter market demand drivers..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* HT Usage Decline Data */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Hormone Therapy Usage Decline</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Market Context</label>
+                    <textarea
+                      defaultValue="A significant proportion of women in both the U.S. and U.K. opt out of hormone therapy (HT) for menopause symptoms, often due to concerns about associated risks."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter market context..."
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">United States</label>
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          defaultValue="26.9% in 1999-2000"
+                          className="w-full p-2 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                          placeholder="Historical rate..."
+                        />
+                        <input
+                          type="text"
+                          defaultValue="4.7% in 2017-2020"
+                          className="w-full p-2 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                          placeholder="Current rate..."
+                        />
+                        <input
+                          type="text"
+                          defaultValue="1.8% as of 2023"
+                          className="w-full p-2 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                          placeholder="Latest rate..."
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">United Kingdom</label>
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          defaultValue="Approximately 10%"
+                          className="w-full p-2 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                          placeholder="UK usage rate..."
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Summary</label>
+                      <textarea
+                        defaultValue="These figures suggest that a substantial majority of women experiencing menopausal symptoms opt out of hormone therapy, often due to risk aversion and misinformation."
+                        className="w-full p-2 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                        rows={4}
+                        placeholder="Enter summary..."
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Reasons for Decline</label>
+                    <textarea
+                      defaultValue="The decline is attributed to lingering concerns stemming from the Women's Health Initiative (WHI) study published in 2002, which reported increased risks of breast cancer and cardiovascular disease associated with HT. Despite subsequent analyses clarifying these risks, many women and healthcare providers remain cautious."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Enter reasons for decline..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Implications</label>
+                    <div className="space-y-2">
+                      <div>
+                        <strong className="text-sm text-gray-900">Unmet Need:</strong>
+                        <textarea
+                          defaultValue="The low uptake of HT highlights a significant unmet need for alternative, non-hormonal treatments for menopausal symptoms."
+                          className="w-full mt-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                          rows={2}
+                          placeholder="Enter unmet need implications..."
+                        />
+                      </div>
+                      <div>
+                        <strong className="text-sm text-gray-900">Educational Efforts:</strong>
+                        <textarea
+                          defaultValue="There's a need for improved education and communication to address misconceptions about HT and inform women about available treatment options."
+                          className="w-full mt-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                          rows={2}
+                          placeholder="Enter educational implications..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <div className="flex justify-end">
+                <button 
+                  onClick={() => {
+                    toast({
+                      title: "Unmet Need Data Saved",
+                      description: "All unmet need information has been updated successfully.",
+                    });
+                  }}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium"
+                >
+                  Save Unmet Need Data
+                </button>
               </div>
             </div>
           );
