@@ -93,7 +93,6 @@ import SophieImpactLens from './pages/SophieImpactLens';
 import Brief from './pages/sophie/brief';
 import AdminDashboard from './pages/AdminDashboard';
 
-
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -103,7 +102,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // Public Route Component (redirect if already authenticated)
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" replace />;
+  return !isAuthenticated ? <>{children}</> : <Navigate to="/app/dashboard" replace />;
 };
 
 // Create a query client instance
@@ -121,6 +120,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          {/* Root path redirects to EMME Engage landing */}
+          <Route path="/" element={<Navigate to="/emme-engage" replace />} />
+          
           {/* Public Landing Pages */}
           <Route path="/emme-engage" element={<EMMEEngageLanding />} />
           <Route path="/emme-health" element={<EMMEHealthLanding />} />
@@ -132,8 +134,8 @@ function App() {
             </PublicRoute>
           } />
 
-          {/* Protected Routes with Layout */}
-          <Route path="/" element={
+          {/* Protected Routes with Layout - moved to /app/* */}
+          <Route path="/app" element={
             <ProtectedRoute>
               <Layout />
             </ProtectedRoute>
@@ -156,7 +158,11 @@ function App() {
             
             {/* EMME Connect Routes */}
             <Route path="emme" element={<SophieChat />} />
-            <Route path="emme-engage/app" element={<EMMEEngageApp />} />
+            <Route path="emme-engage/app" element={
+              <TenantProvider>
+                <EMMEEngageApp />
+              </TenantProvider>
+            } />
             <Route path="emme/research-hub" element={<EMMEConnectEnhanced />} />
             <Route path="emme/competitive-intelligence" element={<EMMEConnectEnhanced />} />
             <Route path="emme/regulatory-strategy" element={<EMMEConnectEnhanced />} />
@@ -247,7 +253,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
 
-          {/* Default route - redirect to landing page */}
+          {/* Default route - redirect to EMME Engage landing */}
           <Route path="*" element={<Navigate to="/emme-engage" replace />} />
         </Routes>
       </BrowserRouter>

@@ -48,13 +48,13 @@ export class NavigationService {
     // Route to appropriate app section
     switch (partnerApp) {
       case 'emme-engage':
-        this.goTo('/emme-engage/app');
+        this.goTo('/app/emme-engage/app');  // Goes directly to EMME Engage app
         break;
       case 'emme-health':
-        this.goTo('/dashboard');
+        this.goTo('/app/dashboard');
         break;
       default:
-        this.goTo('/dashboard');
+        this.goTo('/app/dashboard');
     }
   }
 
@@ -106,12 +106,12 @@ export class NavigationService {
     const partnerApp = localStorage.getItem('partner-app');
     
     if (partnerApp === 'emme-engage') {
-      this.goTo('/emme-engage/app');
+      this.goTo('/app/emme-engage/app');  // Goes directly to EMME Engage app
     } else if (partnerApp === 'emme-health') {
-      this.goTo('/dashboard');
+      this.goTo('/app/dashboard');
     } else {
       // Default redirect
-      this.goTo('/dashboard');
+      this.goTo('/app/dashboard');
     }
   }
 
