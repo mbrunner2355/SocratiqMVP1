@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
+import React from "react";
 
 // Create queryClient directly here to avoid import issues
 const queryClient = new QueryClient({
@@ -59,6 +60,38 @@ import Dashboard from "@/pages/dashboard";
 import { TenantProvider } from "@/components/TenantProvider";
 import { useState } from "react";
 
+// Error Boundary Component
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode; componentName: string },
+  { hasError: boolean; error?: Error }
+> {
+  constructor(props: { children: React.ReactNode; componentName: string }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error(`Error in ${this.props.componentName}:`, error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4 bg-red-50 border border-red-200 rounded">
+          <h3 className="text-red-800 font-semibold">Error in {this.props.componentName}</h3>
+          <p className="text-red-600 text-sm">{this.state.error?.message}</p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 // Container component to handle EMME Engage app navigation state
 function EMMEEngageAppContainer() {
   const [currentView, setCurrentView] = useState("home");
@@ -71,54 +104,56 @@ function EMMEEngageAppContainer() {
   const renderCurrentView = () => {
     switch(currentView) {
       case "home":
-        return <EMMEHome />;
+        return <ErrorBoundary componentName="EMMEHome"><EMMEHome /></ErrorBoundary>;
       case "clients":
-        return <ClientManager />;
+        return <ErrorBoundary componentName="ClientManager"><ClientManager /></ErrorBoundary>;
       case "projects":
-        return <ProjectManager mode="list" />;
+        return <ErrorBoundary componentName="ProjectManager"><ProjectManager mode="list" /></ErrorBoundary>;
       case "create-project":
-        return <ProjectManager mode="create" />;
+        return <ErrorBoundary componentName="ProjectManager-Create"><ProjectManager mode="create" /></ErrorBoundary>;
       case "smart-wizard":
         return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Advanced project creation wizard with AI guidance.</p></div>;
       case "strategic-intelligence":
-        return <StrategicIntelligenceModule />;
+        return <ErrorBoundary componentName="StrategicIntelligenceModule"><StrategicIntelligenceModule /></ErrorBoundary>;
       case "stakeholder-engagement":
-        return <StakeholderEngagementModule />;
+        return <ErrorBoundary componentName="StakeholderEngagementModule"><StakeholderEngagementModule /></ErrorBoundary>;
       case "content-orchestration":
-        return <ContentOrchestrationModule />;
+        return <ErrorBoundary componentName="ContentOrchestrationModule"><ContentOrchestrationModule /></ErrorBoundary>;
       case "equity-access":
-        return <EquityAccessModule />;
+        return <ErrorBoundary componentName="EquityAccessModule"><EquityAccessModule /></ErrorBoundary>;
       case "corpus":
-        return <CorpusManager />;
+        return <ErrorBoundary componentName="CorpusManager"><CorpusManager /></ErrorBoundary>;
       case "data-pipeline":
-        return <PipelineManager />;
+        return <ErrorBoundary componentName="PipelineManager"><PipelineManager /></ErrorBoundary>;
       case "data-ingestion":
-        return <ProcessingQueue />;
+        return <ErrorBoundary componentName="ProcessingQueue"><ProcessingQueue /></ErrorBoundary>;
       case "api-management":
-        return <Analytics />;
+        return <ErrorBoundary componentName="Analytics"><Analytics /></ErrorBoundary>;
       case "trace":
-        return <TraceManager />;
+        return <ErrorBoundary componentName="TraceManager"><TraceManager /></ErrorBoundary>;
       case "sophie":
-        return <SophieDashboard />;
+        return <ErrorBoundary componentName="SophieDashboard"><SophieDashboard /></ErrorBoundary>;
       case "sophie-intelligence":
-        return <SophieIntelligenceDashboard />;
+        return <ErrorBoundary componentName="SophieIntelligenceDashboard"><SophieIntelligenceDashboard /></ErrorBoundary>;
       case "sophie-chat":
-        return <SophieChat />;
+        return <ErrorBoundary componentName="SophieChat"><SophieChat /></ErrorBoundary>;
       case "build":
-        return <BuildDashboard />;
+        return <ErrorBoundary componentName="BuildDashboard"><BuildDashboard /></ErrorBoundary>;
       case "fedscout":
-        return <FedScoutDashboard />;
+        return <ErrorBoundary componentName="FedScoutDashboard"><FedScoutDashboard /></ErrorBoundary>;
       case "blockchain":
-        return <BlockchainDashboard />;
+        return <ErrorBoundary componentName="BlockchainDashboard"><BlockchainDashboard /></ErrorBoundary>;
       default:
-        return <EMMEHome />;
+        return <ErrorBoundary componentName="EMMEHome-Default"><EMMEHome /></ErrorBoundary>;
     }
   };
   
   return (
-    <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
-      {renderCurrentView()}
-    </EMMELayout>
+    <ErrorBoundary componentName="EMMELayout">
+      <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
+        {renderCurrentView()}
+      </EMMELayout>
+    </ErrorBoundary>
   );
 }
 
@@ -135,44 +170,48 @@ function Router() {
 
   return (
     <Switch>
-      <Route path="/" component={SocratIQPlatform} />
-      <Route path="/landing" component={Landing} />
-      <Route path="/home" component={Home} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/emme-engage" component={EMMEEngageApp} />
+      <Route path="/" component={() => <ErrorBoundary componentName="SocratIQPlatform"><SocratIQPlatform /></ErrorBoundary>} />
+      <Route path="/landing" component={() => <ErrorBoundary componentName="Landing"><Landing /></ErrorBoundary>} />
+      <Route path="/home" component={() => <ErrorBoundary componentName="Home"><Home /></ErrorBoundary>} />
+      <Route path="/dashboard" component={() => <ErrorBoundary componentName="Dashboard"><Dashboard /></ErrorBoundary>} />
+      <Route path="/emme-engage" component={() => <ErrorBoundary componentName="EMMEEngageApp"><EMMEEngageApp /></ErrorBoundary>} />
       <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
       <Route path="/emme-engage/projects/:id">
-        {(params) => <ProjectDetails projectId={params.id} onBack={() => window.history.back()} />}
+        {(params) => <ErrorBoundary componentName="ProjectDetails"><ProjectDetails projectId={params.id} onBack={() => window.history.back()} /></ErrorBoundary>}
       </Route>
-      <Route path="/sophie" component={SophieDashboard} />
-      <Route path="/sophie/intelligence" component={SophieIntelligenceDashboard} />
-      <Route path="/sophie/chat" component={SophieChat} />
-      <Route path="/corpus" component={CorpusManager} />
-      <Route path="/pipeline" component={PipelineManager} />
+      <Route path="/sophie" component={() => <ErrorBoundary componentName="SophieDashboard-Route"><SophieDashboard /></ErrorBoundary>} />
+      <Route path="/sophie/intelligence" component={() => <ErrorBoundary componentName="SophieIntelligenceDashboard-Route"><SophieIntelligenceDashboard /></ErrorBoundary>} />
+      <Route path="/sophie/chat" component={() => <ErrorBoundary componentName="SophieChat-Route"><SophieChat /></ErrorBoundary>} />
+      <Route path="/corpus" component={() => <ErrorBoundary componentName="CorpusManager-Route"><CorpusManager /></ErrorBoundary>} />
+      <Route path="/pipeline" component={() => <ErrorBoundary componentName="PipelineManager-Route"><PipelineManager /></ErrorBoundary>} />
       <Route path="/analytics">
-        {() => <Analytics analytics={{}} />}
+        {() => <ErrorBoundary componentName="Analytics-Route"><Analytics analytics={{}} /></ErrorBoundary>}
       </Route>
-      <Route path="/trace" component={TraceManager} />
-      <Route path="/build" component={BuildDashboard} />
-      <Route path="/fedscout" component={FedScoutDashboard} />
-      <Route path="/blockchain" component={BlockchainDashboard} />
-      <Route component={NotFound} />
+      <Route path="/trace" component={() => <ErrorBoundary componentName="TraceManager-Route"><TraceManager /></ErrorBoundary>} />
+      <Route path="/build" component={() => <ErrorBoundary componentName="BuildDashboard-Route"><BuildDashboard /></ErrorBoundary>} />
+      <Route path="/fedscout" component={() => <ErrorBoundary componentName="FedScoutDashboard-Route"><FedScoutDashboard /></ErrorBoundary>} />
+      <Route path="/blockchain" component={() => <ErrorBoundary componentName="BlockchainDashboard-Route"><BlockchainDashboard /></ErrorBoundary>} />
+      <Route component={() => <ErrorBoundary componentName="NotFound"><NotFound /></ErrorBoundary>} />
     </Switch>
   );
 }
 
 function App() {
+  console.log("App component rendering, creating QueryClient...");
+  
   return (
-    <TenantProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <div className="min-h-screen bg-background">
-            <Router />
-          </div>
-          <Toaster />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </TenantProvider>
+    <ErrorBoundary componentName="App">
+      <TenantProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <div className="min-h-screen bg-background">
+              <Router />
+            </div>
+            <Toaster />
+          </TooltipProvider>
+        </QueryClientProvider>
+      </TenantProvider>
+    </ErrorBoundary>
   );
 }
 
