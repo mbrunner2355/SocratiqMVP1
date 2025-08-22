@@ -2265,6 +2265,283 @@ Current landscape includes one direct non-hormonal competitor already in the mar
     </div>
   );
 
+  const renderClientContent = () => {
+    const [uploadedFiles, setUploadedFiles] = useState([
+      {
+        id: '1',
+        name: 'Tech requirements.pdf',
+        type: 'pdf',
+        size: '2.4 MB',
+        uploadDate: 'Jan 4, 2025',
+        uploader: 'Olivia Rhye'
+      },
+      {
+        id: '2', 
+        name: 'Dashboard screenshot.jpg',
+        type: 'image',
+        size: '1.8 MB',
+        uploadDate: 'Jan 4, 2025',
+        uploader: 'Phoenix Baker'
+      },
+      {
+        id: '3',
+        name: 'Dashboard prototype recording.mp4',
+        type: 'video',
+        size: '12.3 MB',
+        uploadDate: 'Jan 2, 2025',
+        uploader: 'Lana Steiner'
+      }
+    ]);
+
+    const [activeTab, setActiveTab] = useState('upload');
+    const [dragActive, setDragActive] = useState(false);
+    const [webUrl, setWebUrl] = useState('');
+
+    const handleDrag = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.type === 'dragenter' || e.type === 'dragover') {
+        setDragActive(true);
+      } else if (e.type === 'dragleave') {
+        setDragActive(false);
+      }
+    };
+
+    const handleDrop = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+      
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFiles(e.dataTransfer.files);
+      }
+    };
+
+    const handleFiles = (files) => {
+      Array.from(files).forEach(file => {
+        const newFile = {
+          id: Date.now() + Math.random(),
+          name: file.name,
+          type: file.type.includes('image') ? 'image' : 
+                file.type.includes('video') ? 'video' :
+                file.type.includes('pdf') ? 'pdf' : 'document',
+          size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
+          uploadDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          uploader: 'Current User'
+        };
+        setUploadedFiles(prev => [newFile, ...prev]);
+      });
+      
+      toast({
+        title: "Files Uploaded",
+        description: `Successfully uploaded ${files.length} file(s)`,
+      });
+    };
+
+    const handleWebUpload = () => {
+      if (webUrl.trim()) {
+        const fileName = webUrl.split('/').pop() || 'web-content';
+        const newFile = {
+          id: Date.now(),
+          name: fileName,
+          type: 'web',
+          size: '-- MB',
+          uploadDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          uploader: 'Current User'
+        };
+        setUploadedFiles(prev => [newFile, ...prev]);
+        setWebUrl('');
+        
+        toast({
+          title: "Web Content Added",
+          description: "Successfully added content from web link",
+        });
+      }
+    };
+
+    const removeFile = (fileId) => {
+      setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
+      toast({
+        title: "File Removed",
+        description: "File has been removed from the project",
+      });
+    };
+
+    const getFileIcon = (type) => {
+      switch (type) {
+        case 'pdf':
+          return '📄';
+        case 'image':
+          return '🖼️';
+        case 'video':
+          return '🎥';
+        case 'web':
+          return '🌐';
+        default:
+          return '📁';
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="border-b border-gray-200">
+          <div className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('upload')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'upload'
+                  ? 'border-red-500 text-red-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Upload documents
+            </button>
+            <button
+              onClick={() => setActiveTab('ask-emme')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'ask-emme'
+                  ? 'border-red-500 text-red-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Ask emme
+            </button>
+          </div>
+        </div>
+
+        {activeTab === 'upload' && (
+          <div className="space-y-6">
+            {/* Drag and Drop Upload Area */}
+            <div
+              className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
+                dragActive
+                  ? 'border-red-300 bg-red-50'
+                  : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+              }`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <div className="space-y-4">
+                <div className="mx-auto w-12 h-12 text-gray-400">
+                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">Drag and drop or click here</h3>
+                  <p className="text-sm text-gray-600">to upload your image (max 2 MB)</p>
+                </div>
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => handleFiles(e.target.files)}
+                  className="hidden"
+                  id="file-upload"
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp4,.mov"
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="inline-block px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium cursor-pointer"
+                >
+                  Choose Files
+                </label>
+              </div>
+            </div>
+
+            {/* Web Link Upload */}
+            <div className="border rounded-lg p-4">
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium text-gray-700">Link from the web</span>
+                <div className="flex-1 flex space-x-2">
+                  <input
+                    type="url"
+                    value={webUrl}
+                    onChange={(e) => setWebUrl(e.target.value)}
+                    placeholder="http://imgur.com/GenTYVrL.png"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  />
+                  <button
+                    onClick={handleWebUpload}
+                    disabled={!webUrl.trim()}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 disabled:text-gray-400"
+                  >
+                    Add
+                  </button>
+                  <button
+                    onClick={() => setWebUrl('')}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* File List */}
+            <div className="space-y-3">
+              <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="col-span-5">File name</div>
+                <div className="col-span-2">Date uploaded</div>
+                <div className="col-span-2">Uploader</div>
+                <div className="col-span-2">Size</div>
+                <div className="col-span-1"></div>
+              </div>
+              
+              {uploadedFiles.map((file) => (
+                <div key={file.id} className="grid grid-cols-12 gap-4 px-4 py-3 bg-white border rounded-lg hover:bg-gray-50">
+                  <div className="col-span-5 flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                    />
+                    <span className="text-lg">{getFileIcon(file.type)}</span>
+                    <span className="text-sm font-medium text-gray-900 truncate">{file.name}</span>
+                  </div>
+                  <div className="col-span-2 flex items-center text-sm text-gray-500">
+                    {file.uploadDate}
+                  </div>
+                  <div className="col-span-2 flex items-center text-sm text-gray-500">
+                    {file.uploader}
+                  </div>
+                  <div className="col-span-2 flex items-center text-sm text-gray-500">
+                    {file.size}
+                  </div>
+                  <div className="col-span-1 flex items-center justify-end">
+                    <button
+                      onClick={() => removeFile(file.id)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'ask-emme' && (
+          <div className="bg-white border rounded-lg p-6">
+            <div className="text-center py-8">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-2xl font-bold">e</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Ask emme for assistance</h3>
+              <p className="text-gray-600 mb-4">Get help with your client content management and pharmaceutical intelligence queries.</p>
+              <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium">
+                Start Chat with emme
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'organization-overview':
@@ -2563,280 +2840,4 @@ Current landscape includes one direct non-hormonal competitor already in the mar
     </div>
   );
 
-  const renderClientContent = () => {
-    const [uploadedFiles, setUploadedFiles] = useState([
-      {
-        id: '1',
-        name: 'Tech requirements.pdf',
-        type: 'pdf',
-        size: '2.4 MB',
-        uploadDate: 'Jan 4, 2025',
-        uploader: 'Olivia Rhye'
-      },
-      {
-        id: '2', 
-        name: 'Dashboard screenshot.jpg',
-        type: 'image',
-        size: '1.8 MB',
-        uploadDate: 'Jan 4, 2025',
-        uploader: 'Phoenix Baker'
-      },
-      {
-        id: '3',
-        name: 'Dashboard prototype recording.mp4',
-        type: 'video',
-        size: '12.3 MB',
-        uploadDate: 'Jan 2, 2025',
-        uploader: 'Lana Steiner'
-      }
-    ]);
-
-    const [activeTab, setActiveTab] = useState('upload');
-    const [dragActive, setDragActive] = useState(false);
-    const [webUrl, setWebUrl] = useState('');
-
-    const handleDrag = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (e.type === 'dragenter' || e.type === 'dragover') {
-        setDragActive(true);
-      } else if (e.type === 'dragleave') {
-        setDragActive(false);
-      }
-    };
-
-    const handleDrop = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setDragActive(false);
-      
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        handleFiles(e.dataTransfer.files);
-      }
-    };
-
-    const handleFiles = (files) => {
-      Array.from(files).forEach(file => {
-        const newFile = {
-          id: Date.now() + Math.random(),
-          name: file.name,
-          type: file.type.includes('image') ? 'image' : 
-                file.type.includes('video') ? 'video' :
-                file.type.includes('pdf') ? 'pdf' : 'document',
-          size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
-          uploadDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-          uploader: 'Current User'
-        };
-        setUploadedFiles(prev => [newFile, ...prev]);
-      });
-      
-      toast({
-        title: "Files Uploaded",
-        description: `Successfully uploaded ${files.length} file(s)`,
-      });
-    };
-
-    const handleWebUpload = () => {
-      if (webUrl.trim()) {
-        const fileName = webUrl.split('/').pop() || 'web-content';
-        const newFile = {
-          id: Date.now(),
-          name: fileName,
-          type: 'web',
-          size: '-- MB',
-          uploadDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-          uploader: 'Current User'
-        };
-        setUploadedFiles(prev => [newFile, ...prev]);
-        setWebUrl('');
-        
-        toast({
-          title: "Web Content Added",
-          description: "Successfully added content from web link",
-        });
-      }
-    };
-
-    const removeFile = (fileId) => {
-      setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
-      toast({
-        title: "File Removed",
-        description: "File has been removed from the project",
-      });
-    };
-
-    const getFileIcon = (type) => {
-      switch (type) {
-        case 'pdf':
-          return '📄';
-        case 'image':
-          return '🖼️';
-        case 'video':
-          return '🎥';
-        case 'web':
-          return '🌐';
-        default:
-          return '📁';
-      }
-    };
-
-    return (
-      <div className="space-y-6">
-        <div className="border-b border-gray-200">
-          <div className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('upload')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'upload'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Upload documents
-            </button>
-            <button
-              onClick={() => setActiveTab('ask-emme')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'ask-emme'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Ask emme
-            </button>
-          </div>
-        </div>
-
-        {activeTab === 'upload' && (
-          <div className="space-y-6">
-            {/* Drag and Drop Upload Area */}
-            <div
-              className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-                dragActive
-                  ? 'border-red-300 bg-red-50'
-                  : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <div className="space-y-4">
-                <div className="mx-auto w-12 h-12 text-gray-400">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">Drag and drop or click here</h3>
-                  <p className="text-sm text-gray-600">to upload your image (max 2 MB)</p>
-                </div>
-                <input
-                  type="file"
-                  multiple
-                  onChange={(e) => handleFiles(e.target.files)}
-                  className="hidden"
-                  id="file-upload"
-                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp4,.mov"
-                />
-                <label
-                  htmlFor="file-upload"
-                  className="inline-block px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium cursor-pointer"
-                >
-                  Choose Files
-                </label>
-              </div>
-            </div>
-
-            {/* Web Link Upload */}
-            <div className="border rounded-lg p-4">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-700">Link from the web</span>
-                <div className="flex-1 flex space-x-2">
-                  <input
-                    type="url"
-                    value={webUrl}
-                    onChange={(e) => setWebUrl(e.target.value)}
-                    placeholder="http://imgur.com/GenTYVrL.png"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                  />
-                  <button
-                    onClick={handleWebUpload}
-                    disabled={!webUrl.trim()}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 disabled:text-gray-400"
-                  >
-                    Add
-                  </button>
-                  <button
-                    onClick={() => setWebUrl('')}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* File List */}
-            <div className="space-y-3">
-              <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="col-span-5">File name</div>
-                <div className="col-span-2">Date uploaded</div>
-                <div className="col-span-2">Uploader</div>
-                <div className="col-span-2">Size</div>
-                <div className="col-span-1"></div>
-              </div>
-              
-              {uploadedFiles.map((file) => (
-                <div key={file.id} className="grid grid-cols-12 gap-4 px-4 py-3 bg-white border rounded-lg hover:bg-gray-50">
-                  <div className="col-span-5 flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                    />
-                    <span className="text-lg">{getFileIcon(file.type)}</span>
-                    <span className="text-sm font-medium text-gray-900 truncate">{file.name}</span>
-                  </div>
-                  <div className="col-span-2 flex items-center text-sm text-gray-500">
-                    {file.uploadDate}
-                  </div>
-                  <div className="col-span-2 flex items-center text-sm text-gray-500">
-                    {file.uploader}
-                  </div>
-                  <div className="col-span-2 flex items-center text-sm text-gray-500">
-                    {file.size}
-                  </div>
-                  <div className="col-span-1 flex items-center justify-end">
-                    <button
-                      onClick={() => removeFile(file.id)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'ask-emme' && (
-          <div className="bg-white border rounded-lg p-6">
-            <div className="text-center py-8">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-2xl font-bold">e</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Ask emme for assistance</h3>
-              <p className="text-gray-600 mb-4">Get help with your client content management and pharmaceutical intelligence queries.</p>
-              <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium">
-                Start Chat with emme
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
 }
