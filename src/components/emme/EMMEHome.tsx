@@ -28,7 +28,7 @@ import { useTenantStyling } from "@/components/TenantProvider";
 // Partner branding functionality will be implemented later
 import { EMMEIntelligenceChat } from "./EMMEIntelligenceChat";
 
-export function EMMEHome() {
+export function EMMEHome({ setActiveView }: { setActiveView?: (view: string) => void }) {
   const [, setLocation] = useLocation();
   
   // EMME Engage branding configuration
@@ -279,22 +279,24 @@ export function EMMEHome() {
                   className="hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => {
                     console.log(`Module clicked: ${module.name}`);
-                    // Navigate to relevant pages based on module
-                    switch(module.name) {
-                      case "Insight Engine":
-                        setLocation("/emme-engage/strategic-intelligence");
-                        break;
-                      case "Engagement Studio":
-                        setLocation("/emme-engage/stakeholder-engagement");
-                        break;
-                      case "Learning Hub":
-                        setLocation("/emme-engage/content-orchestration");
-                        break;
-                      case "Equity Infrastructure":
-                        setLocation("/emme-engage/equity-access");
-                        break;
-                      default:
-                        alert(`${module.name} dashboard coming soon!`);
+                    // Navigate to relevant views based on module
+                    if (setActiveView) {
+                      switch(module.name) {
+                        case "Insight Engine":
+                          setActiveView("strategic-intelligence");
+                          break;
+                        case "Engagement Studio":
+                          setActiveView("stakeholder-engagement");
+                          break;
+                        case "Learning Hub":
+                          setActiveView("content-orchestration");
+                          break;
+                        case "Equity Infrastructure":
+                          setActiveView("equity-access");
+                          break;
+                        default:
+                          setActiveView("strategic-intelligence");
+                      }
                     }
                   }}
                 >
@@ -352,21 +354,23 @@ export function EMMEHome() {
                           onClick={() => {
                             console.log(`Quick action clicked: ${action.title}`);
                             // Navigate to relevant functionality
-                            switch(action.title) {
-                              case "Plan New Launch":
-                                setLocation("/emme-engage/projects/create");
-                                break;
-                              case "Monitor Market Dynamics":
-                                setLocation("/emme-engage/strategic-intelligence");
-                                break;
-                              case "Track Campaign Impact":
-                                setLocation("/emme-engage/stakeholder-engagement");
-                                break;
-                              case "Generate RWE Insights":
-                                setLocation("/emme-engage/data-platform");
-                                break;
-                              default:
-                                alert(`${action.title} functionality coming soon!`);
+                            if (setActiveView) {
+                              switch(action.title) {
+                                case "Plan New Launch":
+                                  setActiveView("create-project");
+                                  break;
+                                case "Monitor Market Dynamics":
+                                  setActiveView("strategic-intelligence");
+                                  break;
+                                case "Track Campaign Impact":
+                                  setActiveView("stakeholder-engagement");
+                                  break;
+                                case "Generate RWE Insights":
+                                  setActiveView("data-platform");
+                                  break;
+                                default:
+                                  setActiveView("strategic-intelligence");
+                              }
                             }
                           }}
                         >
@@ -418,7 +422,9 @@ export function EMMEHome() {
                 size="sm"
                 onClick={() => {
                   console.log('View All Activity clicked');
-                  setLocation("/emme-engage/projects");
+                  if (setActiveView) {
+                    setActiveView("view-projects");
+                  }
                 }}
               >
                 View All Activity

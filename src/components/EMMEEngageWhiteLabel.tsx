@@ -171,7 +171,7 @@ function EMMEEngageWhiteLabel() {
   const renderActiveView = () => {
     switch (activeView) {
       case "home":
-        return <EMMEHome />;
+        return <EMMEHome setActiveView={setActiveView} />;
       case "intelligence-brief":
         return <EMMEIntelligenceBrief />;
       case "clients":
@@ -554,7 +554,7 @@ function EMMEEngageWhiteLabel() {
       case "workflow":
         return <WorkflowVisualization />;
       default:
-        return <EMMEHome />;
+        return <EMMEHome setActiveView={setActiveView} />;
     }
   };
 
