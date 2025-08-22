@@ -13,6 +13,13 @@ SocratIQ Transform™ is an AI-powered document intelligence platform designed t
 - **Session Management**: Smart navigation tracking remembers user's last visited section per project
 - **Responsive Interface**: Clean, single-purpose interfaces optimized for pharmaceutical workflows
 
+**Framework Background Accordion System (August 22, 2025)**:
+- **Interactive Accordion Menu**: Implemented collapsible accordion system for Framework Background section
+- **Pharmaceutical Categories**: Six key sections - Mission/Vision, Unmet Need, Tolerability, Patient Population, Positioning, Access & Affordability
+- **Collapsible Behavior**: Only selected section expands while others automatically collapse for clean interface
+- **Dynamic Content**: Each section displays comprehensive pharmaceutical intelligence and market data
+- **Visual Design**: Professional styling with dropdown arrows, active states, and smooth transitions
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
