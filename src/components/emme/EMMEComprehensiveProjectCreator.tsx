@@ -950,47 +950,104 @@ Current landscape includes one direct non-hormonal competitor already in the mar
     );
 
     return (
-      <div className="space-y-6">
-        {/* Framework Navigation Tabs */}
-        <div className="border-b border-gray-200">
-          <div className="flex space-x-8">
-            <button 
-              onClick={() => setFrameworkTab('background')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                frameworkTab === 'background'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Background
-            </button>
-            <button 
-              onClick={() => setFrameworkTab('exploration')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                frameworkTab === 'exploration'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Exploration
-            </button>
-            <button 
-              onClick={() => setFrameworkTab('human-insights')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                frameworkTab === 'human-insights'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Human Insights
-            </button>
+      <div className="flex min-h-screen">
+        {/* Left Sidebar Navigation */}
+        <div className="w-64 bg-gray-50 border-r border-gray-200">
+          <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">VMS Global</h2>
+            <nav className="space-y-1">
+              <button 
+                onClick={() => setFrameworkTab('background')}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  frameworkTab === 'background'
+                    ? 'bg-red-100 text-red-700'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Project Insights
+              </button>
+              <div className="ml-4 space-y-1">
+                <button 
+                  onClick={() => setFrameworkTab('background')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                    frameworkTab === 'background'
+                      ? 'bg-red-50 text-red-600 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Framework
+                </button>
+                <div className="ml-4 space-y-1">
+                  <button 
+                    onClick={() => setFrameworkTab('background')}
+                    className={`w-full text-left px-3 py-1 text-sm transition-colors ${
+                      frameworkTab === 'background'
+                        ? 'text-red-600 font-medium'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Background
+                  </button>
+                  <button 
+                    onClick={() => setFrameworkTab('exploration')}
+                    className={`w-full text-left px-3 py-1 text-sm transition-colors ${
+                      frameworkTab === 'exploration'
+                        ? 'text-red-600 font-medium'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Exploration
+                  </button>
+                  <button 
+                    onClick={() => setFrameworkTab('human-insights')}
+                    className={`w-full text-left px-3 py-1 text-sm transition-colors ${
+                      frameworkTab === 'human-insights'
+                        ? 'text-red-600 font-medium'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Human Insights
+                  </button>
+                </div>
+              </div>
+              
+              <button className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100">
+                Client Content
+              </button>
+              <button className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100">
+                Playground
+              </button>
+              <button className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100">
+                Strategy Map
+              </button>
+              <button className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100">
+                Dashboard
+              </button>
+            </nav>
           </div>
         </div>
 
-        {/* Framework Content */}
-        {frameworkTab === 'background' && renderBackgroundContent()}
-        {frameworkTab === 'exploration' && renderExplorationContent()}
-        {frameworkTab === 'human-insights' && renderHumanInsightsContent()}
+        {/* Main Content Area */}
+        <div className="flex-1 p-8">
+          <div className="max-w-4xl">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {frameworkTab === 'background' && 'Background'}
+                {frameworkTab === 'exploration' && 'Exploration'}
+                {frameworkTab === 'human-insights' && 'Human Insights'}
+              </h1>
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
+                Complete
+              </Button>
+            </div>
+
+            {/* Content */}
+            {frameworkTab === 'background' && renderBackgroundContent()}
+            {frameworkTab === 'exploration' && renderExplorationContent()}
+            {frameworkTab === 'human-insights' && renderHumanInsightsContent()}
+          </div>
+        </div>
       </div>
     );
   };
