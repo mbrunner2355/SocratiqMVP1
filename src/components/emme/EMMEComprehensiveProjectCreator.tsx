@@ -81,6 +81,7 @@ export function EMMEComprehensiveProjectCreator() {
   const [chatMessages, setChatMessages] = useState<Array<{id: string, content: string, sender: 'user' | 'emme', timestamp: Date}>>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [backgroundTab, setBackgroundTab] = useState('organization-overview');
+  const [frameworkDropdownOpen, setFrameworkDropdownOpen] = useState(false);
 
   const sendMessageToEmme = async (message: string) => {
     const userMessage = {
@@ -1543,8 +1544,13 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       </div>
     );
 
-    // Always show Background content since that's where the main navigation happens
-    return renderBackgroundContent();
+    return (
+      <div className="space-y-6">
+        {frameworkTab === 'background' && renderBackgroundContent()}
+        {frameworkTab === 'exploration' && renderExplorationContent()}
+        {frameworkTab === 'human-insights' && renderHumanInsightsContent()}
+      </div>
+    );
   };
 
 
@@ -1721,6 +1727,70 @@ Current landscape includes one direct non-hormonal competitor already in the mar
           <div className="space-y-1">
             {PROJECT_NAV_ITEMS.map((item) => {
               const IconComponent = getNavIcon(item.icon);
+              
+              if (item.id === 'framework') {
+                return (
+                  <div key={item.id} className="relative">
+                    <button
+                      onClick={() => {
+                        setActiveProjectNav(item.id);
+                        setFrameworkDropdownOpen(!frameworkDropdownOpen);
+                        // Save last visited section for this project
+                        const currentProject = sessionStorage.getItem('current-project');
+                        if (currentProject) {
+                          const project = JSON.parse(currentProject);
+                          sessionStorage.setItem(`project-${project.id}-last-section`, item.id);
+                        }
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded transition-colors ${
+                        item.id === activeProjectNav
+                          ? 'bg-purple-50 text-purple-700 font-medium'
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                      title={sidebarCollapsed && !sidebarPinned ? item.label : ''}
+                    >
+                      <div className="flex items-center">
+                        <IconComponent className="w-5 h-5 flex-shrink-0" />
+                        {(!sidebarCollapsed || sidebarPinned) && (
+                          <span className="ml-3 truncate">{item.label}</span>
+                        )}
+                      </div>
+                      {(!sidebarCollapsed || sidebarPinned) && (
+                        <span className={`text-xs transition-transform duration-200 ${
+                          frameworkDropdownOpen ? 'rotate-180' : ''
+                        }`}>
+                          ▼
+                        </span>
+                      )}
+                    </button>
+                    
+                    {frameworkDropdownOpen && (!sidebarCollapsed || sidebarPinned) && (
+                      <div className="ml-6 mt-1 space-y-1">
+                        {[
+                          { id: 'background', label: 'Background' },
+                          { id: 'exploration', label: 'Exploration' },
+                          { id: 'human-insights', label: 'Human Insights' }
+                        ].map((subItem) => (
+                          <button
+                            key={subItem.id}
+                            onClick={() => {
+                              setFrameworkTab(subItem.id);
+                            }}
+                            className={`w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${
+                              frameworkTab === subItem.id
+                                ? 'bg-red-50 text-red-600 font-medium'
+                                : 'text-gray-500 hover:bg-gray-50'
+                            }`}
+                          >
+                            {subItem.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              
               return (
                 <button
                   key={item.id}
