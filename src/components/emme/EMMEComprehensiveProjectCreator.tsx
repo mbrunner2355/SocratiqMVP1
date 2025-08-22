@@ -83,6 +83,37 @@ export function EMMEComprehensiveProjectCreator() {
   const [backgroundTab, setBackgroundTab] = useState('organization-overview');
   const [frameworkDropdownOpen, setFrameworkDropdownOpen] = useState(false);
 
+  // Client Content state
+  const [uploadedFiles, setUploadedFiles] = useState([
+    {
+      id: '1',
+      name: 'Tech requirements.pdf',
+      type: 'pdf',
+      size: '2.4 MB',
+      uploadDate: 'Jan 4, 2025',
+      uploader: 'Olivia Rhye'
+    },
+    {
+      id: '2', 
+      name: 'Dashboard screenshot.jpg',
+      type: 'image',
+      size: '1.8 MB',
+      uploadDate: 'Jan 4, 2025',
+      uploader: 'Phoenix Baker'
+    },
+    {
+      id: '3',
+      name: 'Dashboard prototype recording.mp4',
+      type: 'video',
+      size: '12.3 MB',
+      uploadDate: 'Jan 2, 2025',
+      uploader: 'Lana Steiner'
+    }
+  ]);
+  const [clientContentTab, setClientContentTab] = useState('upload');
+  const [dragActive, setDragActive] = useState(false);
+  const [webUrl, setWebUrl] = useState('');
+
   const sendMessageToEmme = async (message: string) => {
     const userMessage = {
       id: Date.now().toString(),
@@ -2266,38 +2297,8 @@ Current landscape includes one direct non-hormonal competitor already in the mar
   );
 
   const renderClientContent = () => {
-    const [uploadedFiles, setUploadedFiles] = useState([
-      {
-        id: '1',
-        name: 'Tech requirements.pdf',
-        type: 'pdf',
-        size: '2.4 MB',
-        uploadDate: 'Jan 4, 2025',
-        uploader: 'Olivia Rhye'
-      },
-      {
-        id: '2', 
-        name: 'Dashboard screenshot.jpg',
-        type: 'image',
-        size: '1.8 MB',
-        uploadDate: 'Jan 4, 2025',
-        uploader: 'Phoenix Baker'
-      },
-      {
-        id: '3',
-        name: 'Dashboard prototype recording.mp4',
-        type: 'video',
-        size: '12.3 MB',
-        uploadDate: 'Jan 2, 2025',
-        uploader: 'Lana Steiner'
-      }
-    ]);
 
-    const [activeTab, setActiveTab] = useState('upload');
-    const [dragActive, setDragActive] = useState(false);
-    const [webUrl, setWebUrl] = useState('');
-
-    const handleDrag = (e) => {
+    const handleDrag = (e: React.DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
       if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -2307,7 +2308,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       }
     };
 
-    const handleDrop = (e) => {
+    const handleDrop = (e: React.DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
       setDragActive(false);
@@ -2317,10 +2318,10 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       }
     };
 
-    const handleFiles = (files) => {
+    const handleFiles = (files: FileList) => {
       Array.from(files).forEach(file => {
         const newFile = {
-          id: Date.now() + Math.random(),
+          id: (Date.now() + Math.random()).toString(),
           name: file.name,
           type: file.type.includes('image') ? 'image' : 
                 file.type.includes('video') ? 'video' :
@@ -2342,7 +2343,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       if (webUrl.trim()) {
         const fileName = webUrl.split('/').pop() || 'web-content';
         const newFile = {
-          id: Date.now(),
+          id: Date.now().toString(),
           name: fileName,
           type: 'web',
           size: '-- MB',
@@ -2359,7 +2360,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       }
     };
 
-    const removeFile = (fileId) => {
+    const removeFile = (fileId: string) => {
       setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
       toast({
         title: "File Removed",
@@ -2367,7 +2368,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       });
     };
 
-    const getFileIcon = (type) => {
+    const getFileIcon = (type: string) => {
       switch (type) {
         case 'pdf':
           return '📄';
@@ -2387,9 +2388,9 @@ Current landscape includes one direct non-hormonal competitor already in the mar
         <div className="border-b border-gray-200">
           <div className="flex space-x-8">
             <button
-              onClick={() => setActiveTab('upload')}
+              onClick={() => setClientContentTab('upload')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'upload'
+                clientContentTab === 'upload'
                   ? 'border-red-500 text-red-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
@@ -2397,9 +2398,9 @@ Current landscape includes one direct non-hormonal competitor already in the mar
               Upload documents
             </button>
             <button
-              onClick={() => setActiveTab('ask-emme')}
+              onClick={() => setClientContentTab('ask-emme')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'ask-emme'
+                clientContentTab === 'ask-emme'
                   ? 'border-red-500 text-red-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
@@ -2409,7 +2410,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
           </div>
         </div>
 
-        {activeTab === 'upload' && (
+        {clientContentTab === 'upload' && (
           <div className="space-y-6">
             {/* Drag and Drop Upload Area */}
             <div
@@ -2524,7 +2525,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
           </div>
         )}
 
-        {activeTab === 'ask-emme' && (
+        {clientContentTab === 'ask-emme' && (
           <div className="bg-white border rounded-lg p-6">
             <div className="text-center py-8">
               <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
