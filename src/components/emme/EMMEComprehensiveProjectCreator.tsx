@@ -434,83 +434,139 @@ export function EMMEComprehensiveProjectCreator() {
               <h2 className="text-xl font-semibold text-red-500">Project Timeline</h2>
             </div>
             
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Phase 1: Research & Analysis */}
-              <div className="relative pl-8">
-                <div className="absolute left-0 top-0 w-4 h-4 bg-purple-500 rounded-full"></div>
-                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Phase 1: Research & Analysis</h3>
-                  <p className="text-sm text-gray-600 mb-2">Duration: 4-6 weeks</p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Competitive landscape analysis completion</li>
-                    <li>• Patient and provider persona development</li>
-                    <li>• Market access pathway assessment</li>
-                    <li>• Pricing strategy framework development</li>
-                  </ul>
+              <div className="border-l-4 border-purple-500 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
+                  <Input 
+                    defaultValue="Phase 1: Research & Analysis"
+                    className="font-semibold text-gray-900 border-none p-0 bg-transparent"
+                  />
                 </div>
+                <Input 
+                  defaultValue="Duration: 4-6 weeks"
+                  className="text-sm text-gray-600 mb-3 border-none p-0 bg-transparent"
+                />
+                <Textarea 
+                  defaultValue="• Competitive landscape analysis completion
+• Patient and provider persona development
+• Market access pathway assessment
+• Pricing strategy framework development"
+                  className="min-h-[80px] text-sm text-gray-700"
+                  placeholder="Define Phase 1 activities..."
+                />
               </div>
 
               {/* Phase 2: Strategic Development */}
-              <div className="relative pl-8">
-                <div className="absolute left-0 top-0 w-4 h-4 bg-red-500 rounded-full"></div>
-                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Phase 2: Strategic Development</h3>
-                  <p className="text-sm text-gray-600 mb-2">Duration: 6-8 weeks</p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Core messaging framework creation</li>
-                    <li>• Go-to-market model development</li>
-                    <li>• Regional adaptation strategies (US, UK, EU)</li>
-                    <li>• Stakeholder engagement plan</li>
-                  </ul>
+              <div className="border-l-4 border-red-500 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                  <Input 
+                    defaultValue="Phase 2: Strategic Development"
+                    className="font-semibold text-gray-900 border-none p-0 bg-transparent"
+                  />
                 </div>
+                <Input 
+                  defaultValue="Duration: 6-8 weeks"
+                  className="text-sm text-gray-600 mb-3 border-none p-0 bg-transparent"
+                />
+                <Textarea 
+                  defaultValue="• Core messaging framework creation
+• Go-to-market model development
+• Regional adaptation strategies (US, UK, EU)
+• Stakeholder engagement plan"
+                  className="min-h-[80px] text-sm text-gray-700"
+                  placeholder="Define Phase 2 activities..."
+                />
               </div>
 
               {/* Phase 3: Implementation Planning */}
-              <div className="relative pl-8">
-                <div className="absolute left-0 top-0 w-4 h-4 bg-green-500 rounded-full"></div>
-                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Phase 3: Implementation Planning</h3>
-                  <p className="text-sm text-gray-600 mb-2">Duration: 4-5 weeks</p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Launch campaign development</li>
-                    <li>• Channel strategy finalization</li>
-                    <li>• Training materials creation</li>
-                    <li>• Success metrics definition</li>
-                  </ul>
+              <div className="border-l-4 border-green-500 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                  <Input 
+                    defaultValue="Phase 3: Implementation Planning"
+                    className="font-semibold text-gray-900 border-none p-0 bg-transparent"
+                  />
                 </div>
+                <Input 
+                  defaultValue="Duration: 4-5 weeks"
+                  className="text-sm text-gray-600 mb-3 border-none p-0 bg-transparent"
+                />
+                <Textarea 
+                  defaultValue="• Launch campaign development
+• Channel strategy finalization
+• Training materials creation
+• Success metrics definition"
+                  className="min-h-[80px] text-sm text-gray-700"
+                  placeholder="Define Phase 3 activities..."
+                />
               </div>
 
               {/* Phase 4: Pre-Launch */}
-              <div className="relative pl-8">
-                <div className="absolute left-0 top-0 w-4 h-4 bg-blue-500 rounded-full"></div>
-                <div className="absolute left-2 top-4 w-0.5 h-16 bg-gray-300"></div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Phase 4: Pre-Launch Preparation</h3>
-                  <p className="text-sm text-gray-600 mb-2">Duration: 3-4 weeks</p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Final regulatory approval coordination</li>
-                    <li>• Launch readiness assessment</li>
-                    <li>• Team training and preparation</li>
-                    <li>• Market entry execution planning</li>
-                  </ul>
+              <div className="border-l-4 border-blue-500 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                  <Input 
+                    defaultValue="Phase 4: Pre-Launch Preparation"
+                    className="font-semibold text-gray-900 border-none p-0 bg-transparent"
+                  />
                 </div>
+                <Input 
+                  defaultValue="Duration: 3-4 weeks"
+                  className="text-sm text-gray-600 mb-3 border-none p-0 bg-transparent"
+                />
+                <Textarea 
+                  defaultValue="• Final regulatory approval coordination
+• Launch readiness assessment
+• Team training and preparation
+• Market entry execution planning"
+                  className="min-h-[80px] text-sm text-gray-700"
+                  placeholder="Define Phase 4 activities..."
+                />
               </div>
 
               {/* Phase 5: Launch */}
-              <div className="relative pl-8">
-                <div className="absolute left-0 top-0 w-4 h-4 bg-yellow-500 rounded-full"></div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Phase 5: Market Launch</h3>
-                  <p className="text-sm text-gray-600 mb-2">Duration: Ongoing</p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Multi-market launch execution</li>
-                    <li>• Performance monitoring and optimization</li>
-                    <li>• Real-time strategy adjustments</li>
-                    <li>• Post-launch success evaluation</li>
-                  </ul>
+              <div className="border-l-4 border-yellow-500 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                  <Input 
+                    defaultValue="Phase 5: Market Launch"
+                    className="font-semibold text-gray-900 border-none p-0 bg-transparent"
+                  />
+                </div>
+                <Input 
+                  defaultValue="Duration: Ongoing"
+                  className="text-sm text-gray-600 mb-3 border-none p-0 bg-transparent"
+                />
+                <Textarea 
+                  defaultValue="• Multi-market launch execution
+• Performance monitoring and optimization
+• Real-time strategy adjustments
+• Post-launch success evaluation"
+                  className="min-h-[80px] text-sm text-gray-700"
+                  placeholder="Define Phase 5 activities..."
+                />
+              </div>
+
+              <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Timeline Planning</p>
+                    <p className="text-sm text-gray-600">Customize phases, durations, and activities for your project timeline</p>
+                  </div>
+                  <Button 
+                    onClick={() => {
+                      toast({
+                        title: "Timeline Saved",
+                        description: "Project timeline has been updated.",
+                      });
+                    }}
+                    variant="outline"
+                  >
+                    Save Timeline
+                  </Button>
                 </div>
               </div>
             </div>
