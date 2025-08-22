@@ -980,8 +980,85 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 />
               </div>
 
+              {/* EMME Chat Interface */}
+              <div className="border-t border-gray-200 pt-4">
+                <h5 className="font-medium text-gray-900 mb-3">Chat with EMME</h5>
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <MessageCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h6 className="font-medium text-gray-900">EMME</h6>
+                      <p className="text-xs text-gray-500">Pharmaceutical Intelligence Assistant</p>
+                    </div>
+                  </div>
+                  
+                  {/* Chat Input */}
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Ask EMME about pharmaceutical intelligence, market insights, or strategic analysis..."
+                      className="w-full p-3 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          const input = e.target as HTMLInputElement;
+                          if (input.value.trim()) {
+                            toast({
+                              title: "EMME Response",
+                              description: `Processing your question: "${input.value}"`,
+                            });
+                            input.value = '';
+                          }
+                        }
+                      }}
+                    />
+                    
+                    {/* Suggested Questions */}
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-500">Suggested questions:</p>
+                      <div className="space-y-1">
+                        <button 
+                          className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border text-gray-700 transition-colors"
+                          onClick={() => {
+                            toast({
+                              title: "EMME Analysis",
+                              description: "Analyzing public perceptions and women's health correlations...",
+                            });
+                          }}
+                        >
+                          "Let's take a deeper dive into public perceptions, especially in regard to women's health?"
+                        </button>
+                        <button 
+                          className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border text-gray-700 transition-colors"
+                          onClick={() => {
+                            toast({
+                              title: "EMME Insights",
+                              description: "Generating competitive analysis for women's health market...",
+                            });
+                          }}
+                        >
+                          "What are the competitive advantages in the women's health therapeutic area?"
+                        </button>
+                        <button 
+                          className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border text-gray-700 transition-colors"
+                          onClick={() => {
+                            toast({
+                              title: "EMME Strategy",
+                              description: "Analyzing market access strategies for LMIC regions...",
+                            });
+                          }}
+                        >
+                          "How can we optimize market access strategies for emerging markets?"
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Save Button */}
-              <div className="flex justify-end pt-4 border-t border-gray-200">
+              <div className="flex justify-end pt-4">
                 <Button 
                   onClick={() => {
                     toast({
