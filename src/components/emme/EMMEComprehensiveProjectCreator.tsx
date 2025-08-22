@@ -970,30 +970,27 @@ Current landscape includes one direct non-hormonal competitor already in the mar
         <div className="bg-white rounded-lg border">
           <div className="border-b border-gray-200">
             {[
-              { id: 'mission-vision', label: 'Mission, Vision and Core Values', icon: '🎯' },
-              { id: 'unmet-need', label: 'Unmet Need', icon: '📋' },
-              { id: 'tolerability', label: 'Tolerability', icon: '✅' },
-              { id: 'patient-population', label: 'Patient Population', icon: '👥' },
-              { id: 'positioning', label: 'Positioning', icon: '🎯' },
-              { id: 'access-affordability', label: 'Access & Affordability', icon: '💰' }
+              { id: 'mission-vision', label: 'Mission, Vision and Core Values' },
+              { id: 'unmet-need', label: 'Unmet Need' },
+              { id: 'tolerability', label: 'Tolerability' },
+              { id: 'patient-population', label: 'Patient Population' },
+              { id: 'positioning', label: 'Positioning' },
+              { id: 'access-affordability', label: 'Access & Affordability' }
             ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveAccordion(item.id)}
-                className={`w-full text-left px-6 py-4 flex items-center gap-3 hover:bg-gray-50 transition-colors ${
-                  activeAccordion === item.id ? 'bg-red-50 border-r-4 border-red-500' : ''
+                className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors ${
+                  activeAccordion === item.id ? 'bg-red-50 text-red-600 font-medium' : 'text-gray-700'
                 }`}
               >
-                <span className="text-lg">{item.icon}</span>
-                <span className={`font-medium ${
-                  activeAccordion === item.id ? 'text-red-600' : 'text-gray-700'
-                }`}>
+                <span className={`${activeAccordion === item.id ? 'text-red-600' : 'text-gray-700'}`}>
                   {item.label}
                 </span>
-                <span className={`ml-auto text-sm ${
-                  activeAccordion === item.id ? 'text-red-500' : 'text-gray-400'
+                <span className={`text-sm transition-transform ${
+                  activeAccordion === item.id ? 'text-red-500 rotate-180' : 'text-gray-400'
                 }`}>
-                  {activeAccordion === item.id ? '▼' : '▶'}
+                  ▼
                 </span>
               </button>
             ))}
