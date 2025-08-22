@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, MessageCircle } from 'lucide-react';
+import { Search, MessageCircle, BarChart3, FileText, Users, Play, Map, Activity, Pin, PinOff } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useToast } from '@/hooks/use-toast';
@@ -28,6 +28,18 @@ const PROJECT_NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: 'chart' }
 ];
 
+// Helper function to get navigation icons
+const getNavIcon = (iconName: string) => {
+  switch (iconName) {
+    case 'chart': return BarChart3;
+    case 'document': return FileText;
+    case 'content': return Users;
+    case 'play': return Play;
+    case 'map': return Map;
+    default: return Activity;
+  }
+};
+
 export function EMMEComprehensiveProjectCreator() {
   const [activeTab, setActiveTab] = useState('organization-overview');
   const [projectName, setProjectName] = useState('VMS Global');
@@ -36,6 +48,8 @@ export function EMMEComprehensiveProjectCreator() {
   const [insightsTab, setInsightsTab] = useState('overview');
   const [frameworkTab, setFrameworkTab] = useState('background');
   const [activeAccordion, setActiveAccordion] = useState('mission-vision');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [sidebarPinned, setSidebarPinned] = useState(false);
 
   // Check if we're opening an existing project from session storage
   useEffect(() => {
@@ -1330,36 +1344,60 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
   return (
     <div className="flex h-full bg-gray-50">
-      {/* Project Structure Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200">
+      {/* Collapsible Sidebar */}
+      <div 
+        className={`${sidebarCollapsed && !sidebarPinned ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 ease-in-out`}
+        onMouseEnter={() => !sidebarPinned && setSidebarCollapsed(false)}
+        onMouseLeave={() => !sidebarPinned && setSidebarCollapsed(true)}
+      >
         <div className="p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-5 h-5 bg-gray-300 rounded"></div>
-            <span className="font-medium text-gray-800">{projectName}</span>
+          {/* Sidebar Header */}
+          <div className="flex items-center justify-between mb-4">
+            {(!sidebarCollapsed || sidebarPinned) && (
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-gray-300 rounded"></div>
+                <span className="font-medium text-gray-800 truncate">{projectName}</span>
+              </div>
+            )}
+            <button
+              onClick={() => setSidebarPinned(!sidebarPinned)}
+              className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+              title={sidebarPinned ? 'Unpin sidebar' : 'Pin sidebar'}
+            >
+              {sidebarPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+            </button>
           </div>
           
+          {/* Navigation Items */}
           <div className="space-y-1">
-            {PROJECT_NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveProjectNav(item.id);
-                  // Save last visited section for this project
-                  const currentProject = sessionStorage.getItem('current-project');
-                  if (currentProject) {
-                    const project = JSON.parse(currentProject);
-                    sessionStorage.setItem(`project-${project.id}-last-section`, item.id);
-                  }
-                }}
-                className={`w-full text-left px-3 py-2 text-sm rounded transition-colors ${
-                  item.id === activeProjectNav
-                    ? 'bg-purple-50 text-purple-700 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+            {PROJECT_NAV_ITEMS.map((item) => {
+              const IconComponent = getNavIcon(item.icon);
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveProjectNav(item.id);
+                    // Save last visited section for this project
+                    const currentProject = sessionStorage.getItem('current-project');
+                    if (currentProject) {
+                      const project = JSON.parse(currentProject);
+                      sessionStorage.setItem(`project-${project.id}-last-section`, item.id);
+                    }
+                  }}
+                  className={`w-full flex items-center px-3 py-2 text-sm rounded transition-colors ${
+                    item.id === activeProjectNav
+                      ? 'bg-purple-50 text-purple-700 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                  title={sidebarCollapsed && !sidebarPinned ? item.label : ''}
+                >
+                  <IconComponent className="w-5 h-5 flex-shrink-0" />
+                  {(!sidebarCollapsed || sidebarPinned) && (
+                    <span className="ml-3 truncate">{item.label}</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -1390,7 +1428,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
-              <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" title="Chat with EMME" />
+              <MessageCircle className="w-5 h-5 text-purple-600 hover:text-purple-700 cursor-pointer" />
             </div>
           </div>
         </div>
