@@ -50,6 +50,32 @@ export function EMMEComprehensiveProjectCreator() {
   const [activeAccordion, setActiveAccordion] = useState('mission-vision');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [sidebarPinned, setSidebarPinned] = useState(false);
+  
+  // Mission Vision form data
+  const [missionVisionData, setMissionVisionData] = useState({
+    missionStatement: 'Global mission, introduced as part of its strategic repositioning to integrate its life science focus across pharmaceuticals, consumer health, and other science.',
+    vision: 'To be a trusted leader in life sciences, advancing health through innovation and sustainability, providing long-term societal value.',
+    coreValues: 'Leadership, Integrity, Agility, Efficiency',
+    commitmentAreas: 'Sustainability, Innovation, Patient Outcomes, and Collaboration',
+    innovationPrinciple: 'Innovation for People and Planet – Using science to improve quality of life while reducing ecological footprint.',
+    patientCentricity: 'Especially in pharma, promoting access-based innovation.',
+    digitalTransformation: 'Democratizing access and enhancing R&D capabilities.',
+    strategicCommitment: 'Committed to providing 100 million women in low- and middle-income countries (LMICs) with access to modern contraception by 2030. This initiative aims to enhance women\'s health, rights, and economic status, contributing significantly to gender equality and sustainable development.',
+    pricingStrategy: 'Adapting pricing to local purchasing power in LMICs, aiming to make contraceptives more affordable. Working to increase access to hormonal IUSs.',
+    challengeInitiative: 'In collaboration with Bill & Melinda Gates Foundation and others, assisting cities in Africa and Asia to rapidly and sustainably scale up reproductive health solutions for women and girls in urban poverty.',
+    worldContraceptionDay: 'Co-founded WCD and the "Your Life" campaign to provide young people with accurate information on sexual and reproductive health, encouraging informed decisions.',
+    environmentalIssue: 'Linked to serious environmental issue connected to various adverse health effects, particularly concerning women\'s health — negative fertility impact, potential associations with breast cancer, menstrual irregularities and hormonal disruption, and reduced fertility rates.',
+    deiCommitments: 'Established clear global commitments for gender balance and aims to increase the number of women at all management levels globally to 50% by 2030.',
+    employeeBenefits: 'Offers comprehensive benefits to support employees through various life stages, including maternity leave and menopause.',
+    researchQuestion: 'Let\'s take a deeper dive into public perceptions, especially in regard to women\'s health? Are there any direct correlations to either positive or negative women\'s health outcomes?'
+  });
+
+  const handleMissionVisionChange = (field: string, value: string) => {
+    setMissionVisionData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
   // Check if we're opening an existing project from session storage
   useEffect(() => {
@@ -781,110 +807,192 @@ Current landscape includes one direct non-hormonal competitor already in the mar
         case 'mission-vision':
           return (
             <div className="space-y-6">
+              {/* Mission Statement */}
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Mission Statement</h4>
-                <p className="text-sm text-gray-700">
-                  Global mission, introduced as part of its strategic repositioning to integrate its life science focus across pharmaceuticals, consumer health, and other science.
-                </p>
+                <label className="block font-semibold text-gray-900 mb-2">Mission Statement</label>
+                <textarea
+                  value={missionVisionData.missionStatement}
+                  onChange={(e) => handleMissionVisionChange('missionStatement', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  rows={3}
+                  placeholder="Enter mission statement..."
+                />
+              </div>
+
+              {/* Vision */}
+              <div>
+                <label className="block font-semibold text-gray-900 mb-2">Vision</label>
+                <textarea
+                  value={missionVisionData.vision}
+                  onChange={(e) => handleMissionVisionChange('vision', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  rows={2}
+                  placeholder="Enter vision statement..."
+                />
+              </div>
+
+              {/* Core Values */}
+              <div>
+                <label className="block font-semibold text-gray-900 mb-2">Core Values & Framework</label>
+                <input
+                  type="text"
+                  value={missionVisionData.coreValues}
+                  onChange={(e) => handleMissionVisionChange('coreValues', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500 mb-2"
+                  placeholder="Enter core values..."
+                />
+                <textarea
+                  value={missionVisionData.commitmentAreas}
+                  onChange={(e) => handleMissionVisionChange('commitmentAreas', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  rows={2}
+                  placeholder="Areas of commitment..."
+                />
+              </div>
+
+              {/* Guiding Principles */}
+              <div>
+                <label className="block font-semibold text-gray-900 mb-2">Innovation Principle</label>
+                <textarea
+                  value={missionVisionData.innovationPrinciple}
+                  onChange={(e) => handleMissionVisionChange('innovationPrinciple', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  rows={2}
+                  placeholder="Innovation for People and Planet principle..."
+                />
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Vision</h4>
-                <p className="text-sm text-gray-700">
-                  <span className="text-red-500">▶</span> To be a trusted leader in life sciences, advancing health through innovation and sustainability, providing long-term societal value.
-                </p>
+                <label className="block font-semibold text-gray-900 mb-2">Patient-Centricity</label>
+                <textarea
+                  value={missionVisionData.patientCentricity}
+                  onChange={(e) => handleMissionVisionChange('patientCentricity', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  rows={2}
+                  placeholder="Patient-centricity approach..."
+                />
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Core Values & Framework</h4>
-                <p className="text-sm text-gray-700 mb-2">Leadership, Integrity, Agility, Efficiency</p>
-                <p className="text-sm text-gray-700">These values support an overarching commitment to:</p>
+                <label className="block font-semibold text-gray-900 mb-2">Digital Transformation</label>
+                <textarea
+                  value={missionVisionData.digitalTransformation}
+                  onChange={(e) => handleMissionVisionChange('digitalTransformation', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  rows={2}
+                  placeholder="Digital transformation strategy..."
+                />
               </div>
 
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Sustainability, Innovation, Patient Outcomes, and Collaboration</h4>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Guiding Principles in Action</h4>
-                <p className="text-sm text-gray-700 mb-2">
-                  <span className="text-red-500">▶</span> Innovation for People and Planet – Using science to improve quality of life while reducing ecological footprint.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Patient-Centricity – Especially in pharma, promoting access-based innovation.</h4>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Digital Transformation – Democratizing access and enhancing R&D capabilities.</h4>
-              </div>
-
-              {/* Extended Content from Screen 2 */}
+              {/* Strategic Commitments Section */}
               <div className="border-t border-gray-200 pt-4">
                 <h4 className="font-semibold text-gray-900 mb-3">Strategic Commitments & Initiatives</h4>
                 
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-700">
-                      Committed to providing 100 million women in low- and middle-income countries (LMICs) with access to modern contraception by 2030. This initiative aims to enhance women's health, rights, and economic status, contributing significantly to gender equality and sustainable development.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">Strategic Commitment</label>
+                    <textarea
+                      value={missionVisionData.strategicCommitment}
+                      onChange={(e) => handleMissionVisionChange('strategicCommitment', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="100 million women initiative details..."
+                    />
                   </div>
 
                   <div>
-                    <h5 className="font-medium text-gray-900 mb-1">Equitable Pricing Strategies:</h5>
-                    <p className="text-sm text-gray-700">
-                      Adapting pricing to local purchasing power in LMICs, aiming to make contraceptives more affordable. Working to increase access to hormonal IUSs.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">Equitable Pricing Strategies</label>
+                    <textarea
+                      value={missionVisionData.pricingStrategy}
+                      onChange={(e) => handleMissionVisionChange('pricingStrategy', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Pricing strategy for LMICs..."
+                    />
                   </div>
 
                   <div>
-                    <h5 className="font-medium text-gray-900 mb-1">The Challenge Initiative (TCI):</h5>
-                    <p className="text-sm text-gray-700">
-                      In collaboration with Bill & Melinda Gates Foundation and others, assisting cities in Africa and Asia to rapidly and sustainably scale up reproductive health solutions for women and girls in urban poverty.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">The Challenge Initiative (TCI)</label>
+                    <textarea
+                      value={missionVisionData.challengeInitiative}
+                      onChange={(e) => handleMissionVisionChange('challengeInitiative', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Gates Foundation collaboration details..."
+                    />
                   </div>
 
                   <div>
-                    <h5 className="font-medium text-gray-900 mb-1">World Contraception Day (WCD):</h5>
-                    <p className="text-sm text-gray-700">
-                      Co-founded WCD and the "Your Life" campaign to provide young people with accurate information on sexual and reproductive health, encouraging informed decisions.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">World Contraception Day (WCD)</label>
+                    <textarea
+                      value={missionVisionData.worldContraceptionDay}
+                      onChange={(e) => handleMissionVisionChange('worldContraceptionDay', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="WCD and Your Life campaign..."
+                    />
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-700">
-                      <span className="text-red-500">▶</span> <strong>Linked to serious environmental issue</strong> connected to various adverse health effects, particularly concerning women's health — negative fertility impact, potential associations with breast cancer, menstrual irregularities and hormonal disruption, and reduced fertility rates.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">Environmental Health Issues</label>
+                    <textarea
+                      value={missionVisionData.environmentalIssue}
+                      onChange={(e) => handleMissionVisionChange('environmentalIssue', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Environmental health impacts..."
+                    />
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-700">
-                      <span className="text-red-500">▶</span> <strong>Global DEI Commitments:</strong> Established clear global commitments for gender balance and aims to increase the number of women at all management levels globally to 50% by 2030.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">Global DEI Commitments</label>
+                    <textarea
+                      value={missionVisionData.deiCommitments}
+                      onChange={(e) => handleMissionVisionChange('deiCommitments', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Gender balance and DEI goals..."
+                    />
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-700">
-                      Offers comprehensive benefits to support employees through various life stages, including maternity leave and menopause.
-                    </p>
+                    <label className="block font-medium text-gray-900 mb-1">Employee Benefits</label>
+                    <textarea
+                      value={missionVisionData.employeeBenefits}
+                      onChange={(e) => handleMissionVisionChange('employeeBenefits', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Life stage benefits..."
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* Interactive Question Section */}
-              <div className="bg-gray-50 p-4 rounded-lg border-t border-gray-200">
-                <p className="text-sm text-gray-700 italic">
-                  "Let's take a deeper dive into public perceptions, especially in regard to women's health? Are there any direct correlations to either positive or negative women's health outcomes?"
-                </p>
+              {/* Research Question Section */}
+              <div className="border-t border-gray-200 pt-4">
+                <label className="block font-medium text-gray-900 mb-2">Research Question</label>
+                <textarea
+                  value={missionVisionData.researchQuestion}
+                  onChange={(e) => handleMissionVisionChange('researchQuestion', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-50"
+                  rows={3}
+                  placeholder="Research questions and strategic insights..."
+                />
               </div>
 
-              {/* AI Assistant Section */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h5 className="font-medium text-gray-900 mb-2">What can I help you with?</h5>
-                <div className="min-h-[60px] bg-white rounded border flex items-center justify-center">
-                  <p className="text-gray-500 text-sm">AI assistant for pharmaceutical intelligence</p>
-                </div>
+              {/* Save Button */}
+              <div className="flex justify-end pt-4 border-t border-gray-200">
+                <Button 
+                  onClick={() => {
+                    toast({
+                      title: "Mission & Vision Saved",
+                      description: "All changes have been saved successfully.",
+                    });
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
+                  Save Changes
+                </Button>
               </div>
             </div>
           );
