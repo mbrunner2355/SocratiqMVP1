@@ -1457,14 +1457,160 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                       placeholder="Enter sleep quality findings..."
                     />
                   </div>
+                </div>
+              </div>
 
+              {/* OASIS Phase 3 Program */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">The OASIS Program: Phase 3 Evidence</h4>
+                
+                <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phase 3 Program Status</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Program Overview</label>
                     <textarea
-                      defaultValue="Phase 3 clinical program currently underway to support regulatory submissions across multiple markets including US, EU, and UK."
+                      defaultValue="Includes four global Phase 3 trials designed to confirm efficacy, safety, and real-world relevance:"
                       className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       rows={2}
-                      placeholder="Enter Phase 3 status..."
+                      placeholder="Enter program overview..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">OASIS 1 & 2 (26-week trials)</label>
+                    <textarea
+                      defaultValue="Showed significant reductions in hot flash frequency and severity by week 4, with effects beginning as early as week 1. Also improved sleep disturbances and menopause-specific quality of life scores. Discontinuation rates were low and comparable to placebo."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Enter OASIS 1 & 2 results..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">OASIS 3 (52-week extension trial)</label>
+                    <textarea
+                      defaultValue="Demonstrated sustained symptom relief over one year. No signals of hepatotoxicity, endometrial changes, or malignancy."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter OASIS 3 results..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">OASIS 4 (hormone-sensitive breast cancer study)</label>
+                    <textarea
+                      defaultValue="Met all primary and secondary endpoints. Confirmed elinzanetant's role as a non-hormonal option suitable for oncology patients, where hormone therapy is contraindicated."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter OASIS 4 results..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Comparative Analysis */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Time to Effect, Durability & Quality of Life Impact</h4>
+                
+                <div className="space-y-4">
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Parameter</label>
+                      <div className="text-xs font-medium text-gray-900 bg-gray-100 p-2 rounded">Comparison Metric</div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">ELINZANETANT</label>
+                      <div className="text-xs bg-red-50 p-2 rounded border-red-200 border">Primary Results</div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">FEZOLINETANT</label>
+                      <div className="text-xs bg-gray-50 p-2 rounded border-gray-200 border">Comparator</div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-xs font-medium text-gray-700">Time to Effect:</div>
+                      <input
+                        type="text"
+                        defaultValue="Week 1"
+                        className="text-xs p-1 border border-red-300 rounded focus:ring-2 focus:ring-red-500"
+                        placeholder="Enter time to effect..."
+                      />
+                      <input
+                        type="text"
+                        defaultValue="Week 4"
+                        className="text-xs p-1 border border-gray-300 rounded focus:ring-2 focus:ring-red-500"
+                        placeholder="Enter comparator time..."
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-xs font-medium text-gray-700">Durability:</div>
+                      <input
+                        type="text"
+                        defaultValue="Sustained through 52 weeks"
+                        className="text-xs p-1 border border-red-300 rounded focus:ring-2 focus:ring-red-500"
+                        placeholder="Enter durability..."
+                      />
+                      <input
+                        type="text"
+                        defaultValue="Sustained through 24 weeks"
+                        className="text-xs p-1 border border-gray-300 rounded focus:ring-2 focus:ring-red-500"
+                        placeholder="Enter comparator durability..."
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-xs font-medium text-gray-700">QoL Improvements:</div>
+                      <textarea
+                        defaultValue="Sleep quality, menopause-specific QoL"
+                        className="text-xs p-1 border border-red-300 rounded focus:ring-2 focus:ring-red-500"
+                        rows={2}
+                        placeholder="Enter QoL improvements..."
+                      />
+                      <textarea
+                        defaultValue="Sleep quality, overall QoL"
+                        className="text-xs p-1 border border-gray-300 rounded focus:ring-2 focus:ring-red-500"
+                        rows={2}
+                        placeholder="Enter comparator QoL..."
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Strategic Implications */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Strategic Implications</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Rapid Onset Advantage</label>
+                    <textarea
+                      defaultValue="Elinzanetant's earlier onset of action may offer a competitive advantage for patients seeking quick relief from VMS."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter rapid onset advantage..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Long-Term Efficacy</label>
+                    <textarea
+                      defaultValue="The sustained benefits over a 52-week period position Elinzanetant as a viable long-term treatment option."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter long-term efficacy..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Quality of Life Differentiation</label>
+                    <textarea
+                      defaultValue="Both treatments improve quality of life, but Elinzanetant's impact on menopause-specific QoL measures may resonate more with patients experiencing a broader range of menopausal symptoms."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Enter QoL differentiation..."
                     />
                   </div>
                 </div>
