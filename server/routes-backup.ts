@@ -40,13 +40,60 @@ export function registerBackupRoutes(app: Express) {
       // Essential project structure
       const essentialFiles = [
         'package.json',
-        'README.md',
+        'README.md', 
         'tsconfig.json',
         'vite.config.ts',
         'tailwind.config.ts',
         'drizzle.config.ts',
         '.env.example'
       ];
+
+      // Add a comprehensive backup manifest
+      const backupManifest = {
+        metadata: {
+          backupDate: new Date().toISOString(),
+          projectName: "EMME Engage - Pharmaceutical Partnership Platform",
+          version: "1.0.0",
+          description: "Complete backup including all components, server code, and database schema"
+        },
+        components: {
+          totalComponents: "50+",
+          coreModules: [
+            "Strategic Intelligence Module",
+            "Stakeholder Engagement Module", 
+            "Content Orchestration Module",
+            "Equity Access Module",
+            "Data Platform Module",
+            "Project Management System",
+            "Multi-tenant White-label System"
+          ],
+          keyComponents: [
+            "EMMEEngageWhiteLabel.tsx - Main application shell",
+            "EMMEComprehensiveProjectCreator.tsx - Project creation interface", 
+            "SimpleProjectManager.tsx - Project management dashboard",
+            "StrategicIntelligenceModule.tsx - Market analysis tools",
+            "StakeholderEngagementModule.tsx - HCP & patient engagement",
+            "ContentOrchestrationModule.tsx - MLR workflow & content optimization",
+            "DataPlatformModule.tsx - Data ingestion & corpus management"
+          ]
+        },
+        serverComponents: [
+          "routes-emme-projects.ts - Project management API",
+          "routes-emme.ts - Core EMME API routes",
+          "emmeDataProvider.ts - Pharmaceutical data services",
+          "schema.ts - Complete database schema with emmeProjects table"
+        ],
+        restorationInstructions: {
+          step1: "Extract ZIP file to new directory",
+          step2: "Run 'npm install' to install dependencies", 
+          step3: "Copy .env.example to .env and configure environment variables",
+          step4: "Run 'npm run db:push' to sync database schema",
+          step5: "Run 'npm run dev' to start the application",
+          step6: "Access at http://localhost:5000"
+        }
+      };
+
+      archive.append(JSON.stringify(backupManifest, null, 2), { name: 'BACKUP_MANIFEST.json' });
 
       // Add essential files if they exist
       for (const file of essentialFiles) {

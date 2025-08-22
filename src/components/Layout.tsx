@@ -53,7 +53,8 @@ import {
   Eye,
   CheckCircle,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  Archive
 } from "lucide-react";
 import { SophieLogo } from "./SophieLogo";
 import { SophieIntelligenceDashboard } from "./SophieIntelligenceDashboard";

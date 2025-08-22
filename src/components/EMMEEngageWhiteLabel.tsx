@@ -37,6 +37,8 @@ import { SimpleProjectManager } from "@/components/emme/SimpleProjectManager";
 import { EMMEComprehensiveProjectCreator } from "@/components/emme/EMMEComprehensiveProjectCreator";
 import { Home, FolderPlus, Users, MessageSquare, Zap, Brain, FileText, Database, Shield, BarChart, AlertTriangle, Settings, Pin, PinOff, Archive } from 'lucide-react';
 import { ProjectBackupManager } from './ProjectBackupManager';
+import { CompleteProjectBackup } from './CompleteProjectBackup';
+import { updateUrlForView, getViewFromUrl, initializeUrlRouting } from '@/utils/urlRouting';
 
 
 interface TenantUsage {
@@ -111,6 +113,9 @@ function EMMEEngageWhiteLabel() {
       setProjectContext(projectData);
       setActiveView(moduleId);
       
+      // Update URL to reflect new view
+      updateUrlForView(moduleId, projectData?.id);
+      
       // Store project context in sessionStorage for persistence
       if (projectData) {
         sessionStorage.setItem('emme-project-context', JSON.stringify(projectData));
@@ -119,6 +124,21 @@ function EMMEEngageWhiteLabel() {
     };
 
     window.addEventListener('navigateToModule', handleNavigateToModule);
+    
+    // Initialize URL-based routing
+    initializeUrlRouting((view, projectId) => {
+      setActiveView(view);
+      if (projectId) {
+        // Load project data if needed
+        console.log('Loading project from URL:', projectId);
+      }
+    });
+
+    // Set initial view from URL
+    const { view, projectId } = getViewFromUrl();
+    if (view !== 'home') {
+      setActiveView(view);
+    }
     
     // Load project context from sessionStorage on component mount
     const savedContext = sessionStorage.getItem('emme-project-context');
@@ -196,7 +216,7 @@ function EMMEEngageWhiteLabel() {
       case "view-projects":
         return <SimpleProjectManager />;
       case "backup":
-        return <ProjectBackupManager />;
+        return <CompleteProjectBackup />;
 
       // Project Framework sections
       case "background":

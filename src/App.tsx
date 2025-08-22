@@ -30,6 +30,7 @@ import Landing from "@/pages/Landing";
 import EMMEEngageLanding from "@/pages/emme-engage-landing";
 import FedScout from "@/pages/fedscout";
 import SophieLanding from "@/pages/sophie-landing";
+import BackupPage from "@/pages/backup";
 
 // Create QueryClient instance
 const queryClient = new QueryClient({
@@ -83,6 +84,9 @@ function App() {
           <Route path="/trials" component={() => <Layout><Trials /></Layout>} />
           <Route path="/labs" component={() => <Layout><Labs /></Layout>} />
           <Route path="/mock5-client" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          
+          {/* Backup & Export Routes */}
+          <Route path="/backup" component={() => <Layout><BackupPage /></Layout>} />
           
           {/* 404 Route */}
           <Route component={NotFound} />
