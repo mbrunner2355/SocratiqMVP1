@@ -36,7 +36,9 @@ import {
   GitBranch,
   Bot,
   Send,
-  Loader2
+  Loader2,
+  Pin,
+  PinOff
 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -71,6 +73,8 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
   const [activeNav, setActiveNav] = useState(activeView);
   const [expandedMenus, setExpandedMenus] = useState<string[]>(["projects"]);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [sidebarPinned, setSidebarPinned] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -335,6 +339,7 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
   const renderNavItem = (item: NavItem, isSubmenu = false) => {
     const isActive = activeNav === item.id;
     const isExpanded = expandedMenus.includes(item.id);
+    const collapsed = sidebarCollapsed && !sidebarPinned;
 
     return (
       <div key={item.id} className={`${isSubmenu ? "ml-4" : ""}`}>
@@ -356,22 +361,23 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
               onViewChange(item.id);
             }
           }}
-          className={`w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg transition-colors ${
+          className={`w-full flex items-center ${collapsed ? 'justify-center px-2' : 'justify-between px-3'} py-2.5 text-sm rounded-lg transition-colors ${
             isActive 
-              ? "bg-gray-100 text-gray-900 font-medium" 
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              ? `${isEMMEEngage ? 'bg-purple-100 text-purple-700' : 'bg-blue-50 text-blue-700'} font-medium`
+              : `${isEMMEEngage ? 'text-stone-600 hover:bg-stone-100' : 'text-gray-600 hover:bg-gray-50'} hover:text-gray-900`
           }`}
+          title={collapsed ? item.label : ''}
         >
-          <div className="flex items-center space-x-3">
+          <div className={`flex items-center ${collapsed ? '' : 'space-x-3'}`}>
             {item.icon}
-            <span>{item.label}</span>
+            {!collapsed && <span>{item.label}</span>}
           </div>
-          {item.hasSubmenu && (
+          {item.hasSubmenu && !collapsed && (
             isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />
           )}
         </button>
         
-        {item.hasSubmenu && isExpanded && item.submenuItems && (
+        {item.hasSubmenu && isExpanded && item.submenuItems && !collapsed && (
           <div className="mt-1 space-y-1">
             {item.submenuItems.map(subItem => renderNavItem(subItem, true))}
           </div>
@@ -382,29 +388,55 @@ export function EMMELayout({ children, activeView = "home", onViewChange }: EMME
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Left Sidebar */}
-      <div className={`w-64 ${isEMMEEngage ? 'bg-stone-200' : 'bg-white'} border-r ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} flex flex-col`}>
+      {/* Collapsible Left Sidebar */}
+      <div 
+        className={`${sidebarCollapsed && !sidebarPinned ? 'w-16' : 'w-64'} ${isEMMEEngage ? 'bg-stone-200' : 'bg-white'} border-r ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} flex flex-col transition-all duration-300 ease-in-out`}
+        onMouseEnter={() => !sidebarPinned && setSidebarCollapsed(false)}
+        onMouseLeave={() => !sidebarPinned && setSidebarCollapsed(true)}
+      >
         {/* Logo */}
-        <div className={`p-6 border-b ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'}`}>
-          <div className="flex items-center justify-center mb-2">
-            <img 
-              src={emmeEngageLogo} 
-              alt="EMME Engage - Pharmaceutical Marketing Intelligence"
-              className="h-10 w-auto object-contain"
-            />
+        <div className={`${sidebarCollapsed && !sidebarPinned ? 'p-2' : 'p-6'} border-b ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'}`}>
+          <div className="flex items-center justify-between">
+            {(!sidebarCollapsed || sidebarPinned) && (
+              <div className="flex flex-col items-center flex-1">
+                <div className="flex items-center justify-center mb-2">
+                  <img 
+                    src={emmeEngageLogo} 
+                    alt="EMME Engage - Pharmaceutical Marketing Intelligence"
+                    className="h-10 w-auto object-contain"
+                  />
+                </div>
+                <p className={`text-xs ${isEMMEEngage ? 'text-purple-500' : 'text-gray-500'} text-center`}>powered by SocratIQ</p>
+              </div>
+            )}
+            {(sidebarCollapsed && !sidebarPinned) && (
+              <div className="flex items-center justify-center w-full">
+                <img 
+                  src={emmeEngageLogo} 
+                  alt="EMME"
+                  className="h-8 w-auto object-contain"
+                />
+              </div>
+            )}
+            <button
+              onClick={() => setSidebarPinned(!sidebarPinned)}
+              className="p-1 text-gray-400 hover:text-gray-600 transition-colors ml-2"
+              title={sidebarPinned ? 'Unpin sidebar' : 'Pin sidebar'}
+            >
+              {sidebarPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+            </button>
           </div>
-          <p className={`text-xs ${isEMMEEngage ? 'text-purple-500' : 'text-gray-500'} text-center`}>powered by SocratIQ</p>
         </div>
 
         {/* Navigation */}
-        <ScrollArea className="flex-1 px-3 py-4">
+        <ScrollArea className={`flex-1 ${sidebarCollapsed && !sidebarPinned ? 'px-2' : 'px-3'} py-4`}>
           <nav className="space-y-1">
             {navigationItems.map(item => renderNavItem(item))}
           </nav>
         </ScrollArea>
 
         {/* Bottom Navigation */}
-        <div className={`border-t ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} p-3`}>
+        <div className={`border-t ${isEMMEEngage ? 'border-stone-300' : 'border-gray-200'} ${sidebarCollapsed && !sidebarPinned ? 'p-2' : 'p-3'}`}>
           <nav className="space-y-1">
             {bottomNavItems.map(item => renderNavItem(item))}
           </nav>

@@ -35,6 +35,7 @@ import { EMMEDataSourcesDashboard } from "@/components/emme/EMMEDataSourcesDashb
 import { EMMEProductionDashboard } from "@/components/emme/EMMEProductionDashboard";
 import { SimpleProjectManager } from "@/components/emme/SimpleProjectManager";
 import { EMMEComprehensiveProjectCreator } from "@/components/emme/EMMEComprehensiveProjectCreator";
+import { Home, FolderPlus, Users, MessageSquare, Zap, Brain, FileText, Database, Shield, BarChart, AlertTriangle, Settings, Pin, PinOff } from 'lucide-react';
 
 
 interface TenantUsage {
@@ -66,9 +67,31 @@ interface TenantAnalytics {
   }>;
 }
 
+// Helper function to get navigation icons
+const getMainNavIcon = (view: string) => {
+  switch (view) {
+    case 'home': return Home;
+    case 'create-project': return FolderPlus;
+    case 'view-projects': return BarChart;
+    case 'clients': return Users;
+    case 'chat': return MessageSquare;
+    case 'smart-wizard': return Zap;
+    case 'strategic-intelligence': return Brain;
+    case 'content-orchestration': return FileText;
+    case 'data-platform': return Database;
+    case 'equity-access': return Shield;
+    case 'models': return Settings;
+    case 'trust': return Shield;
+    case 'alerts': return AlertTriangle;
+    default: return Home;
+  }
+};
+
 function EMMEEngageWhiteLabel() {
   const [activeView, setActiveView] = useState("home");
   const [insightsTab, setInsightsTab] = useState('overview');
+  const [mainSidebarCollapsed, setMainSidebarCollapsed] = useState(true);
+  const [mainSidebarPinned, setMainSidebarPinned] = useState(false);
   
   // Always show Intelligence Brief as primary dashboard
   console.log("EMMEEngageWhiteLabel activeView:", activeView);
