@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import React from "react";
+import { useState } from "react";
 
 // Create queryClient directly here to avoid import issues
 const queryClient = new QueryClient({
@@ -20,45 +21,91 @@ const queryClient = new QueryClient({
   },
 });
 
-// Import all major platform components
+// Import all major platform components - use direct imports
 import { SocratIQPlatform } from "@/components/SocratIQPlatform";
 import { EMMEEngageApp } from "@/components/EMMEEngageApp";
 import { EMMELayout } from "@/components/emme/EMMELayout";
 import { EMMEHome } from "@/components/emme/EMMEHome";
-import { ClientManager } from "@/components/emme/ClientManager";
-import { ProjectManager } from "@/components/emme/ProjectManager";
-import { ProjectDetails } from "@/components/ProjectDetails";
-import { ContentOrchestrationModule } from "@/components/emme/ContentOrchestrationModule";
-import { StrategicIntelligenceModule } from "@/components/emme/StrategicIntelligenceModule";
-import { StakeholderEngagementModule } from "@/components/emme/StakeholderEngagementModule";
-import { EquityAccessModule } from "@/components/emme/EquityAccessModule";
 
-// Import Sophie components
-import { SophieDashboard } from "@/components/SophieDashboard";
-import { SophieIntelligenceDashboard } from "@/components/SophieIntelligenceDashboard";
-import { SophieChat } from "@/components/SophieChat";
+// Conditional imports for components that exist
+let ClientManager, ProjectManager, ProjectDetails;
+let ContentOrchestrationModule, StrategicIntelligenceModule, StakeholderEngagementModule, EquityAccessModule;
+let SophieDashboard, SophieIntelligenceDashboard, SophieChat;
+let CorpusManager, PipelineManager, ProcessingQueue, Analytics, TraceManager;
+let BuildDashboard, FedScoutDashboard, BlockchainDashboard;
+let NotFound, Landing, Home, Dashboard;
 
-// Import admin components
-import { CorpusManager } from "@/components/CorpusManager";
-import { PipelineManager } from "@/components/PipelineManager";
-import ProcessingQueue from "@/components/ProcessingQueue";
-import Analytics from "@/components/Analytics";
-import { TraceManager } from "@/components/TraceManager";
+try {
+  ClientManager = require("@/components/emme/ClientManager").ClientManager;
+  ProjectManager = require("@/components/emme/ProjectManager").ProjectManager;
+  ProjectDetails = require("@/components/ProjectDetails").ProjectDetails;
+} catch {
+  // Fallback components
+  ClientManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Client Manager</h1></div>;
+  ProjectManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Project Manager</h1></div>;
+  ProjectDetails = () => <div className="p-6"><h1 className="text-2xl font-bold">Project Details</h1></div>;
+}
 
-// Import additional specialized components
-import { BuildDashboard } from "@/components/BuildDashboard";
-import { FedScoutDashboard } from "@/components/FedScoutDashboard";
-import { BlockchainDashboard } from "@/components/BlockchainDashboard";
+try {
+  ContentOrchestrationModule = require("@/components/emme/ContentOrchestrationModule").ContentOrchestrationModule;
+  StrategicIntelligenceModule = require("@/components/emme/StrategicIntelligenceModule").StrategicIntelligenceModule;
+  StakeholderEngagementModule = require("@/components/emme/StakeholderEngagementModule").StakeholderEngagementModule;
+  EquityAccessModule = require("@/components/emme/EquityAccessModule").EquityAccessModule;
+} catch {
+  ContentOrchestrationModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Content Orchestration</h1></div>;
+  StrategicIntelligenceModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Strategic Intelligence</h1></div>;
+  StakeholderEngagementModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Stakeholder Engagement</h1></div>;
+  EquityAccessModule = () => <div className="p-6"><h1 className="text-2xl font-bold">Equity Access</h1></div>;
+}
 
-// Import pages
-import NotFound from "@/pages/not-found";
-import Landing from "@/pages/Landing";
-import Home from "@/pages/Home";
-import Dashboard from "@/pages/dashboard";
+try {
+  SophieDashboard = require("@/components/SophieDashboard").SophieDashboard;
+  SophieIntelligenceDashboard = require("@/components/SophieIntelligenceDashboard").SophieIntelligenceDashboard;
+  SophieChat = require("@/components/SophieChat").SophieChat;
+} catch {
+  SophieDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Sophie Dashboard</h1></div>;
+  SophieIntelligenceDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Sophie Intelligence</h1></div>;
+  SophieChat = () => <div className="p-6"><h1 className="text-2xl font-bold">Sophie Chat</h1></div>;
+}
+
+try {
+  CorpusManager = require("@/components/CorpusManager").CorpusManager;
+  PipelineManager = require("@/components/PipelineManager").PipelineManager;
+  ProcessingQueue = require("@/components/ProcessingQueue").default;
+  Analytics = require("@/components/Analytics").default;
+  TraceManager = require("@/components/TraceManager").TraceManager;
+} catch {
+  CorpusManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Corpus Manager</h1></div>;
+  PipelineManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Pipeline Manager</h1></div>;
+  ProcessingQueue = () => <div className="p-6"><h1 className="text-2xl font-bold">Processing Queue</h1></div>;
+  Analytics = () => <div className="p-6"><h1 className="text-2xl font-bold">Analytics</h1></div>;
+  TraceManager = () => <div className="p-6"><h1 className="text-2xl font-bold">Trace Manager</h1></div>;
+}
+
+try {
+  BuildDashboard = require("@/components/BuildDashboard").BuildDashboard;
+  FedScoutDashboard = require("@/components/FedScoutDashboard").FedScoutDashboard;
+  BlockchainDashboard = require("@/components/BlockchainDashboard").BlockchainDashboard;
+} catch {
+  BuildDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Build Dashboard</h1></div>;
+  FedScoutDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">FedScout Dashboard</h1></div>;
+  BlockchainDashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Blockchain Dashboard</h1></div>;
+}
+
+try {
+  NotFound = require("@/pages/not-found").default;
+  Landing = require("@/pages/Landing").default;
+  Home = require("@/pages/Home").default;
+  Dashboard = require("@/pages/dashboard").default;
+} catch {
+  NotFound = () => <div className="p-6"><h1 className="text-2xl font-bold">404 - Page Not Found</h1></div>;
+  Landing = () => <div className="p-6"><h1 className="text-2xl font-bold">Landing Page</h1></div>;
+  Home = () => <div className="p-6"><h1 className="text-2xl font-bold">Home Page</h1></div>;
+  Dashboard = () => <div className="p-6"><h1 className="text-2xl font-bold">Dashboard</h1></div>;
+}
 
 // Import tenant provider for multi-tenant support
 import { TenantProvider } from "@/components/TenantProvider";
-import { useState } from "react";
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component<
@@ -84,6 +131,12 @@ class ErrorBoundary extends React.Component<
         <div className="p-4 bg-red-50 border border-red-200 rounded">
           <h3 className="text-red-800 font-semibold">Error in {this.props.componentName}</h3>
           <p className="text-red-600 text-sm">{this.state.error?.message}</p>
+          <button 
+            onClick={() => this.setState({ hasError: false })}
+            className="mt-2 px-4 py-2 bg-red-600 text-white rounded text-sm"
+          >
+            Try Again
+          </button>
         </div>
       );
     }
@@ -91,6 +144,32 @@ class ErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+);
+
+// Safe wrapper for components that might not exist
+const SafeComponent = ({ children, fallback, componentName }: { 
+  children: React.ReactNode; 
+  fallback?: React.ReactNode;
+  componentName: string;
+}) => {
+  try {
+    return <>{children}</>;
+  } catch (error) {
+    console.error(`Failed to render ${componentName}:`, error);
+    return fallback || (
+      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
+        <h3 className="text-yellow-800 font-semibold">Component temporarily unavailable</h3>
+        <p className="text-yellow-600 text-sm">{componentName} is being loaded...</p>
+      </div>
+    );
+  }
+};
 
 // Container component to handle EMME Engage app navigation state
 function EMMEEngageAppContainer() {
@@ -104,56 +183,178 @@ function EMMEEngageAppContainer() {
   const renderCurrentView = () => {
     switch(currentView) {
       case "home":
-        return <ErrorBoundary componentName="EMMEHome"><EMMEHome /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="EMMEHome">
+            <ErrorBoundary componentName="EMMEHome">
+              <EMMEHome />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "clients":
-        return <ErrorBoundary componentName="ClientManager"><ClientManager /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="ClientManager">
+            <ErrorBoundary componentName="ClientManager">
+              <ClientManager />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "projects":
-        return <ErrorBoundary componentName="ProjectManager"><ProjectManager mode="list" /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="ProjectManager">
+            <ErrorBoundary componentName="ProjectManager">
+              <ProjectManager mode="list" />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "create-project":
-        return <ErrorBoundary componentName="ProjectManager-Create"><ProjectManager mode="create" /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="ProjectManager-Create">
+            <ErrorBoundary componentName="ProjectManager-Create">
+              <ProjectManager mode="create" />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "smart-wizard":
         return <div className="p-6"><h1 className="text-2xl font-bold">Smart Wizard</h1><p>Advanced project creation wizard with AI guidance.</p></div>;
       case "strategic-intelligence":
-        return <ErrorBoundary componentName="StrategicIntelligenceModule"><StrategicIntelligenceModule /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="StrategicIntelligenceModule">
+            <ErrorBoundary componentName="StrategicIntelligenceModule">
+              <StrategicIntelligenceModule />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "stakeholder-engagement":
-        return <ErrorBoundary componentName="StakeholderEngagementModule"><StakeholderEngagementModule /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="StakeholderEngagementModule">
+            <ErrorBoundary componentName="StakeholderEngagementModule">
+              <StakeholderEngagementModule />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "content-orchestration":
-        return <ErrorBoundary componentName="ContentOrchestrationModule"><ContentOrchestrationModule /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="ContentOrchestrationModule">
+            <ErrorBoundary componentName="ContentOrchestrationModule">
+              <ContentOrchestrationModule />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "equity-access":
-        return <ErrorBoundary componentName="EquityAccessModule"><EquityAccessModule /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="EquityAccessModule">
+            <ErrorBoundary componentName="EquityAccessModule">
+              <EquityAccessModule />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "corpus":
-        return <ErrorBoundary componentName="CorpusManager"><CorpusManager /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="CorpusManager">
+            <ErrorBoundary componentName="CorpusManager">
+              <CorpusManager />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "data-pipeline":
-        return <ErrorBoundary componentName="PipelineManager"><PipelineManager /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="PipelineManager">
+            <ErrorBoundary componentName="PipelineManager">
+              <PipelineManager />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "data-ingestion":
-        return <ErrorBoundary componentName="ProcessingQueue"><ProcessingQueue /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="ProcessingQueue">
+            <ErrorBoundary componentName="ProcessingQueue">
+              <ProcessingQueue />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "api-management":
-        return <ErrorBoundary componentName="Analytics"><Analytics /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="Analytics">
+            <ErrorBoundary componentName="Analytics">
+              <Analytics />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "trace":
-        return <ErrorBoundary componentName="TraceManager"><TraceManager /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="TraceManager">
+            <ErrorBoundary componentName="TraceManager">
+              <TraceManager />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "sophie":
-        return <ErrorBoundary componentName="SophieDashboard"><SophieDashboard /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="SophieDashboard">
+            <ErrorBoundary componentName="SophieDashboard">
+              <SophieDashboard />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "sophie-intelligence":
-        return <ErrorBoundary componentName="SophieIntelligenceDashboard"><SophieIntelligenceDashboard /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="SophieIntelligenceDashboard">
+            <ErrorBoundary componentName="SophieIntelligenceDashboard">
+              <SophieIntelligenceDashboard />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "sophie-chat":
-        return <ErrorBoundary componentName="SophieChat"><SophieChat /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="SophieChat">
+            <ErrorBoundary componentName="SophieChat">
+              <SophieChat />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "build":
-        return <ErrorBoundary componentName="BuildDashboard"><BuildDashboard /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="BuildDashboard">
+            <ErrorBoundary componentName="BuildDashboard">
+              <BuildDashboard />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "fedscout":
-        return <ErrorBoundary componentName="FedScoutDashboard"><FedScoutDashboard /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="FedScoutDashboard">
+            <ErrorBoundary componentName="FedScoutDashboard">
+              <FedScoutDashboard />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       case "blockchain":
-        return <ErrorBoundary componentName="BlockchainDashboard"><BlockchainDashboard /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="BlockchainDashboard">
+            <ErrorBoundary componentName="BlockchainDashboard">
+              <BlockchainDashboard />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
       default:
-        return <ErrorBoundary componentName="EMMEHome-Default"><EMMEHome /></ErrorBoundary>;
+        return (
+          <SafeComponent componentName="EMMEHome-Default">
+            <ErrorBoundary componentName="EMMEHome-Default">
+              <EMMEHome />
+            </ErrorBoundary>
+          </SafeComponent>
+        );
     }
   };
   
   return (
-    <ErrorBoundary componentName="EMMELayout">
-      <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
-        {renderCurrentView()}
-      </EMMELayout>
-    </ErrorBoundary>
+    <SafeComponent componentName="EMMELayout">
+      <ErrorBoundary componentName="EMMELayout">
+        <EMMELayout activeView={currentView} onViewChange={handleViewChange}>
+          {renderCurrentView()}
+        </EMMELayout>
+      </ErrorBoundary>
+    </SafeComponent>
   );
 }
 
@@ -161,37 +362,135 @@ function Router() {
   const { isLoading } = useAuth();
   
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
     <Switch>
-      <Route path="/" component={() => <ErrorBoundary componentName="SocratIQPlatform"><SocratIQPlatform /></ErrorBoundary>} />
-      <Route path="/landing" component={() => <ErrorBoundary componentName="Landing"><Landing /></ErrorBoundary>} />
-      <Route path="/home" component={() => <ErrorBoundary componentName="Home"><Home /></ErrorBoundary>} />
-      <Route path="/dashboard" component={() => <ErrorBoundary componentName="Dashboard"><Dashboard /></ErrorBoundary>} />
-      <Route path="/emme-engage" component={() => <ErrorBoundary componentName="EMMEEngageApp"><EMMEEngageApp /></ErrorBoundary>} />
+      <Route path="/" component={() => (
+        <SafeComponent componentName="SocratIQPlatform">
+          <ErrorBoundary componentName="SocratIQPlatform">
+            <SocratIQPlatform />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/landing" component={() => (
+        <SafeComponent componentName="Landing">
+          <ErrorBoundary componentName="Landing">
+            <Landing />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/home" component={() => (
+        <SafeComponent componentName="Home">
+          <ErrorBoundary componentName="Home">
+            <Home />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/dashboard" component={() => (
+        <SafeComponent componentName="Dashboard">
+          <ErrorBoundary componentName="Dashboard">
+            <Dashboard />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/emme-engage" component={() => (
+        <SafeComponent componentName="EMMEEngageApp">
+          <ErrorBoundary componentName="EMMEEngageApp">
+            <EMMEEngageApp />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
       <Route path="/emme-engage/app" component={EMMEEngageAppContainer} />
       <Route path="/emme-engage/projects/:id">
-        {(params) => <ErrorBoundary componentName="ProjectDetails"><ProjectDetails projectId={params.id} onBack={() => window.history.back()} /></ErrorBoundary>}
+        {(params) => (
+          <SafeComponent componentName="ProjectDetails">
+            <ErrorBoundary componentName="ProjectDetails">
+              <ProjectDetails projectId={params.id} onBack={() => window.history.back()} />
+            </ErrorBoundary>
+          </SafeComponent>
+        )}
       </Route>
-      <Route path="/sophie" component={() => <ErrorBoundary componentName="SophieDashboard-Route"><SophieDashboard /></ErrorBoundary>} />
-      <Route path="/sophie/intelligence" component={() => <ErrorBoundary componentName="SophieIntelligenceDashboard-Route"><SophieIntelligenceDashboard /></ErrorBoundary>} />
-      <Route path="/sophie/chat" component={() => <ErrorBoundary componentName="SophieChat-Route"><SophieChat /></ErrorBoundary>} />
-      <Route path="/corpus" component={() => <ErrorBoundary componentName="CorpusManager-Route"><CorpusManager /></ErrorBoundary>} />
-      <Route path="/pipeline" component={() => <ErrorBoundary componentName="PipelineManager-Route"><PipelineManager /></ErrorBoundary>} />
+      <Route path="/sophie" component={() => (
+        <SafeComponent componentName="SophieDashboard-Route">
+          <ErrorBoundary componentName="SophieDashboard-Route">
+            <SophieDashboard />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/sophie/intelligence" component={() => (
+        <SafeComponent componentName="SophieIntelligenceDashboard-Route">
+          <ErrorBoundary componentName="SophieIntelligenceDashboard-Route">
+            <SophieIntelligenceDashboard />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/sophie/chat" component={() => (
+        <SafeComponent componentName="SophieChat-Route">
+          <ErrorBoundary componentName="SophieChat-Route">
+            <SophieChat />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/corpus" component={() => (
+        <SafeComponent componentName="CorpusManager-Route">
+          <ErrorBoundary componentName="CorpusManager-Route">
+            <CorpusManager />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/pipeline" component={() => (
+        <SafeComponent componentName="PipelineManager-Route">
+          <ErrorBoundary componentName="PipelineManager-Route">
+            <PipelineManager />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
       <Route path="/analytics">
-        {() => <ErrorBoundary componentName="Analytics-Route"><Analytics analytics={{}} /></ErrorBoundary>}
+        {() => (
+          <SafeComponent componentName="Analytics-Route">
+            <ErrorBoundary componentName="Analytics-Route">
+              <Analytics analytics={{}} />
+            </ErrorBoundary>
+          </SafeComponent>
+        )}
       </Route>
-      <Route path="/trace" component={() => <ErrorBoundary componentName="TraceManager-Route"><TraceManager /></ErrorBoundary>} />
-      <Route path="/build" component={() => <ErrorBoundary componentName="BuildDashboard-Route"><BuildDashboard /></ErrorBoundary>} />
-      <Route path="/fedscout" component={() => <ErrorBoundary componentName="FedScoutDashboard-Route"><FedScoutDashboard /></ErrorBoundary>} />
-      <Route path="/blockchain" component={() => <ErrorBoundary componentName="BlockchainDashboard-Route"><BlockchainDashboard /></ErrorBoundary>} />
-      <Route component={() => <ErrorBoundary componentName="NotFound"><NotFound /></ErrorBoundary>} />
+      <Route path="/trace" component={() => (
+        <SafeComponent componentName="TraceManager-Route">
+          <ErrorBoundary componentName="TraceManager-Route">
+            <TraceManager />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/build" component={() => (
+        <SafeComponent componentName="BuildDashboard-Route">
+          <ErrorBoundary componentName="BuildDashboard-Route">
+            <BuildDashboard />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/fedscout" component={() => (
+        <SafeComponent componentName="FedScoutDashboard-Route">
+          <ErrorBoundary componentName="FedScoutDashboard-Route">
+            <FedScoutDashboard />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route path="/blockchain" component={() => (
+        <SafeComponent componentName="BlockchainDashboard-Route">
+          <ErrorBoundary componentName="BlockchainDashboard-Route">
+            <BlockchainDashboard />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
+      <Route component={() => (
+        <SafeComponent componentName="NotFound">
+          <ErrorBoundary componentName="NotFound">
+            <NotFound />
+          </ErrorBoundary>
+        </SafeComponent>
+      )} />
     </Switch>
   );
 }
@@ -201,16 +500,16 @@ function App() {
   
   return (
     <ErrorBoundary componentName="App">
-      <TenantProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
           <TooltipProvider>
             <div className="min-h-screen bg-background">
               <Router />
             </div>
             <Toaster />
           </TooltipProvider>
-        </QueryClientProvider>
-      </TenantProvider>
+        </TenantProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }

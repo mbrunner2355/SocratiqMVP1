@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-// AWS Configuration
+// AWS Configuration - Using import.meta.env for Vite
 const AWS_CONFIG = {
   region: 'us-east-1',
   s3Bucket: 'socratiqbeta1',
-  cognitoUserPoolId: process.env.VITE_COGNITO_USER_POOL_ID,
-  cognitoClientId: process.env.VITE_COGNITO_CLIENT_ID,
-  apiGatewayUrl: process.env.VITE_API_GATEWAY_URL || 'https://api.socratiq.com',
+  cognitoUserPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID,
+  cognitoClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+  apiGatewayUrl: import.meta.env.VITE_API_GATEWAY_URL || 'https://api.socratiq.com',
 }
 
 export interface Document {
@@ -25,6 +25,8 @@ export interface Document {
   createdAt: string
   updatedAt: string
   projectId?: string
+  s3Key?: string
+  filePath?: string
 }
 
 export interface Project {
@@ -162,7 +164,7 @@ export const useAppStore = create<AppState>()(
         }
         
         // Upload to AWS S3 if file data is available
-        if (documentData.filePath && typeof window !== 'undefined') {
+        if ((documentData as any).filePath && typeof window !== 'undefined') {
           try {
             const s3Key = `documents/${id}/${document.filename}`
             // AWS S3 upload would happen here in production

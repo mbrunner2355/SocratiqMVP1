@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
@@ -116,7 +116,7 @@ export function SocratIQPlatform() {
             providing advanced conversational AI, semantic search, and intelligent analytics across various domains.
           </p>
           <div className="flex justify-center space-x-4">
-            <Link to="/emme">
+            <Link to="/emme-engage">
               <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
                 <Users className="w-5 h-5 mr-2" />
                 Launch EMME Engage
@@ -167,7 +167,7 @@ export function SocratIQPlatform() {
                   </div>
                   <div className="mt-6">
                     {module.id === 'emme' ? (
-                      <Link to="/emme">
+                      <Link to="/emme-engage">
                         <Button className="w-full">
                           Launch Application
                           <ArrowRight className="w-4 h-4 ml-2" />
