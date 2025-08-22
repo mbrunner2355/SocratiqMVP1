@@ -1565,41 +1565,8 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       </div>
     );
 
-    return (
-      <div className="space-y-6">
-        {/* Framework Navigation Tabs */}
-        <div className="bg-white rounded-lg border">
-          <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
-              {[
-                { id: 'background', label: 'Background' },
-                { id: 'exploration', label: 'Exploration' },
-                { id: 'human-insights', label: 'Human Insights' }
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setFrameworkTab(tab.id)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    frameworkTab === tab.id
-                      ? 'border-red-500 text-red-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="space-y-6">
-          {frameworkTab === 'background' && renderBackgroundContent()}
-          {frameworkTab === 'exploration' && renderExplorationContent()}
-          {frameworkTab === 'human-insights' && renderHumanInsightsContent()}
-        </div>
-      </div>
-    );
+    // Always show Background content since that's where the main navigation happens
+    return renderBackgroundContent();
   };
 
 
