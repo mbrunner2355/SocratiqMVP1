@@ -822,41 +822,87 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <span className="text-red-500">▼</span>
               </div>
               
-              <div className="pl-6 space-y-3">
-                <div>
-                  <h5 className="font-medium text-gray-900 mb-2">Mechanism & CE</h5>
-                  <h5 className="font-medium text-gray-900 mb-2">Tolerability & Delivery</h5>
-                  <h5 className="font-medium text-gray-900 mb-2">Patient Population Positioning</h5>
-                  <h5 className="font-medium text-gray-900 mb-2">Access & Affordability</h5>
-                </div>
-
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="font-medium text-blue-900">UNITED STATES</p>
-                      <p className="text-blue-800">Average Among Menopausal Women</p>
-                      <p className="text-blue-800 font-semibold">4.7%</p>
-                      <p className="text-blue-800">Approximately 10%</p>
-                    </div>
-                    <div>
-                      <p className="font-medium text-blue-900">SUMMARY</p>
-                    </div>
+              <div className="pl-6 space-y-4">
+                {/* Mechanism & CE */}
+                <div className="border-l-2 border-gray-200 pl-4">
+                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
+                    <span className="text-red-500">▶</span>
+                    <h5 className="font-medium text-gray-900">Mechanism & CE</h5>
+                  </div>
+                  <div className="mt-2 pl-6 text-sm text-gray-700">
+                    <p>Dual NK-1/NK-3 receptor antagonist targeting KNDy neurons for non-hormonal menopause symptom management.</p>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <p className="text-sm text-gray-700">
-                    These figures suggest that a substantial majority of women experiencing menopausal symptoms opt out of hormone therapy, often due to risk aversion and misinformation.
-                  </p>
+                {/* Tolerability & Delivery */}
+                <div className="border-l-2 border-gray-200 pl-4">
+                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
+                    <span className="text-red-500">▶</span>
+                    <h5 className="font-medium text-gray-900">Tolerability & Delivery</h5>
+                  </div>
+                  <div className="mt-2 pl-6 text-sm text-gray-700">
+                    <p>Once-daily oral administration with favorable safety profile and no hormone-related side effects.</p>
+                  </div>
+                </div>
 
-                  <div>
-                    <h6 className="font-medium text-gray-900 mb-1">Implications</h6>
-                    <p className="text-sm text-gray-700">
-                      <strong>Unmet Need:</strong> The low uptake of HT highlights a significant unmet need for alternative, non-hormonal treatments for menopausal symptoms.
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Educational Efforts:</strong> There's a need for improved education and communication to address misconceptions about HT and inform women about available treatment options.
-                    </p>
+                {/* Patient Population */}
+                <div className="border-l-2 border-gray-200 pl-4">
+                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
+                    <span className="text-red-500">▶</span>
+                    <h5 className="font-medium text-gray-900">Patient Population</h5>
+                  </div>
+                  <div className="mt-2 pl-6 text-sm text-gray-700">
+                    <p>Women experiencing moderate to severe menopausal symptoms seeking non-hormonal alternatives.</p>
+                  </div>
+                </div>
+
+                {/* Positioning */}
+                <div className="border-l-2 border-gray-200 pl-4">
+                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
+                    <span className="text-red-500">▶</span>
+                    <h5 className="font-medium text-gray-900">Positioning</h5>
+                  </div>
+                  <div className="mt-2 pl-6 text-sm text-gray-700">
+                    <p>Novel non-hormonal option for women avoiding or contraindicated for hormone therapy.</p>
+                  </div>
+                </div>
+
+                {/* Access & Affordability */}
+                <div className="border-l-2 border-gray-200 pl-4">
+                  <div className="flex items-center gap-2 cursor-pointer hover:text-red-600">
+                    <span className="text-red-500">▶</span>
+                    <h5 className="font-medium text-gray-900">Access & Affordability</h5>
+                  </div>
+                  <div className="mt-2 pl-6 space-y-3">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="font-medium text-blue-900">UNITED STATES</p>
+                          <p className="text-blue-800">Average Among Menopausal Women</p>
+                          <p className="text-blue-800 font-semibold">4.7%</p>
+                          <p className="text-blue-800">Approximately 10%</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-blue-900">SUMMARY</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <p className="text-sm text-gray-700">
+                        These figures suggest that a substantial majority of women experiencing menopausal symptoms opt out of hormone therapy, often due to risk aversion and misinformation.
+                      </p>
+
+                      <div>
+                        <h6 className="font-medium text-gray-900 mb-1">Implications</h6>
+                        <p className="text-sm text-gray-700">
+                          <strong>Unmet Need:</strong> The low uptake of HT highlights a significant unmet need for alternative, non-hormonal treatments for menopausal symptoms.
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          <strong>Educational Efforts:</strong> There's a need for improved education and communication to address misconceptions about HT and inform women about available treatment options.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
