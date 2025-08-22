@@ -780,7 +780,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       switch (activeAccordion) {
         case 'mission-vision':
           return (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Mission Statement</h4>
                 <p className="text-sm text-gray-700">
@@ -797,7 +797,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Core Values & Framework</h4>
-                <p className="text-sm text-gray-700">Leadership, Integrity, Agility, Efficiency</p>
+                <p className="text-sm text-gray-700 mb-2">Leadership, Integrity, Agility, Efficiency</p>
                 <p className="text-sm text-gray-700">These values support an overarching commitment to:</p>
               </div>
 
@@ -807,7 +807,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Guiding Principles in Action</h4>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-gray-700 mb-2">
                   <span className="text-red-500">▶</span> Innovation for People and Planet – Using science to improve quality of life while reducing ecological footprint.
                 </p>
               </div>
@@ -818,6 +818,73 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Digital Transformation – Democratizing access and enhancing R&D capabilities.</h4>
+              </div>
+
+              {/* Extended Content from Screen 2 */}
+              <div className="border-t border-gray-200 pt-4">
+                <h4 className="font-semibold text-gray-900 mb-3">Strategic Commitments & Initiatives</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Committed to providing 100 million women in low- and middle-income countries (LMICs) with access to modern contraception by 2030. This initiative aims to enhance women's health, rights, and economic status, contributing significantly to gender equality and sustainable development.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h5 className="font-medium text-gray-900 mb-1">Equitable Pricing Strategies:</h5>
+                    <p className="text-sm text-gray-700">
+                      Adapting pricing to local purchasing power in LMICs, aiming to make contraceptives more affordable. Working to increase access to hormonal IUSs.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h5 className="font-medium text-gray-900 mb-1">The Challenge Initiative (TCI):</h5>
+                    <p className="text-sm text-gray-700">
+                      In collaboration with Bill & Melinda Gates Foundation and others, assisting cities in Africa and Asia to rapidly and sustainably scale up reproductive health solutions for women and girls in urban poverty.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h5 className="font-medium text-gray-900 mb-1">World Contraception Day (WCD):</h5>
+                    <p className="text-sm text-gray-700">
+                      Co-founded WCD and the "Your Life" campaign to provide young people with accurate information on sexual and reproductive health, encouraging informed decisions.
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      <span className="text-red-500">▶</span> <strong>Linked to serious environmental issue</strong> connected to various adverse health effects, particularly concerning women's health — negative fertility impact, potential associations with breast cancer, menstrual irregularities and hormonal disruption, and reduced fertility rates.
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      <span className="text-red-500">▶</span> <strong>Global DEI Commitments:</strong> Established clear global commitments for gender balance and aims to increase the number of women at all management levels globally to 50% by 2030.
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Offers comprehensive benefits to support employees through various life stages, including maternity leave and menopause.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Interactive Question Section */}
+              <div className="bg-gray-50 p-4 rounded-lg border-t border-gray-200">
+                <p className="text-sm text-gray-700 italic">
+                  "Let's take a deeper dive into public perceptions, especially in regard to women's health? Are there any direct correlations to either positive or negative women's health outcomes?"
+                </p>
+              </div>
+
+              {/* AI Assistant Section */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h5 className="font-medium text-gray-900 mb-2">What can I help you with?</h5>
+                <div className="min-h-[60px] bg-white rounded border flex items-center justify-center">
+                  <p className="text-gray-500 text-sm">AI assistant for pharmaceutical intelligence</p>
+                </div>
               </div>
             </div>
           );

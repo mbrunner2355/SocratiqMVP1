@@ -19,6 +19,14 @@ SocratIQ Transform™ is an AI-powered document intelligence platform designed t
 - **Collapsible Behavior**: Only selected section expands while others automatically collapse for clean interface
 - **Dynamic Content**: Each section displays comprehensive pharmaceutical intelligence and market data
 - **Visual Design**: Professional styling with dropdown arrows, active states, and smooth transitions
+- **Enhanced Mission/Vision Content**: Added comprehensive organizational commitments, strategic initiatives, DEI goals, equitable pricing strategies, and environmental health considerations from user-provided pharmaceutical intelligence documents
+
+**Collapsible Navigation System (August 22, 2025)**:
+- **Dual Sidebar Optimization**: Implemented smart collapsible behavior for both EMME Engage main navigation and SocratIQ project navigation
+- **Hover Expansion**: Both sidebars start collapsed at 16px width, expand on hover to show full labels
+- **Pin/Unpin Functionality**: Users can pin sidebars open when needed with toggle button
+- **Space Maximization**: Reclaims 400+ pixels of screen width for pharmaceutical content display
+- **Smooth Animations**: 300ms transitions for professional user experience
 
 # User Preferences
 
