@@ -1383,6 +1383,147 @@ Current landscape includes one direct non-hormonal competitor already in the mar
             </div>
           );
 
+        case 'mechanism-ce':
+          return (
+            <div className="space-y-6">
+              {/* Drug Mechanism */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Mechanism of Action</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Drug Classification</label>
+                    <textarea
+                      defaultValue="Elinzanetant is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, a novel, non-hormonal mechanism of action."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter drug classification..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Target Mechanism</label>
+                    <textarea
+                      defaultValue="It targets KNDy neurons (Kisspeptin, Neurokinin B, Dynorphin) in the hypothalamus — key players in thermoregulation and reproductive hormone signaling."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter target mechanism..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Therapeutic Effect</label>
+                    <textarea
+                      defaultValue="During menopause, estrogen decline causes these neurons to become hyperactive, triggering hot flashes and sleep disruptions. By modulating this pathway, elinzanetant helps restore thermal balance without affecting hormone levels."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={3}
+                      placeholder="Enter therapeutic effect..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Clinical Evidence */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Clinical Evidence</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Phase 1 & 2 Trial Results</label>
+                    <textarea
+                      defaultValue="Phase 1 studies established safety, pharmacokinetics, and pharmacodynamics, confirming oral bioavailability and tolerability in healthy women."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter Phase 1 & 2 results..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">SWITCH-1 Trial (Phase 2b)</label>
+                    <textarea
+                      defaultValue="Phase 2b (SWITCH-1) trial identified the optimal 120 mg dose, showing a statistically significant reduction in hot flash frequency and severity by week 4, with a favorable safety profile."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter SWITCH-1 trial results..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Sleep Quality Benefits</label>
+                    <textarea
+                      defaultValue="Additional findings from early-phase research indicated positive effects on sleep quality, reduced wake time, and no impact on hormone-sensitive tissues."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter sleep quality findings..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Phase 3 Program Status</label>
+                    <textarea
+                      defaultValue="Phase 3 clinical program currently underway to support regulatory submissions across multiple markets including US, EU, and UK."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter Phase 3 status..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Competitive Differentiation */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Competitive Differentiation</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Novel Mechanism Advantage</label>
+                    <textarea
+                      defaultValue="First-in-class dual NK-1/NK-3 receptor antagonist specifically targeting thermoregulatory pathways, offering non-hormonal approach with precision targeting."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter mechanism advantage..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Safety Profile Differentiation</label>
+                    <textarea
+                      defaultValue="No hormone-related contraindications, suitable for women with cancer histories or those avoiding hormone therapy due to personal preference or medical contraindications."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter safety differentiation..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Clinical Efficacy Positioning</label>
+                    <textarea
+                      defaultValue="Demonstrated rapid onset of action (within 4 weeks) with sustained efficacy and favorable tolerability profile compared to existing non-hormonal alternatives."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter efficacy positioning..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <div className="flex justify-end">
+                <button 
+                  onClick={() => {
+                    toast({
+                      title: "Mechanism & CE Data Saved",
+                      description: "All mechanism and clinical efficacy information has been updated successfully.",
+                    });
+                  }}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium"
+                >
+                  Save Mechanism & CE Data
+                </button>
+              </div>
+            </div>
+          );
+
         case 'tolerability':
           return (
             <div className="space-y-4">
@@ -1558,6 +1699,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
         <div className="bg-white rounded-lg border">
           {[
             { id: 'unmet-need', label: 'Unmet Need' },
+            { id: 'mechanism-ce', label: 'Mechanism & CE' },
             { id: 'tolerability', label: 'Tolerability' },
             { id: 'patient-population', label: 'Patient Population' },
             { id: 'positioning', label: 'Positioning' },
