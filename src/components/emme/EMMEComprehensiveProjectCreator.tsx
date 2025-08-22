@@ -80,6 +80,7 @@ export function EMMEComprehensiveProjectCreator() {
   // Chat functionality
   const [chatMessages, setChatMessages] = useState<Array<{id: string, content: string, sender: 'user' | 'emme', timestamp: Date}>>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [backgroundTab, setBackgroundTab] = useState('organization-overview');
 
   const sendMessageToEmme = async (message: string) => {
     const userMessage = {
@@ -1300,8 +1301,6 @@ Current landscape includes one direct non-hormonal competitor already in the mar
           return null;
       }
     };
-
-    const [backgroundTab, setBackgroundTab] = useState('organization-overview');
 
     const renderOrganizationOverviewTab = () => (
       <div className="space-y-6">
