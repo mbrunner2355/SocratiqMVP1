@@ -51,7 +51,8 @@ import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding"
 interface EMMELayoutProps {
   children: React.ReactNode;
   activeView?: string;
-  onViewChange?: (view: string) => void;
+  onViewChange?: (view: string, projectId?: string) => void;
+  projectContext?: any;
 }
 
 interface NavItem {
@@ -70,7 +71,7 @@ interface ChatMessage {
   isTyping?: boolean;
 }
 
-export function EMMELayout({ children, activeView = "home", onViewChange }: EMMELayoutProps) {
+export function EMMELayout({ children, activeView = "home", onViewChange, projectContext }: EMMELayoutProps) {
   const [activeNav, setActiveNav] = useState(activeView);
   const [expandedMenus, setExpandedMenus] = useState<string[]>(["projects"]);
   const [isChatOpen, setIsChatOpen] = useState(false);

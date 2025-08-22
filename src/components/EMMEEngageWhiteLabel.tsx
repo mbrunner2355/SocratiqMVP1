@@ -39,6 +39,7 @@ import { Home, FolderPlus, Users, MessageSquare, Zap, Brain, FileText, Database,
 import { ProjectBackupManager } from './ProjectBackupManager';
 import { CompleteProjectBackup } from './CompleteProjectBackup';
 import { updateUrlForView, getViewFromUrl, initializeUrlRouting } from '@/utils/urlRouting';
+import { useLocation } from 'wouter';
 
 
 interface TenantUsage {
@@ -113,7 +114,7 @@ function EMMEEngageWhiteLabel() {
       setProjectContext(projectData);
       setActiveView(moduleId);
       
-      // Update URL to reflect new view
+      // Update URL to reflect new view with proper routing
       updateUrlForView(moduleId, projectData?.id);
       
       // Store project context in sessionStorage for persistence
@@ -126,8 +127,12 @@ function EMMEEngageWhiteLabel() {
     window.addEventListener('navigateToModule', handleNavigateToModule);
     
     // Initialize URL-based routing
-    initializeUrlRouting((view, projectId) => {
+    initializeUrlRouting((view, projectId, section, tab) => {
+      console.log('URL routing update:', view, projectId, section, tab);
       setActiveView(view);
+      if (tab) {
+        setInsightsTab(tab);
+      }
       if (projectId) {
         // Load project data if needed
         console.log('Loading project from URL:', projectId);
@@ -582,8 +587,13 @@ function EMMEEngageWhiteLabel() {
     }
   };
 
+  const handleViewChange = (newView: string, projectId?: string) => {
+    setActiveView(newView);
+    updateUrlForView(newView, projectId || projectContext?.id);
+  };
+
   return (
-    <EMMELayout activeView={activeView} onViewChange={setActiveView}>
+    <EMMELayout activeView={activeView} onViewChange={handleViewChange} projectContext={projectContext}>
       {renderActiveView()}
     </EMMELayout>
   );

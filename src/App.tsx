@@ -83,6 +83,25 @@ function App() {
           <Route path="/ip" component={() => <Layout><IP /></Layout>} />
           <Route path="/trials" component={() => <Layout><Trials /></Layout>} />
           <Route path="/labs" component={() => <Layout><Labs /></Layout>} />
+          
+          {/* EMME Engage Application Routes with proper URLs */}
+          <Route path="/projects" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/home" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/create" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/view" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/insights" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/insights/overview" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/insights/scope" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/insights/timeline" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/framework" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/framework/:section" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/client-content" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/playground" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/strategy-map" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          <Route path="/projects/:projectId/dashboard" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
+          
+          {/* Legacy route for compatibility */}
           <Route path="/mock5-client" component={() => <Layout><EMMEEngageWhiteLabel /></Layout>} />
           
           {/* Backup & Export Routes */}

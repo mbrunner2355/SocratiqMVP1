@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, MessageCircle, BarChart3, FileText, Users, Play, Map, Activity, Pin, PinOff } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
+import { updateUrlForView } from '@/utils/urlRouting';
 import { useToast } from '@/hooks/use-toast';
 
 // Top navigation tabs - starting with Organization Overview
@@ -849,7 +849,10 @@ Current landscape includes one direct non-hormonal competitor already in the mar
         <div className="border-b border-gray-200 mb-8">
           <div className="flex space-x-8">
             <button 
-              onClick={() => setInsightsTab('overview')}
+              onClick={() => {
+                setInsightsTab('overview');
+                updateUrlForView('project-insights', '1755870770093', undefined, 'overview');
+              }}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 insightsTab === 'overview'
                   ? 'border-red-500 text-red-600'
@@ -859,7 +862,10 @@ Current landscape includes one direct non-hormonal competitor already in the mar
               Overview
             </button>
             <button 
-              onClick={() => setInsightsTab('scope')}
+              onClick={() => {
+                setInsightsTab('scope');
+                updateUrlForView('project-insights', '1755870770093', undefined, 'scope');
+              }}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 insightsTab === 'scope'
                   ? 'border-red-500 text-red-600'
@@ -869,7 +875,10 @@ Current landscape includes one direct non-hormonal competitor already in the mar
               Scope
             </button>
             <button 
-              onClick={() => setInsightsTab('timeline')}
+              onClick={() => {
+                setInsightsTab('timeline');
+                updateUrlForView('project-insights', '1755870770093', undefined, 'timeline');
+              }}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 insightsTab === 'timeline'
                   ? 'border-red-500 text-red-600'
