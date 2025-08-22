@@ -771,38 +771,100 @@ Current landscape includes one direct non-hormonal competitor already in the mar
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <span className="text-red-500">▼</span>
-              Mechanism & CE
+              Mission, Vision and Core Values
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-gray-700">
-              <strong>PRODUCT A</strong> is a dual neurokinin-1 (NK-1) and neurokinin-3 (NK-3) receptor antagonist, a novel, non-hormonal mechanism of action.
-            </p>
-            
-            <p className="text-sm text-gray-700">
-              It targets KNDy neurons (Kisspeptin, Neurokinin B, Dynorphin) in the hypothalamus — key players in thermoregulation and reproductive hormone signaling.
-            </p>
-            
-            <div className="pl-4">
-              <p className="text-sm text-gray-700 mb-2">
-                <span className="text-red-500">▶</span> During menopause, estrogen decline causes these neurons to become hyperactive, triggering hot flashes and sleep disruptions. By modulating this pathway, PRODUCT A helps restore thermal balance without affecting hormone levels.
-              </p>
-              
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm font-semibold text-gray-800 mb-2">Phase 1 & 2 Trials:</p>
-                <p className="text-sm text-gray-700">
-                  Phase 1 studies established safety, pharmacokinetics, and pharmacodynamics, confirming oral bioavailability and tolerability in healthy women.
-                </p>
-                
-                <p className="text-sm text-gray-700 mt-2">
-                  Phase 2b (SWITCH-1) trial identified the optimal 120 mg dose, showing a statistically significant reduction in hot flash frequency and severity by week 4, with a favorable safety profile.
-                </p>
-              </div>
-              
-              <p className="text-sm text-gray-700 mt-2">
-                <span className="text-red-500">▶</span> Additional findings from early-phase research indicated positive effects on sleep quality, reduced wake time, and no impact on hormone-sensitive tissues.
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Mission Statement</h4>
+              <p className="text-sm text-gray-700">
+                Global mission, introduced as part of its strategic repositioning to integrate its life science focus across pharmaceuticals, consumer health, and other science.
               </p>
             </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Vision</h4>
+              <p className="text-sm text-gray-700">
+                <span className="text-red-500">▶</span> To be a trusted leader in life sciences, advancing health through innovation and sustainability, providing long-term societal value.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Core Values & Framework</h4>
+              <p className="text-sm text-gray-700">Leadership, Integrity, Agility, Efficiency</p>
+              <p className="text-sm text-gray-700">These values support an overarching commitment to:</p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Sustainability, Innovation, Patient Outcomes, and Collaboration</h4>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Guiding Principles in Action</h4>
+              <p className="text-sm text-gray-700">
+                <span className="text-red-500">▶</span> Innovation for People and Planet – Using science to improve quality of life while reducing ecological footprint.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Patient-Centricity – Especially in pharma, promoting access-based innovation.</h4>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Digital Transformation – Democratizing access and enhancing R&D capabilities.</h4>
+            </div>
+
+            {/* Expandable Dropdown Section */}
+            <div className="border-t pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-red-500">📋</span>
+                <h4 className="font-medium text-red-500">Unmet Need</h4>
+                <span className="text-red-500">▼</span>
+              </div>
+              
+              <div className="pl-6 space-y-3">
+                <div>
+                  <h5 className="font-medium text-gray-900 mb-2">Mechanism & CE</h5>
+                  <h5 className="font-medium text-gray-900 mb-2">Tolerability & Delivery</h5>
+                  <h5 className="font-medium text-gray-900 mb-2">Patient Population Positioning</h5>
+                  <h5 className="font-medium text-gray-900 mb-2">Access & Affordability</h5>
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="font-medium text-blue-900">UNITED STATES</p>
+                      <p className="text-blue-800">Average Among Menopausal Women</p>
+                      <p className="text-blue-800 font-semibold">4.7%</p>
+                      <p className="text-blue-800">Approximately 10%</p>
+                    </div>
+                    <div>
+                      <p className="font-medium text-blue-900">SUMMARY</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-sm text-gray-700">
+                    These figures suggest that a substantial majority of women experiencing menopausal symptoms opt out of hormone therapy, often due to risk aversion and misinformation.
+                  </p>
+
+                  <div>
+                    <h6 className="font-medium text-gray-900 mb-1">Implications</h6>
+                    <p className="text-sm text-gray-700">
+                      <strong>Unmet Need:</strong> The low uptake of HT highlights a significant unmet need for alternative, non-hormonal treatments for menopausal symptoms.
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Educational Efforts:</strong> There's a need for improved education and communication to address misconceptions about HT and inform women about available treatment options.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-sm text-gray-700 italic">
+              Let's take a deeper dive into public perceptions, especially in regard to women's health? Are there any direct correlations to either positive or negative women's health outcomes?
+            </p>
           </CardContent>
         </Card>
 
