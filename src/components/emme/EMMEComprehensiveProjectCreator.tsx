@@ -966,20 +966,20 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
     const renderBackgroundContent = () => (
       <div className="space-y-6">
-        {/* Accordion Menu */}
+        {/* Collapsible Accordion Menu */}
         <div className="bg-white rounded-lg border">
-          <div className="border-b border-gray-200">
-            {[
-              { id: 'mission-vision', label: 'Mission, Vision and Core Values' },
-              { id: 'unmet-need', label: 'Unmet Need' },
-              { id: 'tolerability', label: 'Tolerability' },
-              { id: 'patient-population', label: 'Patient Population' },
-              { id: 'positioning', label: 'Positioning' },
-              { id: 'access-affordability', label: 'Access & Affordability' }
-            ].map((item) => (
+          {[
+            { id: 'mission-vision', label: 'Mission, Vision and Core Values' },
+            { id: 'unmet-need', label: 'Unmet Need' },
+            { id: 'tolerability', label: 'Tolerability' },
+            { id: 'patient-population', label: 'Patient Population' },
+            { id: 'positioning', label: 'Positioning' },
+            { id: 'access-affordability', label: 'Access & Affordability' }
+          ].map((item, index) => (
+            <div key={item.id} className={`${index > 0 ? 'border-t border-gray-200' : ''}`}>
+              {/* Accordion Header */}
               <button
-                key={item.id}
-                onClick={() => setActiveAccordion(item.id)}
+                onClick={() => setActiveAccordion(activeAccordion === item.id ? '' : item.id)}
                 className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors ${
                   activeAccordion === item.id ? 'bg-red-50 text-red-600 font-medium' : 'text-gray-700'
                 }`}
@@ -987,19 +987,21 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <span className={`${activeAccordion === item.id ? 'text-red-600' : 'text-gray-700'}`}>
                   {item.label}
                 </span>
-                <span className={`text-sm transition-transform ${
+                <span className={`text-sm transition-transform duration-200 ${
                   activeAccordion === item.id ? 'text-red-500 rotate-180' : 'text-gray-400'
                 }`}>
                   ▼
                 </span>
               </button>
-            ))}
-          </div>
-          
-          {/* Content Area */}
-          <div className="p-6">
-            {renderAccordionContent()}
-          </div>
+              
+              {/* Collapsible Content Area */}
+              {activeAccordion === item.id && (
+                <div className="px-6 pb-6 pt-2 bg-gray-50 border-t border-gray-100">
+                  {renderAccordionContent()}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
         <Card>
