@@ -341,21 +341,7 @@ export function SimpleProjectManager() {
                     >
                       View Project
                     </Button>
-                    <Button
-                      onClick={() => {
-                        // Navigate to edit mode (project creation with existing data)
-                        setSelectedProject(project);
-                        sessionStorage.setItem('current-project', JSON.stringify(project));
-                        sessionStorage.setItem('edit-mode', 'true');
-                        window.dispatchEvent(new CustomEvent('navigateToModule', { 
-                          detail: { moduleId: 'create-project', projectData: project }
-                        }));
-                      }}
-                      variant="outline"
-                      size="sm"
-                    >
-                      Edit Project
-                    </Button>
+
                   </div>
                   <div className="mt-2 text-xs text-gray-500">
                     Created: {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'Unknown'}
