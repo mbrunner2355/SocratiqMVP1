@@ -1672,24 +1672,195 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
         case 'tolerability':
           return (
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Safety Profile</h4>
-                <p className="text-sm text-gray-700">
-                  Once-daily oral administration with favorable safety profile demonstrated in Phase 2 trials. No hormone-related side effects observed.
-                </p>
+            <div className="space-y-6">
+              {/* Safety Profile Overview */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Mild, Placebo-Like Side Effect Profile</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Overall Safety Assessment</label>
+                    <textarea
+                      defaultValue="Across all phases of clinical development, Elinzanetant was consistently well tolerated, with a side effect profile comparable to placebo."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter overall safety assessment..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Most Frequently Reported Adverse Events (≥1% incidence)</label>
+                    <textarea
+                      defaultValue="Headache, Nausea, Fatigue, Nasopharyngitis"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter adverse events..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Characteristics</label>
+                    <textarea
+                      defaultValue="Events are generally mild, transient, and non-dose limiting = low discontinuation rates and high adherence."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter event characteristics..."
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Delivery Method</h4>
-                <p className="text-sm text-gray-700">
-                  Convenient oral dosing supports patient compliance and ease of administration compared to alternative delivery methods.
-                </p>
+
+              {/* Hepatotoxicity & Endometrial Safety */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">No Hepatotoxicity or Endometrial Risk</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hepatotoxicity Profile</label>
+                    <textarea
+                      defaultValue="Unlike some earlier NK receptor antagonists, Elinzanetant showed no signs of hepatotoxicity: No clinically relevant liver enzyme elevations in any Phase 3 trial."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter hepatotoxicity profile..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Long-term Safety Data (OASIS 3 and 4)</label>
+                    <textarea
+                      defaultValue="No endometrial hyperplasia or malignancy\nNo increased risk of breast tissue changes"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter long-term safety data..."
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-2">Clinical Evidence</h4>
-                <p className="text-sm text-green-800">
-                  52-week safety data confirmed tolerability with no significant adverse events or hepatotoxicity signals.
-                </p>
+
+              {/* Target Population Suitability */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Target Population Suitability</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Suitable Patient Populations</label>
+                    <textarea
+                      defaultValue="Elinzanetant is suitable for:"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={1}
+                      placeholder="Enter suitability overview..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Oncology-Adjacent Populations</label>
+                    <textarea
+                      defaultValue="Oncology-adjacent populations (e.g., women with breast cancer on endocrine therapy)"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter oncology population details..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Risk-Averse Patient Preference</label>
+                    <textarea
+                      defaultValue="Risk-averse patients who prefer non-hormonal, low-risk solutions"
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter risk-averse patient details..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Method & Compliance */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Delivery Method & Patient Compliance</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Administration</label>
+                    <textarea
+                      defaultValue="Once-daily oral administration with no special timing requirements or dietary restrictions."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter administration details..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Compliance Advantages</label>
+                    <textarea
+                      defaultValue="Convenient oral dosing supports high patient compliance and ease of administration compared to alternative delivery methods (patches, gels, injections)."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter compliance advantages..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Discontinuation Rates</label>
+                    <textarea
+                      defaultValue="Low discontinuation rates observed across all Phase 3 trials, comparable to placebo, indicating excellent tolerability and patient acceptance."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter discontinuation rate data..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Regulatory & Market Access Implications */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Regulatory & Market Access Implications</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Regulatory Advantage</label>
+                    <textarea
+                      defaultValue="Clean safety profile supports streamlined regulatory approvals without need for extensive safety monitoring or contraindication warnings."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter regulatory advantages..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Payer Value Proposition</label>
+                    <textarea
+                      defaultValue="Excellent safety profile reduces healthcare system costs through lower monitoring requirements and reduced adverse event management."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter payer value proposition..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Prescriber Confidence</label>
+                    <textarea
+                      defaultValue="Placebo-like tolerability profile increases prescriber confidence, especially for patients with comorbidities or polypharmacy concerns."
+                      className="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      rows={2}
+                      placeholder="Enter prescriber confidence factors..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <div className="flex justify-end">
+                <button 
+                  onClick={() => {
+                    toast({
+                      title: "Tolerability Data Saved",
+                      description: "All tolerability and delivery information has been updated successfully.",
+                    });
+                  }}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium"
+                >
+                  Save Tolerability Data
+                </button>
               </div>
             </div>
           );
