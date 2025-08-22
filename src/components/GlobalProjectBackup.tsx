@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Download, Package, Database, Code, Archive, FileText, Server, Layers } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DataMigrationBackup } from './DataMigrationBackup';
 
 export function GlobalProjectBackup() {
   const [isCreatingBackup, setIsCreatingBackup] = useState(false);
@@ -301,12 +302,17 @@ export function GlobalProjectBackup() {
             </Button>
           </div>
 
-          <Tabs defaultValue="frontend" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="data" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="data">Project Data</TabsTrigger>
               <TabsTrigger value="frontend">Frontend Modules</TabsTrigger>
               <TabsTrigger value="backend">Backend Services</TabsTrigger>
               <TabsTrigger value="overview">Platform Overview</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="data" className="space-y-4">
+              <DataMigrationBackup />
+            </TabsContent>
 
             <TabsContent value="frontend" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
