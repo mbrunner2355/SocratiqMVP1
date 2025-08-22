@@ -532,7 +532,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
               placeholder="Project background..."
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="space-y-6">
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">Development Stage</h4>
                 <Select 
@@ -542,7 +542,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select development stage" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50">
                     <SelectItem value="pre-clinical">Pre-Clinical</SelectItem>
                     <SelectItem value="phase-1">Phase I</SelectItem>
                     <SelectItem value="phase-2">Phase II</SelectItem>
@@ -558,7 +558,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                 <Textarea 
                   value={formData.patientPopulation}
                   onChange={(e) => setFormData(prev => ({ ...prev, patientPopulation: e.target.value }))}
-                  className="min-h-[60px]"
+                  className="min-h-[80px]"
                   placeholder="Describe the target patient population..."
                 />
               </div>
