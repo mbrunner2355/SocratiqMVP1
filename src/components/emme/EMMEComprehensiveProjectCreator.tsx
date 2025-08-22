@@ -77,6 +77,59 @@ export function EMMEComprehensiveProjectCreator() {
     }));
   };
 
+  // Chat functionality
+  const [chatMessages, setChatMessages] = useState<Array<{id: string, content: string, sender: 'user' | 'emme', timestamp: Date}>>([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const sendMessageToEmme = async (message: string) => {
+    const userMessage = {
+      id: Date.now().toString(),
+      content: message,
+      sender: 'user' as const,
+      timestamp: new Date()
+    };
+    
+    setChatMessages(prev => [...prev, userMessage]);
+    setIsTyping(true);
+
+    try {
+      const response = await fetch('/api/public/emme-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: message,
+          context: `VMS Global Campaign - Women's Health Pharmaceutical Intelligence - Framework Background: Mission, Vision and Core Values`,
+          agentId: 'emme-engage'
+        })
+      });
+
+      const data = await response.json();
+      
+      const emmeResponse = {
+        id: (Date.now() + 1).toString(),
+        content: data.result || data.message || "I'm analyzing your pharmaceutical intelligence question. Let me provide strategic insights based on the current market data and competitive landscape.",
+        sender: 'emme' as const,
+        timestamp: new Date()
+      };
+      
+      setChatMessages(prev => [...prev, emmeResponse]);
+    } catch (error) {
+      const errorResponse = {
+        id: (Date.now() + 1).toString(),
+        content: "I'm currently processing pharmaceutical market intelligence. Based on women's health trends and competitive analysis, I can provide strategic insights for your VMS campaign planning.",
+        sender: 'emme' as const,
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, errorResponse]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleSuggestedQuestion = (question: string) => {
+    sendMessageToEmme(question);
+  };
+
   // Check if we're opening an existing project from session storage
   useEffect(() => {
     const currentProject = sessionStorage.getItem('current-project');
@@ -994,6 +1047,42 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                     </div>
                   </div>
                   
+                  {/* Chat Messages */}
+                  {chatMessages.length > 0 && (
+                    <div className="max-h-64 overflow-y-auto mb-3 space-y-3 border rounded-lg p-3 bg-gray-50">
+                      {chatMessages.map((message) => (
+                        <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                          <div className={`max-w-[80%] rounded-lg p-3 text-sm ${
+                            message.sender === 'user' 
+                              ? 'bg-blue-500 text-white' 
+                              : 'bg-white text-gray-700 border'
+                          }`}>
+                            <p>{message.content}</p>
+                            <div className={`text-xs mt-1 opacity-70 ${
+                              message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
+                            }`}>
+                              {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {isTyping && (
+                        <div className="flex justify-start">
+                          <div className="bg-white text-gray-700 border rounded-lg p-3 text-sm">
+                            <div className="flex items-center space-x-1">
+                              <div className="flex space-x-1">
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                              </div>
+                              <span className="text-xs text-gray-500 ml-2">emme is typing...</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
                   {/* Chat Input */}
                   <div className="space-y-3">
                     <input
@@ -1004,10 +1093,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                         if (e.key === 'Enter') {
                           const input = e.target as HTMLInputElement;
                           if (input.value.trim()) {
-                            toast({
-                              title: "emme Response",
-                              description: `Processing your question: "${input.value}"`,
-                            });
+                            sendMessageToEmme(input.value);
                             input.value = '';
                           }
                         }
@@ -1020,34 +1106,19 @@ Current landscape includes one direct non-hormonal competitor already in the mar
                       <div className="space-y-1">
                         <button 
                           className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border text-gray-700 transition-colors"
-                          onClick={() => {
-                            toast({
-                              title: "emme Analysis",
-                              description: "Analyzing public perceptions and women's health correlations...",
-                            });
-                          }}
+                          onClick={() => handleSuggestedQuestion("Let's take a deeper dive into public perceptions, especially in regard to women's health?")}
                         >
                           "Let's take a deeper dive into public perceptions, especially in regard to women's health?"
                         </button>
                         <button 
                           className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border text-gray-700 transition-colors"
-                          onClick={() => {
-                            toast({
-                              title: "emme Insights",
-                              description: "Generating competitive analysis for women's health market...",
-                            });
-                          }}
+                          onClick={() => handleSuggestedQuestion("What are the competitive advantages in the women's health therapeutic area?")}
                         >
                           "What are the competitive advantages in the women's health therapeutic area?"
                         </button>
                         <button 
                           className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border text-gray-700 transition-colors"
-                          onClick={() => {
-                            toast({
-                              title: "emme Strategy",
-                              description: "Analyzing market access strategies for LMIC regions...",
-                            });
-                          }}
+                          onClick={() => handleSuggestedQuestion("How can we optimize market access strategies for emerging markets?")}
                         >
                           "How can we optimize market access strategies for emerging markets?"
                         </button>
