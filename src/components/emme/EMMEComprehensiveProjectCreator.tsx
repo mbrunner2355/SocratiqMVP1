@@ -1373,16 +1373,7 @@ Current landscape includes one direct non-hormonal competitor already in the mar
           ))}
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>What can I help you with?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="min-h-[100px] bg-gray-50 rounded-lg flex items-center justify-center">
-              <p className="text-gray-500">AI assistant for pharmaceutical intelligence</p>
-            </div>
-          </CardContent>
-        </Card>
+
       </div>
     );
 
