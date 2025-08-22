@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Brain, 
   FileText, 
@@ -13,19 +16,83 @@ import {
   Building,
   Briefcase,
   Search,
-  User
+  User,
+  Eye,
+  EyeOff,
+  Loader2
 } from "lucide-react";
-import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
+import { detectPartnerContext } from "@shared/partner-branding";
+import { NavigationService } from "../lib/navigation";
+
+// Import your Cognito service
+import { CognitoAuthService } from "../lib/aws-config"; // Adjust path as needed
 
 export default function Login() {
-  const handleLogin = () => {
-    window.location.href = "/api/login";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Initialize Cognito auth service
+  const cognitoAuth = new CognitoAuthService();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // Use your Cognito authentication
+      const result = await cognitoAuth.signIn(email, password);
+      
+      // Store authentication tokens
+      localStorage.setItem('cognito_access_token', result.accessToken);
+      localStorage.setItem('cognito_id_token', result.idToken);
+      localStorage.setItem('cognito_refresh_token', result.refreshToken);
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      // Store user info
+      localStorage.setItem('user', JSON.stringify(result.user));
+      
+      // Redirect based on partner context
+      const partnerId = detectPartnerContext();
+      if (partnerId === 'emme-engage') {
+        NavigationService.goTo('/emme-engage/app');
+      } else if (partnerId === 'emme-health') {
+        NavigationService.goTo('/dashboard');
+      } else {
+        NavigationService.goTo('/dashboard');
+      }
+      
+    } catch (error: any) {
+      console.error('Login error:', error);
+      setError(error.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDemoLogin = () => {
+    // For demo purposes - remove in production
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('user', JSON.stringify({
+      email: 'demo@socratiq.ai',
+      firstName: 'Demo',
+      lastName: 'User'
+    }));
+    
+    const partnerId = detectPartnerContext();
+    if (partnerId === 'emme-engage') {
+      NavigationService.goTo('/emme-engage/app');
+    } else {
+      NavigationService.goTo('/dashboard');
+    }
   };
 
   // Detect partner context for dynamic branding
   const partnerId = detectPartnerContext();
   const isEMMEEngage = partnerId === 'emme-engage';
-  const isDefaultSocratIQ = !partnerId || partnerId === 'socratiq';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
@@ -59,8 +126,121 @@ export default function Login() {
               </p>
             </div>
 
+            {/* Error Alert */}
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {/* Login Form */}
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium text-slate-700">
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  disabled={isLoading}
+                  className="h-12"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="password" className="text-sm font-medium text-slate-700">
+                  Password
+                </label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    required
+                    disabled={isLoading}
+                    className="h-12 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                    disabled={isLoading}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Login Button */}
+              <Button 
+                type="submit"
+                disabled={isLoading || !email || !password}
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-medium text-base"
+                size="lg"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Signing in...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>Sign In</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                )}
+              </Button>
+            </form>
+
+            {/* Demo Login Button - Remove in production */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-slate-300" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-slate-500">Or</span>
+              </div>
+            </div>
+
+            <Button 
+              onClick={handleDemoLogin}
+              variant="outline"
+              className="w-full h-12 font-medium text-base"
+              size="lg"
+            >
+              Demo Login (Development)
+            </Button>
+
+            {/* Forgot Password Link */}
+            <div className="text-center">
+              <button 
+                type="button"
+                className="text-sm text-primary hover:text-primary/80 underline"
+                onClick={() => {
+                  // Implement forgot password functionality
+                  alert('Forgot password functionality to be implemented');
+                }}
+              >
+                Forgot your password?
+              </button>
+            </div>
+
             {/* Platform Highlights */}
-            <div className="space-y-3">
+            <div className="space-y-3 pt-4 border-t border-slate-200">
+              <p className="text-xs font-medium text-slate-600 text-center uppercase tracking-wide">
+                Platform Features
+              </p>
+              
               {isEMMEEngage ? (
                 // EMME Engage modules
                 <>
@@ -126,31 +306,9 @@ export default function Login() {
                       <p className="text-xs text-slate-600">Technology Transfer & Patents</p>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center space-x-3 p-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <User className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-slate-800">Profile™</p>
-                      <p className="text-xs text-slate-600">User & System Analytics</p>
-                    </div>
-                  </div>
                 </>
               )}
             </div>
-
-            {/* Login Button */}
-            <Button 
-              onClick={handleLogin} 
-              className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-medium text-base"
-              size="lg"
-            >
-              <div className="flex items-center justify-center space-x-2">
-                <span>Continue with Replit</span>
-                <ArrowRight className="h-4 w-4" />
-              </div>
-            </Button>
 
             {/* Security Badge */}
             <div className="flex items-center justify-center space-x-2 pt-4">

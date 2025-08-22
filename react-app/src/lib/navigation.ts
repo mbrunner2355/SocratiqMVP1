@@ -58,10 +58,109 @@ export class NavigationService {
     }
   }
 
-  static logout() {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('partner-app');
+  static async logout() {
+    try {
+      // Import Cognito service dynamically to avoid circular dependencies
+      const { CognitoAuthService } = await import('./aws-config');
+      const cognitoAuth = new CognitoAuthService();
+      
+      // Sign out from Cognito (clears tokens from localStorage)
+      await cognitoAuth.signOut();
+      
+      console.log('Successfully signed out from Cognito');
+    } catch (error) {
+      console.error('Error during Cognito sign out:', error);
+      
+      // Fallback: manually clear all auth-related localStorage items
+      localStorage.removeItem('cognito_access_token');
+      localStorage.removeItem('cognito_id_token');
+      localStorage.removeItem('cognito_refresh_token');
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('user');
+      localStorage.removeItem('partner-app');
+    }
+    
+    // Always navigate to landing page after logout
     this.goTo('/emme-engage', { replace: true });
+  }
+
+  // New method: Check if user is authenticated
+  static isAuthenticated(): boolean {
+    return localStorage.getItem('isAuthenticated') === 'true' && 
+           !!localStorage.getItem('cognito_access_token');
+  }
+
+  // New method: Get current user info
+  static getCurrentUser() {
+    try {
+      const userStr = localStorage.getItem('user');
+      return userStr ? JSON.parse(userStr) : null;
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      return null;
+    }
+  }
+
+  // New method: Handle authentication redirect after login
+  static handleAuthRedirect() {
+    const partnerApp = localStorage.getItem('partner-app');
+    
+    if (partnerApp === 'emme-engage') {
+      this.goTo('/emme-engage/app');
+    } else if (partnerApp === 'emme-health') {
+      this.goTo('/dashboard');
+    } else {
+      // Default redirect
+      this.goTo('/dashboard');
+    }
+  }
+
+  // New method: Handle token refresh and navigation
+  static async handleTokenRefresh() {
+    try {
+      const refreshToken = localStorage.getItem('cognito_refresh_token');
+      
+      if (!refreshToken) {
+        throw new Error('No refresh token available');
+      }
+
+      const { CognitoAuthService } = await import('./aws-config');
+      const cognitoAuth = new CognitoAuthService();
+      
+      const tokens = await cognitoAuth.refreshToken(refreshToken);
+      
+      // Update tokens in localStorage
+      localStorage.setItem('cognito_access_token', tokens.accessToken!);
+      localStorage.setItem('cognito_id_token', tokens.idToken!);
+      
+      console.log('Tokens refreshed successfully');
+      return true;
+      
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      
+      // If refresh fails, logout user
+      await this.logout();
+      return false;
+    }
+  }
+
+  // New method: Validate current session
+  static async validateSession(): Promise<boolean> {
+    if (!this.isAuthenticated()) {
+      return false;
+    }
+
+    try {
+      // Check if tokens are still valid by making a test API call
+      // You can implement this based on your API structure
+      return true;
+    } catch (error) {
+      console.error('Session validation failed:', error);
+      
+      // Try to refresh tokens
+      return await this.handleTokenRefresh();
+    }
   }
 }
 
@@ -75,4 +174,28 @@ export function useNavigationSetup() {
   useEffect(() => {
     NavigationService.setNavigate(navigate);
   }, [navigate]);
+}
+
+// Hook for session management
+export function useSessionValidation() {
+  useEffect(() => {
+    const validateSession = async () => {
+      const isValid = await NavigationService.validateSession();
+      
+      if (!isValid && window.location.pathname !== '/login' && 
+          !window.location.pathname.startsWith('/emme-engage') && 
+          !window.location.pathname.startsWith('/emme-health')) {
+        // Redirect to login if session is invalid and user is on a protected route
+        NavigationService.goTo('/login');
+      }
+    };
+
+    // Validate session on mount
+    validateSession();
+
+    // Set up periodic session validation (every 5 minutes)
+    const interval = setInterval(validateSession, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 }
