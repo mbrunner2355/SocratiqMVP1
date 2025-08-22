@@ -68,6 +68,45 @@ export function SimpleProjectManager() {
     };
     
     cleanupAndDeduplicateProjects();
+    
+    // Ensure VMS Global project exists
+    const ensureVMSProject = () => {
+      const stored = localStorage.getItem('emme-projects');
+      let projects = stored ? JSON.parse(stored) : [];
+      
+      // Check if VMS Global project exists with proper data
+      const hasVMS = projects.some((p: any) => 
+        p.name === "VMS Global" && 
+        p.client === "Vertex Pharmaceuticals" &&
+        p.developmentStage && 
+        p.patientPopulation
+      );
+      
+      if (!hasVMS) {
+        const vmsProject = {
+          id: 'vms-global-001',
+          name: 'VMS Global',
+          client: 'Vertex Pharmaceuticals',
+          team: 'Strategic Marketing Team',
+          summary: 'Comprehensive VMS (Value Messaging Strategy) development for global pharmaceutical launch across multiple therapeutic areas including CF, sickle cell disease, and pain management.',
+          organizationType: 'Pharmaceutical Company',
+          therapeuticArea: 'Rare Diseases / Cystic Fibrosis',
+          developmentStage: 'Phase III/Pre-Launch',
+          patientPopulation: 'Cystic Fibrosis patients with specific CFTR mutations',
+          hcpInsights: 'Focus on pulmonologists, CF specialists, and pediatric care teams',
+          clinicalEndpoints: 'Lung function improvement, exacerbation reduction, quality of life metrics',
+          status: 'active',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        
+        projects.push(vmsProject);
+        localStorage.setItem('emme-projects', JSON.stringify(projects));
+        console.log('Added VMS Global project to localStorage');
+      }
+    };
+    
+    ensureVMSProject();
   }, []);
 
   // Fetch project data - with fallback for API routing issues
