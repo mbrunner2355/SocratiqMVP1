@@ -1301,7 +1301,9 @@ Current landscape includes one direct non-hormonal competitor already in the mar
       }
     };
 
-    const renderBackgroundContent = () => (
+    const [backgroundTab, setBackgroundTab] = useState('organization-overview');
+
+    const renderOrganizationOverviewTab = () => (
       <div className="space-y-6">
         {/* Organization Overview Section */}
         <div className="bg-white rounded-lg border">
@@ -1332,7 +1334,11 @@ Current landscape includes one direct non-hormonal competitor already in the mar
             )}
           </div>
         </div>
+      </div>
+    );
 
+    const renderInitiativeOverviewTab = () => (
+      <div className="space-y-6">
         {/* Initiative Section */}
         <div className="bg-white rounded-lg border">
           <div className="px-4 py-3 bg-gray-100 border-b">
@@ -1372,8 +1378,61 @@ Current landscape includes one direct non-hormonal competitor already in the mar
             </div>
           ))}
         </div>
+      </div>
+    );
 
+    const renderBackgroundContent = () => (
+      <div className="space-y-6">
+        {/* Background Sub-Tabs */}
+        <div className="bg-white rounded-lg border">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-0">
+              {[
+                { id: 'organization-overview', label: 'Organization overview' },
+                { id: 'initiative-overview', label: 'Initiative Overview' },
+                { id: 'clinical-trials', label: 'Clinical Trials' },
+                { id: 'xxxx', label: 'XXXX' },
+                { id: 'xxx', label: 'XXX' }
+              ].map((tab, index) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setBackgroundTab(tab.id)}
+                  className={`py-3 px-6 text-sm font-medium border-b-2 transition-colors ${
+                    backgroundTab === tab.id
+                      ? 'border-red-500 text-red-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  } ${index > 0 ? 'border-l border-gray-200' : ''}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
 
+        {/* Tab Content */}
+        <div>
+          {backgroundTab === 'organization-overview' && renderOrganizationOverviewTab()}
+          {backgroundTab === 'initiative-overview' && renderInitiativeOverviewTab()}
+          {backgroundTab === 'clinical-trials' && (
+            <div className="bg-white rounded-lg border p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Clinical Trials</h3>
+              <p className="text-gray-600">Clinical trials configuration and data</p>
+            </div>
+          )}
+          {backgroundTab === 'xxxx' && (
+            <div className="bg-white rounded-lg border p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">XXXX Module</h3>
+              <p className="text-gray-600">XXXX configuration options</p>
+            </div>
+          )}
+          {backgroundTab === 'xxx' && (
+            <div className="bg-white rounded-lg border p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">XXX Module</h3>
+              <p className="text-gray-600">XXX configuration options</p>
+            </div>
+          )}
+        </div>
       </div>
     );
 
