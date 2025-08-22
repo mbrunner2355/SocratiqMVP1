@@ -8,6 +8,21 @@ const COGNITO_CONFIG = {
   clientId: '2Qin1ee6Gj5jql9pfcv3avbn2a', // From your screenshot
 };
 
+// AWS configuration for other services (S3, etc.)
+export const awsConfig = {
+  region: 'us-east-1',
+  cognito: COGNITO_CONFIG,
+  s3: {
+    bucket: 'socratiqbeta1', // Your actual S3 bucket name
+    region: 'us-east-1',
+  },
+};
+
+// Helper function to generate S3 URLs
+export const getS3Url = (key: string): string => {
+  return `https://${awsConfig.s3.bucket}.s3.${awsConfig.s3.region}.amazonaws.com/${key}`;
+};
+
 export class CognitoAuthService {
   private client: CognitoIdentityProviderClient;
 
