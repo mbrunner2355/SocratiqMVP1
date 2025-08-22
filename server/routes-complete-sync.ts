@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { db } from './db';
+import { userDataSync } from '../shared/schema';
+import { eq } from 'drizzle-orm';
 
 const router = Router();
 
@@ -8,28 +10,25 @@ router.post('/backup-all-data', async (req, res) => {
   try {
     const { userId = 'anonymous', browserData } = req.body;
     
-    // Store complete browser state in database for AWS deployment
-    const backupRecord = {
-      id: `backup_${Date.now()}`,
-      user_id: userId,
-      backup_data: JSON.stringify(browserData),
-      created_at: new Date().toISOString(),
-      backup_type: 'complete_browser_state'
-    };
-
-    // Simple storage approach - store as JSON in database
-    await db.query(
-      `INSERT INTO user_backups (id, user_id, backup_data, created_at, backup_type) 
-       VALUES ($1, $2, $3, $4, $5) 
-       ON CONFLICT (user_id) DO UPDATE SET 
-       backup_data = $3, created_at = $4`,
-      [backupRecord.id, userId, backupRecord.backup_data, backupRecord.created_at, backupRecord.backup_type]
-    );
+    // Store complete browser state using existing schema
+    await db.insert(userDataSync).values({
+      userId,
+      dataType: 'complete_backup',
+      dataKey: `backup_${Date.now()}`,
+      dataValue: browserData,
+      deviceId: req.headers['user-agent']?.slice(0, 100),
+      browserInfo: req.headers['user-agent']?.slice(0, 255)
+    }).onConflictDoUpdate({
+      target: [userDataSync.userId, userDataSync.dataType],
+      set: {
+        dataValue: browserData,
+        lastSynced: new Date(),
+      }
+    });
 
     res.json({ 
       success: true, 
-      message: 'Complete data backed up for AWS deployment',
-      backupId: backupRecord.id
+      message: 'Complete data backed up for AWS deployment'
     });
   } catch (error) {
     console.error('Backup error:', error);
@@ -42,16 +41,16 @@ router.get('/restore-all-data/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     
-    const result = await db.query(
-      'SELECT backup_data FROM user_backups WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
-      [userId]
-    );
+    const result = await db.select()
+      .from(userDataSync)
+      .where(eq(userDataSync.userId, userId))
+      .orderBy(userDataSync.lastSynced)
+      .limit(1);
 
-    if (result.rows.length > 0) {
-      const restoredData = JSON.parse(result.rows[0].backup_data);
+    if (result.length > 0) {
       res.json({ 
         success: true, 
-        data: restoredData,
+        data: result[0].dataValue,
         message: 'Data restored successfully'
       });
     } else {

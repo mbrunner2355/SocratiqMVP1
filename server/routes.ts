@@ -30,6 +30,7 @@ import { registerTenantRoutes } from "./routes-tenant";
 import { tenantMiddleware, tenantAccessMiddleware } from "./middleware/tenant";
 import fedscoutRoutes from "./routes-fedscout";
 import { registerBackupRoutes } from "./routes-backup";
+import completeSync from "./routes-complete-sync";
 import { pharmaceuticalCorpusBuilder } from "./services/pharmaceuticalCorpus";
 import { emmeDataProvider } from "./services/emmeDataProvider";
 
@@ -375,6 +376,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // SocratIQ GNN™ - Graph Neural Network Pipeline API
   app.use("/api/gnn", routesGNN);
+  app.use('/api', completeSync);
   
   // SocratIQ EMME™ - Partnership Ecosystem API
   app.use("/api/emme", emmeRoutes);

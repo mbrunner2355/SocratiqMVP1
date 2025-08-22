@@ -1,4 +1,5 @@
 import { GlobalProjectBackup } from '@/components/GlobalProjectBackup';
+import { SimpleDataBackup } from '@/components/SimpleDataBackup';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
@@ -26,7 +27,10 @@ export default function BackupPage() {
           </p>
         </div>
         
-        <GlobalProjectBackup />
+        <div className="space-y-6">
+          <SimpleDataBackup />
+          <GlobalProjectBackup />
+        </div>
       </div>
     </div>
   );
