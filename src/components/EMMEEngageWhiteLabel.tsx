@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-// import { useTenant, useFeature, useTenantStyling } from "@/components/TenantProvider";
-// import { useQuery } from "@tanstack/react-query";
+import { useTenant, useFeature, useTenantStyling } from "@/components/TenantProvider";
+import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EMMELayout } from "@/components/emme/EMMELayout";
@@ -9,14 +9,14 @@ import { InsightEngine } from "@/components/emme/InsightEngine";
 import { EngagementStudio } from "@/components/emme/EngagementStudio";
 import { LearningHub } from "@/components/emme/LearningHub";
 import { EquityInfrastructure } from "@/components/emme/EquityInfrastructure";
-// import { ProjectManager } from "@/components/emme/ProjectManager";
+import { ProjectManager } from "@/components/emme/ProjectManager";
 import { ClientManager } from "@/components/emme/ClientManager";
 import { WorkflowVisualization } from "@/components/emme/WorkflowVisualization";
 import { MLRSubmissions } from "@/components/emme/MLRSubmissions";
 import { MLRVisualization } from "@/components/emme/MLRVisualization";
 import { MarketIntelligence } from "@/components/emme/MarketIntelligence";
 import { PayerLandscape } from "@/components/emme/PayerLandscape";
-// import { StrategicIntelligenceOverview } from "@/components/emme/StrategicIntelligenceOverview";
+import { StrategicIntelligenceOverview } from "@/components/emme/StrategicIntelligenceOverview";
 import { DataIngestionHub } from "@/components/emme/DataIngestionHub";
 import { ContentOptimization } from "@/components/emme/ContentOptimization";
 import { CompetitiveIntelligence } from "@/components/emme/CompetitiveIntelligence";
@@ -28,11 +28,11 @@ import { ContentOrchestrationModule } from "@/components/emme/ContentOrchestrati
 import { EquityAccessModule } from "@/components/emme/EquityAccessModule";
 import { DataPlatformModule } from "@/components/emme/DataPlatformModule";
 import { CorpusPipelineModule } from "@/components/emme/CorpusPipelineModule";
-// import { SophieDashboard } from "@/components/SophieDashboard";
+import { SophieDashboard } from "@/components/SophieDashboard";
 import { EMMEIntelligenceBrief } from "@/components/emme/EMMEIntelligenceBrief";
-// import { EMMECreateProject } from "@/components/emme/EMMECreateProject";
-// import { EMMEDataSourcesDashboard } from "@/components/emme/EMMEDataSourcesDashboard";
-// import { EMMEProductionDashboard } from "@/components/emme/EMMEProductionDashboard";
+import { EMMECreateProject } from "@/components/emme/EMMECreateProject";
+import { EMMEDataSourcesDashboard } from "@/components/emme/EMMEDataSourcesDashboard";
+import { EMMEProductionDashboard } from "@/components/emme/EMMEProductionDashboard";
 import { SimpleProjectManager } from "@/components/emme/SimpleProjectManager";
 import { EMMEComprehensiveProjectCreator } from "@/components/emme/EMMEComprehensiveProjectCreator";
 
@@ -68,7 +68,7 @@ interface TenantAnalytics {
 
 function EMMEEngageWhiteLabel() {
   const [activeView, setActiveView] = useState("home");
-  // const [insightsTab, setInsightsTab] = useState('overview');
+  const [insightsTab, setInsightsTab] = useState('overview');
   
   // Always show Intelligence Brief as primary dashboard
   console.log("EMMEEngageWhiteLabel activeView:", activeView);
@@ -111,26 +111,24 @@ function EMMEEngageWhiteLabel() {
     return () => window.removeEventListener('navigateToModule', handleNavigateToModule);
   }, []);
   // Mock styling and features for development
-  // const primaryColor = "#1f2937";
-  // const secondaryColor = "#3b82f6";
-  // const logo = null;
-  // const brandName = "EMME Engage";
+  const primaryColor = "#1f2937";
+  const secondaryColor = "#3b82f6";
+  const logo = null;
+  const brandName = "EMME Engage";
   
   // Feature flags - all enabled for demo
-  // const hasProjectManagement = true;
-  // const hasPartnershipAnalytics = true;
-  // const hasMarketIntelligence = true;
-  // const hasRegulatoryInsights = true;
-  // const hasCompetitiveAnalysis = true;
+  const hasProjectManagement = true;
+  const hasPartnershipAnalytics = true;
+  const hasMarketIntelligence = true;
+  const hasRegulatoryInsights = true;
+  const hasCompetitiveAnalysis = true;
 
   // Mock usage and analytics data for development
-  // const usage = null;
-  // const usageLoading = false;
-  // const analytics = null;
-  // const analyticsLoading = false;
+  const usage = null;
+  const usageLoading = false;
+  const analytics = null;
+  const analyticsLoading = false;
 
-
-  
   if (tenantLoading) {
     return (
       <EMMELayout>

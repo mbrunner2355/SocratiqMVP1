@@ -22,8 +22,10 @@ export function SimpleProjectManager() {
           
           // Remove duplicates and old projects, and update status for incomplete projects
           const uniqueProjects = projects.reduce((acc: any[], current: any) => {
-            // Preserve all VMS projects - don't remove them in cleanup
-            // The user had a specific VMS project created yesterday that should be preserved
+            // Skip old VMS Global projects without proper client/team info
+            if (current.name === "VMS Global" && (!current.client || current.client !== "PharmaX")) {
+              return acc;
+            }
             
             // Update status to draft if project is incomplete
             const updatedCurrent = {
@@ -66,18 +68,6 @@ export function SimpleProjectManager() {
     };
     
     cleanupAndDeduplicateProjects();
-    
-    // Ensure VMS Global project exists
-    const ensureVMSProject = () => {
-      const stored = localStorage.getItem('emme-projects');
-      let projects = stored ? JSON.parse(stored) : [];
-      
-      // Don't auto-create VMS project - the user wants their original one back
-      // Instead, let's preserve whatever VMS project data exists
-      console.log('Preserving existing project data, not auto-creating VMS project');
-    };
-    
-    ensureVMSProject();
   }, []);
 
   // Fetch project data - with fallback for API routing issues
