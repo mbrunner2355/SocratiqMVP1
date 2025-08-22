@@ -3604,3 +3604,74 @@ export type PartnershipModel = typeof PartnershipModels[keyof typeof Partnership
 export type EMMEModuleType = typeof EMMEModuleTypes[keyof typeof EMMEModuleTypes];
 export type LicenseType = typeof LicenseTypes[keyof typeof LicenseTypes];
 export type NewCoFundingStage = typeof NewCoFundingStages[keyof typeof NewCoFundingStages];
+
+// ============================================================================
+// COMPLETE USER DATA SYNC SYSTEM - for cross-device/AWS deployment persistence
+// ============================================================================
+
+// Complete user data sync table - stores ALL browser data for cross-device access
+export const userDataSync = pgTable("user_data_sync", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  dataType: varchar("data_type").notNull(), // 'localStorage', 'sessionStorage', 'chatSessions', 'preferences'
+  dataKey: varchar("data_key").notNull(),
+  dataValue: jsonb("data_value").notNull(),
+  lastSynced: timestamp("last_synced").defaultNow(),
+  deviceId: varchar("device_id"),
+  browserInfo: varchar("browser_info"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// EMME chat sessions with full conversation history
+export const emmeChatSessions = pgTable("emme_chat_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  sessionName: varchar("session_name"),
+  projectId: varchar("project_id"),
+  messages: jsonb("messages").notNull().default('[]'),
+  context: jsonb("context").default('{}'),
+  lastMessage: timestamp("last_message").defaultNow(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// User preferences and UI settings that persist across devices
+export const userPreferences = pgTable("user_preferences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  sidebarCollapsed: boolean("sidebar_collapsed").default(true),
+  sidebarPinned: boolean("sidebar_pinned").default(false),
+  theme: varchar("theme").default('light'),
+  defaultView: varchar("default_view").default('home'),
+  expandedMenus: jsonb("expanded_menus").default('{}'),
+  navigationState: jsonb("navigation_state").default('{}'),
+  lastActiveProject: varchar("last_active_project"),
+  recentProjects: jsonb("recent_projects").default('[]'),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User uploaded content and files that need to persist
+export const userContent = pgTable("user_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  projectId: varchar("project_id"),
+  contentType: varchar("content_type"), // 'document', 'image', 'video', 'web_link'
+  fileName: varchar("file_name"),
+  fileSize: integer("file_size"),
+  fileUrl: varchar("file_url"),
+  metadata: jsonb("metadata").default('{}'),
+  uploadedAt: timestamp("uploaded_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Type exports for the new sync tables
+export type UserDataSync = typeof userDataSync.$inferSelect;
+export type InsertUserDataSync = typeof userDataSync.$inferInsert;
+export type EmmeChatSession = typeof emmeChatSessions.$inferSelect;
+export type InsertEmmeChatSession = typeof emmeChatSessions.$inferInsert;
+export type UserPreferences = typeof userPreferences.$inferSelect;
+export type InsertUserPreferences = typeof userPreferences.$inferInsert;
+export type UserContent = typeof userContent.$inferSelect;
+export type InsertUserContent = typeof userContent.$inferInsert;
