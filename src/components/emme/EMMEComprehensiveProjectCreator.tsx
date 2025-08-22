@@ -1303,10 +1303,42 @@ Current landscape includes one direct non-hormonal competitor already in the mar
 
     const renderBackgroundContent = () => (
       <div className="space-y-6">
-        {/* Collapsible Accordion Menu */}
+        {/* Organization Overview Section */}
         <div className="bg-white rounded-lg border">
+          <div className="px-4 py-3 bg-gray-100 border-b">
+            <h3 className="font-semibold text-gray-900">Organization Overview</h3>
+          </div>
+          <div className="border-b border-gray-200">
+            <button
+              onClick={() => setActiveAccordion(activeAccordion === 'mission-vision' ? '' : 'mission-vision')}
+              className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors ${
+                activeAccordion === 'mission-vision' ? 'bg-red-50 text-red-600 font-medium' : 'text-gray-700'
+              }`}
+            >
+              <span className={`${activeAccordion === 'mission-vision' ? 'text-red-600' : 'text-gray-700'}`}>
+                Mission, Vision and Core Values
+              </span>
+              <span className={`text-sm transition-transform duration-200 ${
+                activeAccordion === 'mission-vision' ? 'text-red-500 rotate-180' : 'text-gray-400'
+              }`}>
+                ▼
+              </span>
+            </button>
+            
+            {activeAccordion === 'mission-vision' && (
+              <div className="px-6 pb-6 pt-2 bg-gray-50 border-t border-gray-100">
+                {renderAccordionContent()}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Initiative Section */}
+        <div className="bg-white rounded-lg border">
+          <div className="px-4 py-3 bg-gray-100 border-b">
+            <h3 className="font-semibold text-gray-900">Initiative</h3>
+          </div>
           {[
-            { id: 'mission-vision', label: 'Mission, Vision and Core Values' },
             { id: 'unmet-need', label: 'Unmet Need' },
             { id: 'tolerability', label: 'Tolerability' },
             { id: 'patient-population', label: 'Patient Population' },
