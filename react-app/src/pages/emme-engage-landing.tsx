@@ -13,13 +13,15 @@ import {
   Star,
   Lightbulb
 } from "lucide-react";
+import { NavigationService } from '@/lib/navigation';
 
 export default function EMMEEngageLanding() {
   const handleEnterApp = () => {
-    // For development - go directly to the main app
-    // Set partner app indicator for routing
-    localStorage.setItem('partner-app', 'emme-engage');
-    window.location.href = "/emme-engage/app";
+    NavigationService.handleAppEntry('emme-engage');
+  };
+
+  const handleLogin = () => {
+    NavigationService.handleLogin('emme-engage');
   };
 
   return (
@@ -36,11 +38,11 @@ export default function EMMEEngageLanding() {
         {/* Connection lines */}
         <svg className="absolute inset-0 w-full h-full" style={{zIndex: -1}}>
           <defs>
-            <pattern id="grid-engage" width="100" height="100" patternUnits="userSpaceOnUse">
+            <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
               <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgb(139 92 246 / 0.3)" strokeWidth="1"/>
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#grid-engage)" />
+          <rect width="100%" height="100%" fill="url(#grid)" />
           
           <line x1="20%" y1="30%" x2="80%" y2="70%" stroke="rgb(139 92 246 / 0.3)" strokeWidth="2" strokeDasharray="5,5">
             <animate attributeName="stroke-dashoffset" values="0;10" dur="20s" repeatCount="indefinite"/>
@@ -52,203 +54,224 @@ export default function EMMEEngageLanding() {
       </div>
 
       {/* Header */}
-      <div className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/95">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">E</span>
+      <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+                <Target className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h1 className="font-bold text-gray-900">EMME Engage™</h1>
+                <p className="text-xs text-gray-600">Pharmaceutical Intelligence</p>
+              </div>
             </div>
-            <span className="text-xl font-bold">EMME Engage</span>
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" onClick={handleLogin}>
+                Sign In
+              </Button>
+              <Button onClick={handleEnterApp}>
+                Enter App
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
           </div>
-          <Button onClick={handleEnterApp} className="bg-purple-600 hover:bg-purple-700">
-            Enter App
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
         </div>
       </div>
 
       {/* Hero Section */}
-      <div className="container py-16 text-center">
-        <Badge variant="secondary" className="mb-4 bg-purple-100 text-purple-800">
-          Go-to-Market Excellence Platform
-        </Badge>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-          <span className="text-purple-600">15-30%</span> of Marketing Spend
-          <span className="block text-2xl text-muted-foreground mt-2">Optimized with Adaptive Go-to-Market Intelligence</span>
-        </h1>
-        <div className="text-center mb-8">
-          <div className="text-4xl font-bold text-purple-600 mb-2">$300M-$900M/YR</div>
-          <p className="text-lg text-muted-foreground">Average savings potential through intelligent market access optimization</p>
-        </div>
-        <Button size="lg" onClick={handleEnterApp} className="text-lg px-8 py-4 bg-purple-600 hover:bg-purple-700">
-          Access Platform
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-      </div>
-
-      {/* Core Features */}
-      <div className="container py-16">
-        <h2 className="text-3xl font-bold text-center mb-12">Core Modules</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="border-l-4 border-l-purple-500">
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Lightbulb className="h-6 w-6 text-purple-600" />
-                <CardTitle className="text-lg">Insight Engine</CardTitle>
-              </div>
-              <CardDescription>Experience + Equity Intelligence</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Lived experience insights combined with equity-readiness assessment for inclusive market strategies.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-violet-500">
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Users className="h-6 w-6 text-violet-600" />
-                <CardTitle className="text-lg">Engagement Studio</CardTitle>
-              </div>
-              <CardDescription>Multi-Stakeholder Strategy</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Integrated HCP, patient, and payer engagement strategy with personalized touchpoint optimization.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-indigo-500">
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Star className="h-6 w-6 text-indigo-600" />
-                <CardTitle className="text-lg">Learning + Activation Hub</CardTitle>
-              </div>
-              <CardDescription>Training & Support Ecosystem</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Comprehensive training modules and support infrastructure for stakeholder activation and engagement.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-purple-500">
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <TrendingUp className="h-6 w-6 text-purple-600" />
-                <CardTitle className="text-lg">Equity Infrastructure</CardTitle>
-              </div>
-              <CardDescription>SDOH & Impact Metrics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Social determinants of health analysis with comprehensive impact measurement and equity tracking.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Value Proposition */}
-      <div className="bg-purple-50 py-16">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Proven Go-to-Market Efficiency Gains</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              EMME delivers a condensed and adaptive go-to-market model with a robust, flexible content framework 
-              designed to help every launch achieve maximum engagement within their specific stakeholder strategies.
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <div className="text-lg font-bold text-purple-600 mb-1">Agency Efficiency Gains</div>
-              <div className="text-sm text-gray-600 mb-2">Reduced duplication, restricting, creative rounds, and analytics rework across holding company partners</div>
-              <div className="text-xl font-bold text-purple-700">$10M-$20M</div>
-            </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <div className="text-lg font-bold text-purple-600 mb-1">Accelerated Time-to-Market</div>
-              <div className="text-sm text-gray-600 mb-2">Faster GTM execution across brands (e.g., even a 1-week gain = ~$30M+ for high-value launches)</div>
-              <div className="text-xl font-bold text-purple-700">$150M-$350M</div>
-            </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <div className="text-lg font-bold text-purple-600 mb-1">Content & Asset Optimization</div>
-              <div className="text-sm text-gray-600 mb-2">Modular content platform cuts down on redundant production, QA, and local adaptation costs</div>
-              <div className="text-xl font-bold text-purple-700">$50M-$100M</div>
-            </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <div className="text-lg font-bold text-purple-600 mb-1">Strategic Alignment Across Teams</div>
-              <div className="text-sm text-gray-600 mb-2">Reduced conflict across brand and market teams - fewer workarounds and delays</div>
-              <div className="text-xl font-bold text-purple-700">$50M-$150M</div>
-            </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <div className="text-lg font-bold text-purple-600 mb-1">Reduced Churn & Onboarding Loss</div>
-              <div className="text-sm text-gray-600 mb-2">Faster ramp-up or turnover, with preserved institutional knowledge and historical data</div>
-              <div className="text-xl font-bold text-purple-700">$10M-$25M</div>
-            </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <div className="text-lg font-bold text-purple-600 mb-1">Improved Equity & Access Strategy</div>
-              <div className="text-sm text-gray-600 mb-2">Increased patient uptake from better SDOH informed engagement and earlier payer wins</div>
-              <div className="text-xl font-bold text-purple-700">$40M-$100M</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Partnership Benefits */}
-      <div className="container py-16">
-        <h2 className="text-3xl font-bold text-center mb-12">Partnership Success Made Simple</h2>
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mb-4">
-              <Zap className="h-6 w-6 text-purple-600" />
-            </div>
-            <h3 className="font-semibold mb-2">Rapid Deployment</h3>
-            <p className="text-sm text-muted-foreground">
-              Launch partnership programs in days, not months, with pre-built templates and workflows.
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mb-4">
-              <Globe className="h-6 w-6 text-purple-600" />
-            </div>
-            <h3 className="font-semibold mb-2">Global Reach</h3>
-            <p className="text-sm text-muted-foreground">
-              Connect with partners worldwide through our intelligent matching and collaboration platform.
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mb-4">
-              <Lightbulb className="h-6 w-6 text-purple-600" />
-            </div>
-            <h3 className="font-semibold mb-2">Smart Insights</h3>
-            <p className="text-sm text-muted-foreground">
-              AI-powered analytics provide actionable insights to optimize partnership performance.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-purple-600 text-white py-16">
-        <div className="container text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Partnership Strategy?</h2>
-          <p className="text-lg mb-8 text-purple-100">
-            Join industry leaders who are accelerating growth through intelligent partnership engagement.
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-16">
+          <Badge className="mb-4 bg-purple-100 text-purple-700 border-purple-200">
+            EMME Engage™ Platform
+          </Badge>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+            <span className="text-gray-900">Transform</span>{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Pharmaceutical
+            </span>{" "}
+            <span className="text-gray-900">Intelligence</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Accelerate market access, enhance stakeholder engagement, and drive strategic decision-making 
+            with AI-powered pharmaceutical intelligence and analytics.
           </p>
-          <Button size="lg" variant="secondary" onClick={handleEnterApp} className="text-lg px-8 py-4">
-            Enter EMME Engage
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" onClick={handleEnterApp} className="bg-purple-600 hover:bg-purple-700">
+              Get Started
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+            <Button size="lg" variant="outline" onClick={handleLogin}>
+              Sign In
+            </Button>
+          </div>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-purple-600" />
+              </div>
+              <CardTitle>Strategic Intelligence</CardTitle>
+              <CardDescription>
+                Real-time market analysis and competitive intelligence for informed decision-making
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-blue-600" />
+              </div>
+              <CardTitle>Stakeholder Engagement</CardTitle>
+              <CardDescription>
+                Comprehensive HCP, patient, and payer relationship management platform
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center mb-4">
+                <TrendingUp className="w-6 h-6 text-green-600" />
+              </div>
+              <CardTitle>Market Access</CardTitle>
+              <CardDescription>
+                Accelerate time-to-market with strategic payer engagement and access optimization
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+
+        {/* Platform Features */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Comprehensive Platform Features</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Unlock the full potential of your pharmaceutical strategy with our integrated suite of intelligence tools
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex items-start space-x-3 p-4 rounded-lg hover:bg-purple-50 transition-colors">
+              <div className="w-8 h-8 rounded bg-purple-100 flex items-center justify-center flex-shrink-0">
+                <Target className="w-4 h-4 text-purple-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Competitive Intelligence</h3>
+                <p className="text-sm text-gray-600">Real-time competitor monitoring and analysis</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-4 rounded-lg hover:bg-blue-50 transition-colors">
+              <div className="w-8 h-8 rounded bg-blue-100 flex items-center justify-center flex-shrink-0">
+                <Building2 className="w-4 h-4 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Market Access Planning</h3>
+                <p className="text-sm text-gray-600">Strategic payer engagement and access optimization</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-4 rounded-lg hover:bg-green-50 transition-colors">
+              <div className="w-8 h-8 rounded bg-green-100 flex items-center justify-center flex-shrink-0">
+                <Users className="w-4 h-4 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Stakeholder Mapping</h3>
+                <p className="text-sm text-gray-600">Comprehensive HCP and payer relationship management</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-4 rounded-lg hover:bg-orange-50 transition-colors">
+              <div className="w-8 h-8 rounded bg-orange-100 flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-4 h-4 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Analytics Dashboard</h3>
+                <p className="text-sm text-gray-600">Real-time metrics and performance insights</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-4 rounded-lg hover:bg-indigo-50 transition-colors">
+              <div className="w-8 h-8 rounded bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                <Handshake className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Partnership Management</h3>
+                <p className="text-sm text-gray-600">Alliance tracking and deal analytics</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-4 rounded-lg hover:bg-pink-50 transition-colors">
+              <div className="w-8 h-8 rounded bg-pink-100 flex items-center justify-center flex-shrink-0">
+                <Lightbulb className="w-4 h-4 text-pink-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">AI-Powered Insights</h3>
+                <p className="text-sm text-gray-600">Sophie™ intelligent assistant and analytics</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="grid md:grid-cols-4 gap-8 mb-16">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">500+</div>
+            <div className="text-gray-600">Global Pharma Companies</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">95%</div>
+            <div className="text-gray-600">Faster Market Access</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">$2.5B</div>
+            <div className="text-gray-600">Revenue Impact</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-orange-600 mb-2">24/7</div>
+            <div className="text-gray-600">AI-Powered Monitoring</div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="text-center bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-12 text-white">
+          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Strategy?</h2>
+          <p className="text-xl mb-8 text-purple-100">
+            Join leading pharmaceutical companies using EMME Engage™ to accelerate market success
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" variant="secondary" onClick={handleEnterApp}>
+              Start Free Trial
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600">
+              Schedule Demo
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="border-t bg-purple-50 py-8">
-        <div className="container text-center text-sm text-muted-foreground">
-          <p>© 2025 EMME Engage. Intelligent partnership platform for accelerated collaborative growth.</p>
+      <div className="border-t bg-white/80 backdrop-blur-sm mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <div className="w-6 h-6 rounded bg-purple-600 flex items-center justify-center">
+                <Target className="w-3 h-3 text-white" />
+              </div>
+              <span className="font-semibold text-gray-900">EMME Engage™</span>
+            </div>
+            <div className="flex items-center space-x-6 text-sm text-gray-600">
+              <span>© 2024 SocratIQ. All rights reserved.</span>
+              <span>Privacy Policy</span>
+              <span>Terms of Service</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

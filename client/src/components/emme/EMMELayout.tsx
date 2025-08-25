@@ -43,7 +43,11 @@ import { apiRequest } from "@/lib/queryClient";
 import { useTenantStyling } from "@/components/TenantProvider";
 import { useAuth } from "@/hooks/useAuth";
 import emmeEngageLogo from "@/assets/emme-engage-logo.png";
+<<<<<<< HEAD
 import { detectPartnerContext, getPartnerBrand } from "src/components/PartnerBrandingDemo.tsx";
+=======
+import { detectPartnerContext, getPartnerBrand } from "@shared/partner-branding";
+>>>>>>> e299add462de9e24e3e523aff87e31537eb077c9
 
 interface EMMELayoutProps {
   children: React.ReactNode;

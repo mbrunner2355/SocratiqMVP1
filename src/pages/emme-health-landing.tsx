@@ -19,7 +19,7 @@ export default function EMMEHealthLanding() {
   const handleLogin = () => {
     // Set partner app indicator for post-login routing
     localStorage.setItem('partner-app', 'emme-health');
-    window.location.href = "/login";
+    NavigationService.handleLogin();
   };
 
   return (

@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, Send, User, Brain, Search, TrendingUp, AlertTriangle } from "lucide-react";
 import { SophieLogo } from "./SophieLogo";
 import { apiRequest } from "@/lib/queryClient";
+import { NavigationService } from '@/lib/navigation';
 
 // @ts-ignore - Types for complex response structures
 declare global {
@@ -68,9 +69,12 @@ export function SophieChat() {
   // Chat mutation
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
-      const response = await apiRequest('/api/sophie/chat', 'POST', {
-        message,
-        conversationId: conversationId || undefined
+      const response = await apiRequest('/api/sophie/chat', {
+        method: 'POST',
+        body: {
+          message,
+          conversationId: conversationId || undefined
+        }
       });
       return response as any;
     },
@@ -107,7 +111,10 @@ export function SophieChat() {
   // Query mutation for structured queries
   const queryMutation = useMutation({
     mutationFn: async (query: string) => {
-      const response = await apiRequest('/api/sophie/query', 'POST', { query });
+      const response = await apiRequest('/api/sophie/query', {
+        method: 'POST',
+        body: { query }
+      });
       return response;
     },
     onSuccess: (data: any) => {
@@ -153,14 +160,16 @@ export function SophieChat() {
 
       // Check for specific EMME section navigation first
       const emmeRoutes: Record<string, string> = {
-        'research hub': '/emme/research-hub',
-        'competitive intelligence': '/emme/competitive-intelligence',
-        'regulatory strategy': '/emme/regulatory-strategy', 
-        'market access': '/emme/market-access',
-        'content library': '/emme/content-library',
-        'partnerships': '/emme/partnerships',
-        'analytics dashboard': '/emme/analytics-dashboard',
-        'analytics': '/emme/analytics-dashboard'
+        'research hub': 'research-hub',
+        'competitive intelligence': 'competitive-intelligence',
+        'regulatory strategy': 'regulatory-strategy', 
+        'market access': 'market-access',
+        'content library': 'content-library',
+        'partnerships': 'partnerships',
+        'analytics dashboard': 'analytics-dashboard',
+        'analytics': 'analytics-dashboard',
+        'projects': 'projects',
+        'questions': 'questions'
       };
 
       const matchedRoute = Object.keys(emmeRoutes).find(key => 
@@ -182,9 +191,9 @@ export function SophieChat() {
         setMessages(prev => [...prev, userMessage, sophieMessage]);
         setInputMessage('');
         
-        // Redirect after brief delay
+        // UPDATED: Use NavigationService instead of window.location.href
         setTimeout(() => {
-          window.location.href = emmeRoutes[matchedRoute];
+          NavigationService.goToEMMESection(emmeRoutes[matchedRoute]);
         }, 1000);
         return; // IMPORTANT: Exit here
       } else {
@@ -289,8 +298,8 @@ export function SophieChat() {
                   <div className="flex justify-start">
                     <div className="max-w-[80%] rounded-lg p-3 bg-muted">
                       <div className="flex items-center space-x-2">
-                        <Bot className="h-4 w-4 animate-pulse" />
-                        <p className="text-sm">Sophie is thinking...</p>
+                        <SophieLogo size="sm" className="h-4 w-4 animate-pulse" />
+                        <div className="text-sm">Sophie is thinking...</div>
                       </div>
                     </div>
                   </div>
@@ -302,13 +311,13 @@ export function SophieChat() {
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Ask Sophie about your documents..."
+                placeholder="Ask Sophie anything about your documents..."
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 disabled={chatMutation.isPending || queryMutation.isPending}
               />
               <Button 
                 onClick={handleSendMessage}
-                disabled={chatMutation.isPending || queryMutation.isPending || !inputMessage.trim()}
+                disabled={!inputMessage.trim() || chatMutation.isPending || queryMutation.isPending}
               >
                 <Send className="h-4 w-4" />
               </Button>
@@ -317,93 +326,135 @@ export function SophieChat() {
         </Card>
 
         {/* Quick Actions & Insights */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Quick Queries</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Quick Queries</p>
               {quickQueries.map((query, index) => (
                 <Button
                   key={index}
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start text-left text-xs"
+                  className="w-full text-left justify-start"
                   onClick={() => handleQuickQuery(query)}
                   disabled={chatMutation.isPending || queryMutation.isPending}
                 >
                   {query}
                 </Button>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+            
+            <Separator />
+            
+            {sophieInsights && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Recent Insights</p>
+                <div className="space-y-2">
+                  {sophieInsights.keyFindings?.slice(0, 3).map((finding: string, index: number) => (
+                    <div key={index} className="text-xs p-2 bg-muted rounded">
+                      {finding}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
-          {sophieInsights && !insightsError && (
+      {/* Sophie Analytics Tabs */}
+      <Tabs defaultValue="analytics" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="insights">Insights</TabsTrigger>
+          <TabsTrigger value="risks">Risk Assessment</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="analytics" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-3">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-sm flex items-center space-x-2">
-                  <Brain className="h-4 w-4" />
-                  <span>AI Insights</span>
-                </CardTitle>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Documents Analyzed</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <Tabs defaultValue="recommendations" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="recommendations" className="text-xs">
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                      Tips
-                    </TabsTrigger>
-                    <TabsTrigger value="trends" className="text-xs">
-                      <Search className="h-3 w-3 mr-1" />
-                      Trends
-                    </TabsTrigger>
-                    <TabsTrigger value="alerts" className="text-xs">
-                      <AlertTriangle className="h-3 w-3 mr-1" />
-                      Alerts
-                    </TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="recommendations" className="space-y-2">
-                    {(sophieInsights as any)?.insights?.recommendations?.length > 0 ? (
-                      (sophieInsights as any).insights.recommendations.map((rec: string, idx: number) => (
-                        <div key={idx} className="text-xs p-2 bg-muted rounded">
-                          {rec}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-xs text-muted-foreground">No recommendations available</div>
-                    )}
-                  </TabsContent>
-                  
-                  <TabsContent value="trends" className="space-y-2">
-                    {(sophieInsights as any)?.insights?.trends?.length > 0 ? (
-                      (sophieInsights as any).insights.trends.map((trend: string, idx: number) => (
-                        <div key={idx} className="text-xs p-2 bg-muted rounded">
-                          {trend}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-xs text-muted-foreground">No trends identified</div>
-                    )}
-                  </TabsContent>
-                  
-                  <TabsContent value="alerts" className="space-y-2">
-                    {(sophieInsights as any)?.insights?.alerts?.length > 0 ? (
-                      (sophieInsights as any).insights.alerts.map((alert: string, idx: number) => (
-                        <div key={idx} className="text-xs p-2 bg-yellow-50 text-yellow-800 border border-yellow-200 rounded">
-                          {alert}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-xs text-muted-foreground">No alerts</div>
-                    )}
-                  </TabsContent>
-                </Tabs>
+                <div className="text-2xl font-bold">1,247</div>
+                <p className="text-xs text-muted-foreground">+12% from last month</p>
               </CardContent>
             </Card>
-          )}
-        </div>
-      </div>
+            
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Entities Identified</CardTitle>
+                <Network className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">8,592</div>
+                <p className="text-xs text-muted-foreground">+5% from last month</p>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Risk Factors</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">23</div>
+                <p className="text-xs text-muted-foreground">-2 from last week</p>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="insights" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Key Insights</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {sophieInsights?.keyFindings ? (
+                <div className="space-y-2">
+                  {sophieInsights.keyFindings.map((insight: string, index: number) => (
+                    <div key={index} className="p-3 bg-muted rounded">
+                      <p className="text-sm">{insight}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No insights available yet. Upload documents to get started.</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="risks" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Risk Assessment</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {sophieInsights?.riskFactors ? (
+                <div className="space-y-2">
+                  {sophieInsights.riskFactors.map((risk: string, index: number) => (
+                    <div key={index} className="p-3 bg-red-50 border border-red-200 rounded">
+                      <div className="flex items-start space-x-2">
+                        <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />
+                        <p className="text-sm">{risk}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No risk factors identified yet.</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
