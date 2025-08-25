@@ -9,10 +9,10 @@ import type { Express, RequestHandler } from "express";
 
 // AWS Cognito configuration
 const cognitoClient = new CognitoIdentityProviderClient({
-  region: process.env.COGNITO_REGION || process.env.AWS_REGION || "us-east-1",
+  region: process.env.VITE_COGNITO_REGION || process.env.VITE_AWS_REGION || "us-east-1",
   credentials: {
-    accessKeyId: process.env.ACCESS_KEY_ID!,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.VITE_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.VITE_SECRET_ACCESS_KEY!,
   },
 });
 
@@ -20,11 +20,11 @@ const cognitoClient = new CognitoIdentityProviderClient({
 let verifier: any = null;
 
 function getVerifier() {
-  if (!verifier && process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
+  if (!verifier && process.env.VITE_COGNITO_USER_POOL_ID && process.env.VITE_COGNITO_CLIENT_ID) {
     verifier = CognitoJwtVerifier.create({
-      userPoolId: process.env.COGNITO_USER_POOL_ID!,
+      userPoolId: process.env.VITE_COGNITO_USER_POOL_ID!,
       tokenUse: "access",
-      clientId: process.env.COGNITO_CLIENT_ID!,
+      clientId: process.env.VITE_COGNITO_CLIENT_ID!,
     });
   }
   return verifier;
@@ -32,12 +32,12 @@ function getVerifier() {
 
 // Generate SECRET_HASH for Cognito client secret
 function generateSecretHash(username: string): string {
-  if (!process.env.COGNITO_CLIENT_SECRET) {
+  if (!process.env.VITE_COGNITO_CLIENT_SECRET) {
     return ''; // No secret hash needed if no client secret
   }
   
-  const message = username + process.env.COGNITO_CLIENT_ID;
-  const hmac = createHmac('sha256', process.env.COGNITO_CLIENT_SECRET);
+  const message = username + process.env.VITE_COGNITO_CLIENT_ID;
+  const hmac = createHmac('sha256', process.env.VITE_COGNITO_CLIENT_SECRET);
   hmac.update(message);
   return hmac.digest('base64');
 }
@@ -153,13 +153,13 @@ export async function setupCognitoAuth(app: Express) {
       };
       
       // Add SECRET_HASH if client secret is configured
-      if (process.env.COGNITO_CLIENT_SECRET) {
+      if (process.env.VITE_COGNITO_CLIENT_SECRET) {
         authParams.SECRET_HASH = generateSecretHash(email);
       }
 
       // Use InitiateAuth instead of AdminInitiateAuth to avoid admin privilege requirements
       const authCommand = new InitiateAuthCommand({
-        ClientId: process.env.COGNITO_CLIENT_ID!,
+        ClientId: process.env.VITE_COGNITO_CLIENT_ID!,
         AuthFlow: "USER_PASSWORD_AUTH",
         AuthParameters: authParams,
       });
@@ -230,7 +230,7 @@ export async function setupCognitoAuth(app: Express) {
 
       // Use SignUp instead of AdminCreateUser (doesn't require admin privileges)
       const signUpParams: any = {
-        ClientId: process.env.COGNITO_CLIENT_ID!,
+        ClientId: process.env.VITE_COGNITO_CLIENT_ID!,
         Username: email,
         Password: password,
         UserAttributes: [
@@ -241,7 +241,7 @@ export async function setupCognitoAuth(app: Express) {
       };
 
       // Add SECRET_HASH if client secret is configured
-      if (process.env.COGNITO_CLIENT_SECRET) {
+      if (process.env.VITE_COGNITO_CLIENT_SECRET) {
         signUpParams.SecretHash = generateSecretHash(email);
       }
 
@@ -253,7 +253,7 @@ export async function setupCognitoAuth(app: Express) {
         try {
           const { AdminConfirmSignUpCommand } = await import("@aws-sdk/client-cognito-identity-provider");
           const confirmCommand = new AdminConfirmSignUpCommand({
-            UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+            UserPoolId: process.env.VITE_COGNITO_USER_POOL_ID!,
             Username: email,
           });
           await cognitoClient.send(confirmCommand);

@@ -10,7 +10,7 @@ import { setupCognitoAuth, isAuthenticated as cognitoAuth } from "./cognitoAuth"
 
 export async function setupAuthentication(app: Express) {
   // Use only AWS Cognito authentication
-  if (process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
+  if (process.env.VITE_COGNITO_USER_POOL_ID && process.env.VITE_COGNITO_CLIENT_ID) {
     console.log("Setting up AWS Cognito authentication");
     await setupCognitoAuth(app);
     return;
@@ -29,7 +29,7 @@ export async function setupAuthentication(app: Express) {
 
 export function getAuthMiddleware() {
   // Check for Cognito configuration first
-  if (process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
+  if (process.env.VITE_COGNITO_USER_POOL_ID && process.env.VITE_COGNITO_CLIENT_ID) {
     return cognitoAuth; // Use only Cognito authentication
   }
   
